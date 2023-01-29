@@ -1,5 +1,6 @@
 package cn.maiaimei.example.validation;
 
+import com.prowidesoftware.swift.model.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
@@ -91,6 +92,12 @@ public class ValidatorUtils {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','
     };
 
+    private static final String SLASH = "/";
+    private static final String LEFT_SQUARE_BRACKET = "[";
+    private static final String RIGHT_SQUARE_BRACKET = "]";
+    private static final String EXCLAMATORY_MARK = "!";
+    private static final String ASTERISK = "*";
+
     /**
      * variable length alphabetic, alpha-numeric, numeric, SWIFT X set, SWIFT Z set or decimals, e.g. 16x
      */
@@ -122,16 +129,32 @@ public class ValidatorUtils {
     private static final Pattern COMPOSITE_FORMAT_A_PATTERN = Pattern.compile(COMPOSITE_FORMAT_A);
     private static final Pattern COMPOSITE_FORMAT_B_PATTERN = Pattern.compile(COMPOSITE_FORMAT_B);
 
-    private static final String SLASH = "/";
-    private static final String LEFT_SQUARE_BRACKET = "[";
-    private static final String RIGHT_SQUARE_BRACKET = "]";
+    private static final Map<String, String> ERROR_MESSAGE_MAP = new HashMap<>();
+
+    static {
+        ERROR_MESSAGE_MAP.put("a", " contain alphabetic, capital letters (A through Z), upper case only");
+        ERROR_MESSAGE_MAP.put("c", " contain alpha-numeric capital letters (upper case), and digits only");
+        ERROR_MESSAGE_MAP.put("n", " contain numeric, digits (0 through 9) only");
+        ERROR_MESSAGE_MAP.put("x", " contain SWIFT X set only");
+        ERROR_MESSAGE_MAP.put("z", " contain SWIFT Z set only");
+        ERROR_MESSAGE_MAP.put("d", " contain decimals, including decimal comma ',' preceding the fractional part. " +
+                "The fractional part may be missing, but the decimal comma must always be present");
+    }
 
     public static boolean eq(String value, int length) {
         return value.length() == length;
     }
 
+    public static boolean ne(String value, int length) {
+        return value.length() != length;
+    }
+
     public static boolean le(String value, int maxlength) {
         return value.length() <= maxlength;
+    }
+
+    public static boolean gt(String value, int maxlength) {
+        return value.length() > maxlength;
     }
 
     public static boolean containsOnlyUpperCase(String value) {
@@ -177,6 +200,74 @@ public class ValidatorUtils {
         }
     }
 
+    public static boolean isFixedLength(String format) {
+        return format.contains(EXCLAMATORY_MARK);
+    }
+
+    public static boolean isMultiline(String format) {
+        return format.contains(ASTERISK);
+    }
+
+    public static boolean isOptional(String format) {
+        return format.startsWith(LEFT_SQUARE_BRACKET) && format.endsWith(RIGHT_SQUARE_BRACKET);
+    }
+
+    // TODO: validateFields
+    public static void validateFields(ValidationResult result, List<Tag> tags, List<ValidationConfigItem> validationConfigItems) {
+        for (ValidationConfigItem validationConfigItem : validationConfigItems) {
+            String tagName = validationConfigItem.getTag();
+            Optional<Tag> tagOptional = tags.stream().filter(w -> tagName.equals(w.getName())).findAny();
+            if (!tagOptional.isPresent()) {
+                if (validationConfigItem.isRequired()) {
+                    result.addErrorMessage(tagName + " must be present");
+                }
+                continue;
+            }
+            String tagValue = tagOptional.get().getValue();
+            if (StringUtils.isBlank(tagValue) && validationConfigItem.isRequired()) {
+                result.addErrorMessage(tagName + " must not be blank");
+                continue;
+            }
+            int beginIndex = 0;
+            String format = validationConfigItem.getFormat();
+            List<String> formats = splitFormat(format);
+            for (int i = 0; i < formats.size(); i++) {
+                String fmt = formats.get(i);
+                List<Integer> numbers = getNumbers(fmt);
+                String type = getType(fmt);
+
+                // validate field value length
+                if (isMultiline(fmt)) {
+                    int rowcount = numbers.get(0);
+                    int maxlength = numbers.get(1);
+                    List<String> lines = getLines(tagValue);
+                    if (lines.size() > rowcount
+                            || lines.stream().anyMatch(line -> gt(line, maxlength) || !containsOnly(line, type))) {
+                        result.addErrorMessage(tagName + " up to " + rowcount + " lines, with a maximum of " + maxlength + " characters per line");
+                    }
+                } else {
+                    if (isFixedLength(fmt)) {
+                        int length = numbers.get(0);
+                        if (ne(tagValue, length)) {
+                            result.addErrorMessage(tagName + " length must be " + length);
+                        }
+                    } else {
+                        int maxlength = numbers.get(0);
+                        if (gt(tagValue, maxlength)) {
+                            result.addErrorMessage(tagName + " length must be less than or equal to " + maxlength);
+                        }
+                    }
+                }
+
+                // validate field value characters
+                if (!containsOnly(tagValue, type)) {
+                    result.addErrorMessage(tagName + ERROR_MESSAGE_MAP.get(type));
+                }
+            }
+
+        }
+    }
+
     public static boolean isMatchVariableLengthChar(String format) {
         return VARIABLE_LENGTH_CHAR_PATTERN.matcher(format).matches();
     }
@@ -197,10 +288,6 @@ public class ValidatorUtils {
     public static boolean isMatchCompositeFormat(String format) {
         return COMPOSITE_FORMAT_A_PATTERN.matcher(format).matches()
                 || COMPOSITE_FORMAT_B_PATTERN.matcher(format).matches();
-    }
-
-    public static boolean isOptional(String format) {
-        return format.startsWith(LEFT_SQUARE_BRACKET) && format.endsWith(RIGHT_SQUARE_BRACKET);
     }
 
     public static boolean validateVariableLengthChar(ValidationConfigItem configItem, String value) {

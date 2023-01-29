@@ -81,7 +81,8 @@ public class ValidationUtils {
         validate27A(result, block);
         ValidationConfigBean configBean = configOptional.get();
         List<ValidationConfigItem> configItems = configBean.getConfigItems();
-        validateFields(result, tags, configItems);
+        //validateFields(result, tags, configItems);
+        ValidatorUtils.validateFields(result, tags, configItems);
     }
 
     private void validate27A(ValidationResult result, SwiftTagListBlock block) {
