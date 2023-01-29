@@ -1,0 +1,257 @@
+{
+  "subMessageType": "784",
+  "configItems": [
+    {
+      "tag": "21A",
+      "format": "16x",
+      "required": true
+    },
+    {
+      "tag": "21T",
+      "format": "16x",
+      "required": true
+    },
+    {
+      "tag": "25F",
+      "format": "5!c",
+      "required": true,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "DRAFT",
+            "FINAL"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "21P",
+      "format": "16x",
+      "required": false
+    },
+    {
+      "tag": "21S",
+      "format": "16x",
+      "required": false
+    },
+    {
+      "tag": "13E",
+      "format": "8!n4!n",
+      "required": true,
+      "rules": [
+        {
+          "key": 0,
+          "type": "datetime",
+          "datetimeFormat": "yyyyMMdd"
+        },
+        {
+          "key": 1,
+          "type": "datetime",
+          "datetimeFormat": "HHmm"
+        }
+      ]
+    },
+    {
+      "tag": "23E",
+      "format": "4!c[/30x]",
+      "required": false,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "TELE",
+            "COUR"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "22K",
+      "format": "4!c[/35x]",
+      "required": true,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "APAY",
+            "BILL",
+            "CUST",
+            "DPAY",
+            "INSU",
+            "JUDI",
+            "LEAS",
+            "OTHR",
+            "PAYM",
+            "PERF",
+            "RETN",
+            "SHIP",
+            "TEND",
+            "WARR"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "12H",
+      "format": "4!c[/35x]",
+      "required": true,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "STND",
+            "WDAP",
+            "WDBF",
+            "OTHR"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "22B",
+      "format": "4!c",
+      "required": false,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "EFCT",
+            "REDC",
+            "EFRE"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "12L",
+      "format": "2!c",
+      "required": false
+    },
+    {
+      "tag": "31S",
+      "format": "6!n",
+      "required": false
+    },
+    {
+      "tag": "53C",
+      "format": "/34x",
+      "required": false
+    },
+    {
+      "tag": "25A",
+      "format": "/34x",
+      "required": false
+    },
+    {
+      "tag": "20E",
+      "format": "4!c/35x",
+      "required": false,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "TEND",
+            "ORDR",
+            "CONT",
+            "OFFR",
+            "DELV",
+            "PINV",
+            "PROJ"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "31R",
+      "format": "6!n[/6!n]",
+      "required": false
+    },
+    {
+      "tag": "71F",
+      "format": "3!a15d",
+      "required": false
+    },
+    {
+      "tag": "37J",
+      "format": "12d",
+      "required": false
+    },
+    {
+      "tag": "49Z",
+      "format": "50*65z",
+      "required": false
+    },
+    {
+      "tag": "29A",
+      "format": "4*35x",
+      "required": false
+    },
+    {
+      "tag": "29D",
+      "format": "4*35x",
+      "required": false
+    },
+    {
+      "tag": "29F",
+      "format": "4*35x",
+      "required": false
+    },
+    {
+      "tag": "72Z",
+      "format": "6*35z",
+      "required": false
+    },
+    {
+      "tag": "23X",
+      "format": "4!c/65x",
+      "required": false,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "FACT",
+            "FAXT",
+            "EMAL",
+            "MAIL",
+            "COUR",
+            "HOST",
+            "OTHR"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "29S",
+      "format": "4!c/35x",
+      "required": false,
+      "rules": [
+        {
+          "key": 0,
+          "type": "enum",
+          "enumItems": [
+            "BICC",
+            "OTHR"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "29P",
+      "format": "4!a2!a2!c[3!c]",
+      "required": false
+    },
+    {
+      "tag": "29U",
+      "format": "4!a2!a2!c[3!c]",
+      "required": false
+    }
+  ]
+}
