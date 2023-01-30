@@ -1,4 +1,4 @@
-package cn.maiaimei.example.validation;
+package cn.maiaimei.example.validation.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ValidationConfigItem {
+public class FieldConfig {
     private String tag;
     private String format;
     private boolean required;
-    private List<ValidationConfigRule> rules;
+    private List<ValidationRule> rules;
+    private List<FieldComponentConfig> components;
 }

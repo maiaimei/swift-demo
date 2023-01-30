@@ -1,5 +1,6 @@
 package cn.maiaimei.example.validation;
 
+import cn.maiaimei.example.validation.model.MT798ValidationConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.SneakyThrows;
@@ -16,16 +17,16 @@ public class ValidationConfig {
     private static final Gson GSON = new Gson();
 
     @Bean
-    public ValidationConfigBean mt784ValidationConfig() {
-        return initValidationConfig("validation/MT784ValidationConfig.json");
+    public MT798ValidationConfig mt784ValidationConfig() {
+        return initValidationConfig("validation/MT798ValidationConfig.json");
     }
 
     @SneakyThrows
-    private ValidationConfigBean initValidationConfig(String path) {
+    private MT798ValidationConfig initValidationConfig(String path) {
         ClassPathResource resource = new ClassPathResource(path);
         InputStream inputStream = resource.getInputStream();
         String json = FileCopyUtils.copyToString(new InputStreamReader(inputStream));
-        return GSON.fromJson(json, new TypeToken<ValidationConfigBean>() {
+        return GSON.fromJson(json, new TypeToken<MT798ValidationConfig>() {
         });
     }
 }

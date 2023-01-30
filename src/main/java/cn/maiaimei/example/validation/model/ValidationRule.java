@@ -1,13 +1,14 @@
-package cn.maiaimei.example.validation;
+package cn.maiaimei.example.validation.model;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ValidationConfigRule {
+public class ValidationRule {
+    @Deprecated
     private Integer key;
     private String type;
-    private String datetimeFormat;
+    private String datetimePattern;
     private List<String> enumItems;
 }

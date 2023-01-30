@@ -1,4 +1,4 @@
-package cn.maiaimei.example.validation;
+package cn.maiaimei.example.validation.model;
 
 import lombok.Data;
 

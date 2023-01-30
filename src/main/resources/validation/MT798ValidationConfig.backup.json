@@ -1,0 +1,294 @@
+{
+  "subMessageType": "784",
+  "fields": [
+    {
+      "tag": "21A",
+      "format": "16x",
+      "required": true
+    },
+    {
+      "tag": "25F",
+      "format": "5!c",
+      "required": true,
+      "rules": [
+        {
+          "type": "enum",
+          "enumItems": [
+            "DRAFT",
+            "FINAL"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "13E",
+      "format": "8!n4!n",
+      "required": true,
+      "components": [
+        {
+          "index": 1,
+          "format": "8!n",
+          "required": true,
+          "rules": [
+            {
+              "type": "datetime",
+              "datetimePattern": "yyyyMMdd"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "format": "4!n",
+          "required": true,
+          "rules": [
+            {
+              "type": "datetime",
+              "datetimePattern": "HHmm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "22K",
+      "format": "4!c[/35x]",
+      "required": true,
+      "components": [
+        {
+          "index": 1,
+          "format": "4!c",
+          "required": true,
+          "rules": [
+            {
+              "type": "enum",
+              "enumItems": [
+                "APAY",
+                "BILL",
+                "CUST",
+                "DPAY",
+                "INSU",
+                "JUDI",
+                "LEAS",
+                "OTHR",
+                "PAYM",
+                "PERF",
+                "RETN",
+                "SHIP",
+                "TEND",
+                "WARR"
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "format": "35x",
+          "required": false
+        }
+      ]
+    },
+    {
+      "tag": "12L",
+      "format": "2!c",
+      "required": false
+    },
+    {
+      "tag": "31S",
+      "format": "6!n",
+      "required": false
+    },
+    {
+      "tag": "53C",
+      "format": "/34x",
+      "required": false
+    },
+    {
+      "tag": "20E",
+      "format": "4!c/35x",
+      "required": false,
+      "components": [
+        {
+          "index": 1,
+          "format": "4!c",
+          "required": true,
+          "rules": [
+            {
+              "type": "enum",
+              "enumItems": [
+                "TEND",
+                "ORDR",
+                "CONT",
+                "OFFR",
+                "DELV",
+                "PINV",
+                "PROJ"
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "format": "35x",
+          "required": true
+        }
+      ]
+    },
+    {
+      "tag": "31R",
+      "format": "6!n[/6!n]",
+      "required": false,
+      "components": [
+        {
+          "index": 1,
+          "format": "6!n",
+          "required": true,
+          "rules": [
+            {
+              "type": "datetime",
+              "datetimePattern": "yyMMdd"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "format": "6!n",
+          "required": false,
+          "rules": [
+            {
+              "type": "datetime",
+              "datetimePattern": "yyMMdd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "71F",
+      "format": "3!a15d",
+      "required": false,
+      "components": [
+        {
+          "index": 1,
+          "format": "3!a",
+          "required": true
+        },
+        {
+          "index": 2,
+          "format": "15d",
+          "required": true
+        }
+      ]
+    },
+    {
+      "tag": "37J",
+      "format": "12d",
+      "required": false
+    },
+    {
+      "tag": "49Z",
+      "format": "50*65z",
+      "required": false
+    },
+    {
+      "tag": "29F",
+      "format": "4*35x",
+      "required": false
+    },
+    {
+      "tag": "29P",
+      "format": "4!a2!a2!c[3!c]",
+      "required": false
+    },
+    {
+      "tag": "52A",
+      "format": "[/1!a][/34x]4!a2!a2!c[3!c]",
+      "required": false,
+      "components": [
+        {
+          "index": 1,
+          "format": "1!a",
+          "required": false
+        },
+        {
+          "index": 2,
+          "format": "34x",
+          "required": false
+        },
+        {
+          "index": 3,
+          "format": "4!a2!a2!c[3!c]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "tag": "52D",
+      "format": "[/1!a][/34x]4*35x",
+      "required": false,
+      "components": [
+        {
+          "index": 1,
+          "format": "1!a",
+          "required": false
+        },
+        {
+          "index": 2,
+          "format": "34x",
+          "required": false
+        },
+        {
+          "index": 3,
+          "format": "35x",
+          "required": true
+        },
+        {
+          "index": 4,
+          "format": "35x",
+          "required": false
+        },
+        {
+          "index": 5,
+          "format": "35x",
+          "required": false
+        },
+        {
+          "index": 6,
+          "format": "35x",
+          "required": false
+        }
+      ]
+    },
+    {
+      "tag": "59",
+      "format": "[/34x]4*35x",
+      "required": false,
+      "components": [
+        {
+          "index": 1,
+          "format": "34x",
+          "required": false
+        },
+        {
+          "index": 2,
+          "format": "35x",
+          "required": true
+        },
+        {
+          "index": 3,
+          "format": "35x",
+          "required": false
+        },
+        {
+          "index": 4,
+          "format": "35x",
+          "required": false
+        },
+        {
+          "index": 5,
+          "format": "35x",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
