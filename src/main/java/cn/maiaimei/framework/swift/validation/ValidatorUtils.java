@@ -1,24 +1,17 @@
 package cn.maiaimei.framework.swift.validation;
 
-import cn.maiaimei.framework.swift.validation.model.FieldComponentConfig;
-import cn.maiaimei.framework.swift.validation.model.FieldConfig;
-import cn.maiaimei.framework.swift.validation.model.ValidationResult;
-import cn.maiaimei.framework.swift.validation.model.ValidationRule;
-import com.prowidesoftware.swift.model.SwiftTagListBlock;
-import com.prowidesoftware.swift.model.field.Field;
-import com.prowidesoftware.swift.model.field.SwiftParseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-public class ValidatorUtils {
+public final class ValidatorUtils {
     private static final String EXCLAMATORY_MARK = "!";
     private static final String SLASH = "/";
 
@@ -99,10 +92,7 @@ public class ValidatorUtils {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','
     };
 
-    private static final String DECIMALS_FORMAT_REGEX = "^[0-9]+,$";
-
-    private static final String BIC_FORMAT = "4!a2!a2!c[3!c]";
-    private static final String BIC_FORMAT_REGEX = "^[A-Z]{6}[A-Za-z]{2}([A-Za-z]{3})?$";
+    private static final String FORMAT_REGEX = "[acnxzd]";
 
     /**
      * fixed length or variable length of alphabetic, alpha-numeric, numeric, SWIFT X set, SWIFT Z set or decimals,
@@ -129,56 +119,68 @@ public class ValidatorUtils {
      */
     private static final String MULTILINE_SWIFT_SET_FORMAT_REGEX = "^[1-9]{1}[0-9]*\\*[1-9]{1}[0-9]*[xz]$";
 
+    private static final String DECIMALS_REGEX = "^[0-9]+,([0-9]{2})?$";
+
+    private static final String NUMBER_REGEX = "\\d+";
+
+    private static final String BIC_REGEX = "^[A-Z]{6}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?$";
+
     /**
      * Message Index/Total
      * <p>1!n/1!n</p>
      */
-    private static final String MESSAGE_INDEX_TOTAL_FORMAT_REGEX = "^[1-9]{1}/[1-9]{1}$";
+    private static final String MESSAGE_INDEX_TOTAL_REGEX = "^[1-9]{1}/[1-9]{1}$";
 
     /**
-     * Message Creation DateTime
+     * <DATE4><HHMM>
      * <p>8!n4!n</p>
      * <p>(Date)(Time)</p>
      */
-    private static final String MESSAGE_CREATION_DATETIME_FORMAT = "8!n4!n";
-    private static final String MESSAGE_CREATION_DATETIME_FORMAT_REGEX = "^[0-9]{12}$";
+    private static final String DATE4_HHMM_REGEX = "^[0-9]{12}$";
 
     /**
-     * Reference Date Format
+     * <DATE2>[/<DATE2>]
      * <p>6!n[/6!n]</p>
      * <p>(Date 1)(Date 2)</p>
      */
-    private static final String REFERENCE_DATE_FORMAT = "6!n[/6!n]";
-    private static final String REFERENCE_DATE_FORMAT_REGEX = "^[0-9]{6}(/[0-9]{6})?$";
+    private static final String DATE2_OPTIONAL_DATE2_REGEX = "^[0-9]{6}(/[0-9]{6})?$";
 
-    private static final Pattern DECIMALS_FORMAT_PATTERN = Pattern.compile(DECIMALS_FORMAT_REGEX);
+    /**
+     * TODO: confirm fractional part
+     * 3!a15d
+     * (Currency)(Amount)
+     */
+    private static final String CUR_AMOUNT_15_REGEX = "^[A-Z]{3}[0-9]+,([0-9]{2})?$";
+
+    private static final Pattern FORMAT_PATTERN = Pattern.compile(FORMAT_REGEX);
     private static final Pattern GENERAL_FORMAT_PATTERN = Pattern.compile(GENERAL_FORMAT_REGEX);
     private static final Pattern MULTILINE_SWIFT_SET_FORMAT_PATTERN = Pattern.compile(MULTILINE_SWIFT_SET_FORMAT_REGEX);
-    private static final Pattern BIC_FORMAT_PATTERN = Pattern.compile(BIC_FORMAT_REGEX);
-    private static final Pattern MESSAGE_INDEX_TOTAL_FORMAT_PATTERN = Pattern.compile(MESSAGE_INDEX_TOTAL_FORMAT_REGEX);
-    private static final Pattern MESSAGE_CREATION_DATETIME_FORMAT_PATTERN = Pattern.compile(MESSAGE_CREATION_DATETIME_FORMAT_REGEX);
-    private static final Pattern REFERENCE_DATE_FORMAT_PATTERN = Pattern.compile(REFERENCE_DATE_FORMAT_REGEX);
+    private static final Pattern DECIMALS_PATTERN = Pattern.compile(DECIMALS_REGEX);
+    private static final Pattern NUMBER_PATTERN = Pattern.compile(NUMBER_REGEX);
+    private static final Pattern BIC_PATTERN = Pattern.compile(BIC_REGEX);
+    private static final Pattern MESSAGE_INDEX_TOTAL_PATTERN = Pattern.compile(MESSAGE_INDEX_TOTAL_REGEX);
+    private static final Pattern DATE4_HHMM_PATTERN = Pattern.compile(DATE4_HHMM_REGEX);
+    private static final Pattern DATE2_OPTIONAL_DATE2_PATTERN = Pattern.compile(DATE2_OPTIONAL_DATE2_REGEX);
+    private static final Pattern CUR_AMOUNT_15_PATTERN = Pattern.compile(CUR_AMOUNT_15_REGEX);
 
-    private static final String MUST_MATCH_FORMAT = "must_match_format";
-    private static final Map<String, String> ERROR_MESSAGES = new HashMap<>();
-
-    static {
-        ERROR_MESSAGES.put(MUST_MATCH_FORMAT, "%s must match %s, invalid value is %s");
-        ERROR_MESSAGES.put("a", "%s contain alphabetic, capital letters (A through Z), upper case only");
-        ERROR_MESSAGES.put("c", "%s contain alpha-numeric capital letters (upper case), and digits only");
-        ERROR_MESSAGES.put("n", "%s contain numeric, digits (0 through 9) only");
-        ERROR_MESSAGES.put("x", "%s contain SWIFT X set only");
-        ERROR_MESSAGES.put("z", "%s contain SWIFT Z set only");
-        ERROR_MESSAGES.put("d", "%s contain decimals, including decimal comma ',' preceding the fractional part. " +
-                "The fractional part may be missing, but the decimal comma must always be present");
+    public static boolean eq(String value, int length) {
+        return value.length() == length;
     }
 
     public static boolean ne(String value, int length) {
         return value.length() != length;
     }
 
-    public static boolean gt(String value, int maxlength) {
-        return value.length() > maxlength;
+    public static boolean le(String value, int length) {
+        return value.length() <= length;
+    }
+
+    public static boolean lt(String value, int length) {
+        return value.length() < length;
+    }
+
+    public static boolean gt(String value, int length) {
+        return value.length() > length;
     }
 
     public static boolean containsOnlyUpperCase(String value) {
@@ -202,7 +204,7 @@ public class ValidatorUtils {
     }
 
     public static boolean containsOnlyDecimals(String value) {
-        return StringUtils.containsOnly(value, DECIMALS) && DECIMALS_FORMAT_PATTERN.matcher(value).matches();
+        return StringUtils.containsOnly(value, DECIMALS) && DECIMALS_PATTERN.matcher(value).matches();
     }
 
     public static boolean containsOnly(String value, String type) {
@@ -228,153 +230,63 @@ public class ValidatorUtils {
         return !containsOnly(value, type);
     }
 
-    public static void validateFields(ValidationResult result, SwiftTagListBlock block, List<FieldConfig> fieldConfigs) {
-        for (FieldConfig fieldConfig : fieldConfigs) {
-            String fieldTag = fieldConfig.getTag();
-            Field field = block.getFieldByName(fieldTag);
-            // validate mandatory field
-            if (field == null) {
-                if (fieldConfig.isRequired()) {
-                    result.addErrorMessage(fieldTag + " must be present");
-                }
-                continue;
-            }
-            // original value: block.getTagValue(fieldTag), non-original value: field.getValue()
-            String fieldValue = block.getTagValue(fieldTag);
-            if (StringUtils.isBlank(fieldValue)) {
-                if (fieldConfig.isRequired()) {
-                    result.addErrorMessage(fieldTag + " must not be blank");
-                }
-                continue;
-            }
-            String fieldFormat = fieldConfig.getFormat();
-            List<ValidationRule> rules = fieldConfig.getRules();
-            validateFieldsByGeneralFormat(result, fieldTag, fieldFormat, fieldValue, rules);
-            validateFieldsByMultilineSwiftSetFormat(result, fieldTag, fieldFormat, fieldValue);
-            validateFieldsByComponents(result, field, fieldConfig, fieldValue);
-            validateBIC(result, fieldTag, fieldFormat, fieldValue);
-        }
-    }
-
-    private static void validateFieldsByComponents(ValidationResult result, Field field, FieldConfig fieldConfig, String fieldValue) {
-        String fieldName = field.getName();
-        String fieldFormat = fieldConfig.getFormat();
-        if (isMatchGeneralFormat(fieldFormat)
-                || isMatchMultilineSwiftSetFormat(fieldFormat)
-                || isMatchBIC(fieldFormat)
-                || !validateMessageCreationDateTime(result, fieldName, fieldFormat, fieldValue)
-                || !validateReferenceDate(result, fieldName, fieldFormat, fieldValue)
-            //|| CollectionUtils.isEmpty(fieldConfig.getComponents())
-        ) {
-            return;
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("Field{} validatorPattern: {}, componentsSize: {}", fieldName, field.validatorPattern(), field.componentsSize());
-        }
-        List<String> componentLabels = field.getComponentLabels();
-        for (int i = 0; i < field.componentsSize(); i++) {
-            int componentIndex = i + 1;
-            if (log.isDebugEnabled()) {
-                log.debug("Field{} {} value is: {}", fieldName, componentLabels.get(i), field.getComponent(componentIndex));
-            }
-            Optional<FieldComponentConfig> componentConfigOptional = Optional.ofNullable(fieldConfig.getComponents()).orElseGet(ArrayList::new).stream().filter(w -> w.getIndex() == componentIndex).findAny();
-            if (!componentConfigOptional.isPresent()) {
-                continue;
-            }
-            FieldComponentConfig fieldComponentConfig = componentConfigOptional.get();
-            String tagAndComponentLabel = fieldName + " " + componentLabels.get(i);
-            String componentFormat = fieldComponentConfig.getFormat();
-            String componentValue = field.getComponent(componentIndex);
-            if (StringUtils.isBlank(componentValue)) {
-                if (fieldComponentConfig.isRequired()) {
-                    result.addErrorMessage(tagAndComponentLabel + " must not be blank");
-                }
-                continue;
-            }
-            validateFieldsByGeneralFormat(result, tagAndComponentLabel, componentFormat, componentValue, fieldComponentConfig.getRules());
-            validateBIC(result, tagAndComponentLabel, componentFormat, componentValue);
-        }
-    }
-
-    private static void validateFieldsByGeneralFormat(ValidationResult result, String tag, String format, String value, List<ValidationRule> rules) {
-        if (StringUtils.isBlank(format) || !isMatchGeneralFormat(format)) {
-            return;
-        }
-        if (isStartsWithSlash(format) && isStartsWithSlash(value)) {
+    public static String validateGeneralFormat(String name, String format, String value) {
+        if (ValidatorUtils.isStartsWithSlash(format) && ValidatorUtils.isStartsWithSlash(value)) {
             value = value.substring(1);
         }
-        // validate field value length
-        boolean isValidLength = true;
-        boolean isFixedLength = isFixedLength(format);
-        int length = getNumber(format);
-        if (isFixedLength && ne(value, length)) {
-            isValidLength = false;
-            result.addErrorMessage(tag + " length must be " + length + ", invalid value is " + value);
-        } else if (!isFixedLength && gt(value, length)) {
-            isValidLength = false;
-            result.addErrorMessage(tag + " length must be less than or equal to " + length + ", invalid value is " + value);
+        int length = ValidatorUtils.getNumber(format);
+        String type = ValidatorUtils.getType(format);
+        boolean isFixedLength = ValidatorUtils.isFixedLength(format);
+        if (isFixedLength && ValidatorUtils.ne(value, length)) {
+            return ValidationError.mustBeFixedLength(type, name, length, value);
         }
-        if (!isValidLength) {
-            return;
+        if (!isFixedLength && ValidatorUtils.gt(value, length)) {
+            return ValidationError.mustBeVarLength(type, name, length, value);
         }
-        // validate field value content
-        String type = getType(format);
-        if (containsOther(value, type)) {
-            result.addErrorMessage(formatErrorMessage(type, tag) + ", invalid value is " + value);
-            return;
-        }
-        // validate field value by custom rules
-        validateRules(result, tag, value, rules);
+        return null;
     }
 
-    private static void validateFieldsByMultilineSwiftSetFormat(ValidationResult result, String tag, String format, String value) {
-        if (StringUtils.isBlank(format) || !isMatchMultilineSwiftSetFormat(format)) {
-            return;
-        }
-        List<Integer> numbers = getNumbers(format);
+    public static String validateMultilineSwiftSet(String name, String format, String value, List<String> lines) {
+        List<Integer> numbers = ValidatorUtils.getNumbers(format);
         int rowcount = numbers.get(0);
         int maxlength = numbers.get(1);
-        String type = getType(format);
-        List<String> lines = SwiftParseUtils.getLines(value);
+        String type = ValidatorUtils.getType(format);
         if (lines.size() > rowcount
-                || lines.stream().anyMatch(line -> gt(line, maxlength) || containsOther(line, type))) {
-            result.addErrorMessage(tag + " up to " + rowcount + " lines, " +
-                    "with a maximum of " + maxlength + " characters per line, " +
-                    "contain SWIFT " + type.toUpperCase() + " set only, " +
-                    "invalid value is " + value);
+                || lines.stream().anyMatch(line -> ValidatorUtils.gt(line, maxlength) || ValidatorUtils.containsOther(line, type))) {
+            return ValidationError.mustBeMultilineSwiftSet(type, name, rowcount, maxlength, value);
         }
+        return null;
     }
 
-    private static void validateRules(ValidationResult result, String tag, String value, List<ValidationRule> rules) {
-        if (CollectionUtils.isEmpty(rules)) {
-            return;
+    public static String validateFixedCVarX(String name, String format,
+                                            List<String> values, List<String> labels,
+                                            boolean isOptionalVarX) {
+        List<Integer> numbers = getNumbers(format);
+        int length = numbers.get(0);
+        int maxlength = numbers.size() > 1 ? numbers.get(1) : -1;
+        String value = values.get(0);
+        String value1 = values.get(1);
+        String value2 = values.get(2);
+        String label1 = labels.get(0);
+        String label2 = labels.get(1);
+        if (ne(value1, length)) {
+            return ValidationError.mustBeFixedLength("x", name.concat(StringUtils.SPACE).concat(label1), length, value1);
         }
-        for (ValidationRule rule : rules) {
-            switch (rule.getType()) {
-                case "enum": {
-                    if (!validateEnum(value, rule.getEnumItems())) {
-                        result.addErrorMessage(tag + " value must in \"" + String.join(",", rule.getEnumItems()) + "\", invalid value is " + value);
-                    }
-                    break;
-                }
-                case "datetime": {
-                    if (!validateDatetime(value, rule.getDatetimePattern())) {
-                        result.addErrorMessage(tag + " must match " + rule.getDatetimePattern() + ", invalid value is " + value);
-                    }
-                    break;
-                }
-                default: {
-                    break;
-                }
+        if (!isOptionalVarX && StringUtils.isBlank(value2)) {
+            return ValidationError.mustNotBeBlank(name.concat(StringUtils.SPACE).concat(label2));
+        }
+        if (StringUtils.isNotBlank(value2)) {
+            if (!SLASH.equals(value.substring(length, length + 1))) {
+                return ValidationError.mustMatchFormat(name, format, value);
+            }
+            if (gt(value2, maxlength)) {
+                return ValidationError.mustBeVarLength("x", name.concat(StringUtils.SPACE).concat(label2), maxlength, value2);
             }
         }
+        return null;
     }
 
-    private static boolean validateEnum(String value, List<String> enumItems) {
-        return enumItems.contains(value);
-    }
-
-    private static boolean validateDatetime(String value, String pattern) {
+    public static boolean validateDatetime(String value, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         try {
             dateFormat.setLenient(false);
@@ -385,79 +297,69 @@ public class ValidatorUtils {
         }
     }
 
-    private static boolean validateMessageCreationDateTime(ValidationResult result, String tag, String format, String value) {
-        if (MESSAGE_CREATION_DATETIME_FORMAT.equals(format) && !MESSAGE_CREATION_DATETIME_FORMAT_PATTERN.matcher(value).matches()) {
-            result.addErrorMessage(formatErrorMessage(MUST_MATCH_FORMAT, tag, format, value));
-            return false;
-        }
-        return true;
+    public static boolean isMatchDate2OptionalDate2(String value) {
+        return DATE2_OPTIONAL_DATE2_PATTERN.matcher(value).matches();
     }
 
-    private static boolean validateReferenceDate(ValidationResult result, String tag, String format, String value) {
-        if (REFERENCE_DATE_FORMAT.equals(format) && !REFERENCE_DATE_FORMAT_PATTERN.matcher(value).matches()) {
-            result.addErrorMessage(formatErrorMessage(MUST_MATCH_FORMAT, tag, format, value));
-            return false;
-        }
-        return true;
+    public static boolean isMatchDate4Hhmm(String value) {
+        return DATE4_HHMM_PATTERN.matcher(value).matches();
     }
 
-    private static void validateBIC(ValidationResult result, String tag, String format, String value) {
-        if (isMatchBIC(format) && !BIC_FORMAT_PATTERN.matcher(value).matches()) {
-            result.addErrorMessage(formatErrorMessage(MUST_MATCH_FORMAT, tag, format, value));
-        }
-    }
-
-    private static boolean isFixedLength(String format) {
-        return format.contains(EXCLAMATORY_MARK);
-    }
-
-    private static boolean isStartsWithSlash(String format) {
-        return format.startsWith(SLASH);
-    }
-
-    private static boolean isMatchBIC(String format) {
-        return BIC_FORMAT.equals(format);
-    }
-
-    public static boolean isMatchMessageIndexTotal(String value) {
-        return MESSAGE_INDEX_TOTAL_FORMAT_PATTERN.matcher(value).matches();
-    }
-
-    private static boolean isMatchGeneralFormat(String format) {
+    public static boolean isMatchGeneralFormat(String format) {
         return GENERAL_FORMAT_PATTERN.matcher(format).matches();
     }
 
-    private static boolean isMatchMultilineSwiftSetFormat(String format) {
+    public static boolean isMatchMultilineSwiftSetFormat(String format) {
         return MULTILINE_SWIFT_SET_FORMAT_PATTERN.matcher(format).matches();
     }
 
-    private static List<Integer> getNumbers(String format) {
+    public static boolean isMatchMessageIndexTotal(String value) {
+        return MESSAGE_INDEX_TOTAL_PATTERN.matcher(value).matches();
+    }
+
+    public static boolean isMatchAmount12(String value) {
+        return le(value, 12) && containsOnlyDecimals(value);
+    }
+
+    public static boolean isMatchCurrencyAmount15(String value) {
+        return CUR_AMOUNT_15_PATTERN.matcher(value).matches();
+    }
+
+    public static boolean isMatchBIC(String value) {
+        return BIC_PATTERN.matcher(value).matches();
+    }
+
+    public static boolean isFixedLength(String format) {
+        return format.contains(EXCLAMATORY_MARK);
+    }
+
+    public static boolean isStartsWithSlash(String format) {
+        return format.startsWith(SLASH);
+    }
+
+    public static List<Integer> getNumbers(String format) {
         List<Integer> numbers = new ArrayList<>();
-        String regex = "\\d+";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(format);
+        Matcher matcher = NUMBER_PATTERN.matcher(format);
         while (matcher.find()) {
             numbers.add(Integer.parseInt(matcher.group(0)));
         }
         return numbers;
     }
 
-    private static int getNumber(String format) {
+    public static int getNumber(String format) {
         List<Integer> numbers = getNumbers(format);
         return numbers.get(0);
     }
 
-    private static String getType(String format) {
-        String regex = "[acnxzd]";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(format);
+    public static String getType(String format) {
+        Matcher matcher = FORMAT_PATTERN.matcher(format);
         if (matcher.find()) {
             return matcher.group(0);
         }
         return "";
     }
 
-    private static String formatErrorMessage(String key, Object... args) {
-        return String.format(ERROR_MESSAGES.get(key), args);
+    private ValidatorUtils() {
+        throw new UnsupportedOperationException();
     }
 }
