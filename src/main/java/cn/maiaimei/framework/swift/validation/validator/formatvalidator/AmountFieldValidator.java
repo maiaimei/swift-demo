@@ -1,7 +1,8 @@
-package cn.maiaimei.framework.swift.validation.validator;
+package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
+import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 @Component
-public class AmountFieldValidator<T extends Field> extends AbstractFieldValidator<T> {
+public class AmountFieldValidator<T extends Field> extends AbstractFormatValidator<T> {
     /**
      * 12d
      */
@@ -33,15 +34,14 @@ public class AmountFieldValidator<T extends Field> extends AbstractFieldValidato
     }
 
     @Override
-    public boolean supports(String nameOrFormat) {
-        return supports(FORMAT_VALIDATE_MAP, nameOrFormat);
+    public boolean supportsFormat(String format) {
+        return ValidatorUtils.isSupportsFormat(FORMAT_VALIDATE_MAP, format);
     }
 
     @Override
-    public String doValidate(T field, String format, String value) {
-        String name = field.getName();
+    public String validate(T field, String tag, String format, String value) {
         if (!FORMAT_VALIDATE_MAP.get(format).test(value)) {
-            return ValidationError.mustMatchFormat(name, FORMAT_MAP.get(format), value);
+            return ValidationError.mustMatchFormat(tag, FORMAT_MAP.get(format), value);
         }
         return null;
     }

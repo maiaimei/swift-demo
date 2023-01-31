@@ -16,7 +16,7 @@ public final class ValidationError {
     private static final String MUST_BE_VAR_LENGTH = "%s length must be less than or equal to %s, %s, invalid value is %s";
     private static final String MUST_BE_MULTILINE_SWIFT_SET = "%s up to %s lines, with a maximum of %s characters per line, contain SWIFT %s set only, invalid value is %s";
     private static final String MUST_MATCH_FORMAT = "%s must match %s, invalid value is %s";
-    private static final String MUST_IN_ENUM = "%s must in \"%s\"";
+    private static final String MUST_IN_ENUM = "%s must in \"%s\", invalid value is %s";
 
     private ValidationError() {
         throw new UnsupportedOperationException();
@@ -46,8 +46,8 @@ public final class ValidationError {
         return String.format(MUST_MATCH_FORMAT, name, format, value);
     }
 
-    public static String mustInEnum(String name, List<String> enumItems) {
-        return String.format(MUST_IN_ENUM, name, String.join(",", enumItems));
+    public static String mustInEnum(String name, String value, List<String> enumItems) {
+        return String.format(MUST_IN_ENUM, name, String.join(",", enumItems), value);
     }
 
     private static String getMessage(String type) {

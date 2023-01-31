@@ -1,7 +1,8 @@
-package cn.maiaimei.framework.swift.validation.validator;
+package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
+import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import java.util.function.Predicate;
  * Dates defined as 8!n must be in the form of YYYYMMDD.
  */
 @Component
-public class DateTimeFieldValidator<T extends Field> extends AbstractFieldValidator<T> {
+public class DateTimeFieldValidator<T extends Field> extends AbstractFormatValidator<T> {
     /**
      * 8!n4!n
      */
@@ -36,16 +37,15 @@ public class DateTimeFieldValidator<T extends Field> extends AbstractFieldValida
     }
 
     @Override
-    public boolean supports(String nameOrFormat) {
-        return supports(FORMAT_VALIDATE_MAP, nameOrFormat);
+    public boolean supportsFormat(String format) {
+        return ValidatorUtils.isSupportsFormat(FORMAT_VALIDATE_MAP, format);
     }
 
     @Override
-    public String doValidate(Field field, String format, String value) {
-        String name = field.getName();
+    public String validate(T field, String tag, String format, String value) {
         String pattern = FORMAT_MAP.get(format);
         if (!FORMAT_VALIDATE_MAP.get(format).test(value) || !ValidatorUtils.validateDatetime(value, pattern)) {
-            return ValidationError.mustMatchFormat(name, pattern, value);
+            return ValidationError.mustMatchFormat(tag, pattern, value);
         }
         return null;
     }

@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +16,8 @@ import java.util.regex.Pattern;
 public final class ValidatorUtils {
     private static final String EXCLAMATORY_MARK = "!";
     private static final String SLASH = "/";
+    private static final String LEFT_SQUARE_BRACKET = "[";
+    private static final String RIGHT_SQUARE_BRACKET = "]";
 
     /**
      * a, alphabetic, capital letters (A through Z), upper case only
@@ -119,6 +123,16 @@ public final class ValidatorUtils {
      */
     private static final String MULTILINE_SWIFT_SET_FORMAT_REGEX = "^[1-9]{1}[0-9]*\\*[1-9]{1}[0-9]*[xz]$";
 
+    /**
+     * [/35x]
+     */
+    private static final String VAR_X_FORMAT_REGEX = "\\[/[1-9]{1}[0-9]*\\*[1-9]{1}[0-9]*x]";
+
+    /**
+     * 4!c[/35x]
+     */
+    private static final String FIXED_C_VAR_X_FORMAT_REGEX = "^[1-9]{1}[0-9]*!c\\[/[1-9]{1}[0-9]*\\*[1-9]{1}[0-9]*x]$";
+
     private static final String DECIMALS_REGEX = "^[0-9]+,([0-9]{2})?$";
 
     private static final String NUMBER_REGEX = "\\d+";
@@ -126,10 +140,10 @@ public final class ValidatorUtils {
     private static final String BIC_REGEX = "^[A-Z]{6}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?$";
 
     /**
-     * Message Index/Total
+     * Index/Total
      * <p>1!n/1!n</p>
      */
-    private static final String MESSAGE_INDEX_TOTAL_REGEX = "^[1-9]{1}/[1-9]{1}$";
+    private static final String INDEX_TOTAL_REGEX = "^[1-9]{1}/[1-9]{1}$";
 
     /**
      * <DATE4><HHMM>
@@ -155,13 +169,15 @@ public final class ValidatorUtils {
     private static final Pattern FORMAT_PATTERN = Pattern.compile(FORMAT_REGEX);
     private static final Pattern GENERAL_FORMAT_PATTERN = Pattern.compile(GENERAL_FORMAT_REGEX);
     private static final Pattern MULTILINE_SWIFT_SET_FORMAT_PATTERN = Pattern.compile(MULTILINE_SWIFT_SET_FORMAT_REGEX);
+    private static final Pattern FIXED_C_VAR_X_FORMAT_PATTERN = Pattern.compile(FIXED_C_VAR_X_FORMAT_REGEX);
     private static final Pattern DECIMALS_PATTERN = Pattern.compile(DECIMALS_REGEX);
     private static final Pattern NUMBER_PATTERN = Pattern.compile(NUMBER_REGEX);
     private static final Pattern BIC_PATTERN = Pattern.compile(BIC_REGEX);
-    private static final Pattern MESSAGE_INDEX_TOTAL_PATTERN = Pattern.compile(MESSAGE_INDEX_TOTAL_REGEX);
+    private static final Pattern INDEX_TOTAL_PATTERN = Pattern.compile(INDEX_TOTAL_REGEX);
     private static final Pattern DATE4_HHMM_PATTERN = Pattern.compile(DATE4_HHMM_REGEX);
     private static final Pattern DATE2_OPTIONAL_DATE2_PATTERN = Pattern.compile(DATE2_OPTIONAL_DATE2_REGEX);
     private static final Pattern CUR_AMOUNT_15_PATTERN = Pattern.compile(CUR_AMOUNT_15_REGEX);
+    public static final Pattern VAR_X_FORMAT_PATTERN = Pattern.compile(VAR_X_FORMAT_REGEX);
 
     public static boolean eq(String value, int length) {
         return value.length() == length;
@@ -258,19 +274,18 @@ public final class ValidatorUtils {
         return null;
     }
 
-    public static String validateFixedCVarX(String name, String format,
-                                            List<String> values, List<String> labels,
-                                            boolean isOptionalVarX) {
+    public static String validateFixedCVarX(String name, String format, List<String> values, List<String> labels, boolean isOptionalVarX) {
         List<Integer> numbers = getNumbers(format);
         int length = numbers.get(0);
         int maxlength = numbers.size() > 1 ? numbers.get(1) : -1;
+        String type = "x";
         String value = values.get(0);
         String value1 = values.get(1);
         String value2 = values.get(2);
         String label1 = labels.get(0);
         String label2 = labels.get(1);
         if (ne(value1, length)) {
-            return ValidationError.mustBeFixedLength("x", name.concat(StringUtils.SPACE).concat(label1), length, value1);
+            return ValidationError.mustBeFixedLength(type, name.concat(StringUtils.SPACE).concat(label1), length, value1);
         }
         if (!isOptionalVarX && StringUtils.isBlank(value2)) {
             return ValidationError.mustNotBeBlank(name.concat(StringUtils.SPACE).concat(label2));
@@ -280,7 +295,7 @@ public final class ValidatorUtils {
                 return ValidationError.mustMatchFormat(name, format, value);
             }
             if (gt(value2, maxlength)) {
-                return ValidationError.mustBeVarLength("x", name.concat(StringUtils.SPACE).concat(label2), maxlength, value2);
+                return ValidationError.mustBeVarLength(type, name.concat(StringUtils.SPACE).concat(label2), maxlength, value2);
             }
         }
         return null;
@@ -313,8 +328,12 @@ public final class ValidatorUtils {
         return MULTILINE_SWIFT_SET_FORMAT_PATTERN.matcher(format).matches();
     }
 
-    public static boolean isMatchMessageIndexTotal(String value) {
-        return MESSAGE_INDEX_TOTAL_PATTERN.matcher(value).matches();
+    public static boolean isMatchFixedCVarXFormat(String format) {
+        return FIXED_C_VAR_X_FORMAT_PATTERN.matcher(format).matches();
+    }
+
+    public static boolean isMatchIndexTotal(String value) {
+        return INDEX_TOTAL_PATTERN.matcher(value).matches();
     }
 
     public static boolean isMatchAmount12(String value) {
@@ -333,8 +352,33 @@ public final class ValidatorUtils {
         return format.contains(EXCLAMATORY_MARK);
     }
 
+    public static boolean isOptional(String format) {
+        return format.startsWith(LEFT_SQUARE_BRACKET) && format.endsWith(RIGHT_SQUARE_BRACKET);
+    }
+
+    public static boolean isOptionalFormat(Pattern pattern, String format, int group) {
+        Matcher matcher = pattern.matcher(format);
+        int i = 0;
+        while (matcher.find()) {
+            if (i == group) {
+                return isOptional(matcher.group(group));
+            }
+            i++;
+        }
+        return false;
+    }
+
     public static boolean isStartsWithSlash(String format) {
         return format.startsWith(SLASH);
+    }
+
+    public static boolean isSupportsFormat(Map<String, Predicate<String>> predicateMap, String format) {
+        for (Map.Entry<String, Predicate<String>> entry : predicateMap.entrySet()) {
+            if (entry.getKey().equals(format)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<Integer> getNumbers(String format) {
