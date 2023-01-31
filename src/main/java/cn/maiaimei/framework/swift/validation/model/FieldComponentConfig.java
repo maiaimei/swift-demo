@@ -1,4 +1,4 @@
-package cn.maiaimei.example.validation.model;
+package cn.maiaimei.framework.swift.validation.model;
 
 import lombok.Data;
 

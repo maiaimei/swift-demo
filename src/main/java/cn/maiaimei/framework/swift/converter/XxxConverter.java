@@ -1,4 +1,4 @@
-package cn.maiaimei.example.converter;
+package cn.maiaimei.framework.swift.converter;
 
 import org.springframework.stereotype.Component;
 

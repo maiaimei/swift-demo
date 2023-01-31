@@ -1,4 +1,4 @@
-package cn.maiaimei.example.model;
+package cn.maiaimei.framework.swift.model;
 
 import lombok.Data;
 

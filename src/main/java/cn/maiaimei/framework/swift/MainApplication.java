@@ -1,4 +1,4 @@
-package cn.maiaimei.example;
+package cn.maiaimei.framework.swift;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

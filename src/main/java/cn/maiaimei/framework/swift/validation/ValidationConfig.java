@@ -1,6 +1,6 @@
-package cn.maiaimei.example.validation;
+package cn.maiaimei.framework.swift.validation;
 
-import cn.maiaimei.example.validation.model.MT798ValidationConfig;
+import cn.maiaimei.framework.swift.validation.model.MT798ValidationConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.SneakyThrows;

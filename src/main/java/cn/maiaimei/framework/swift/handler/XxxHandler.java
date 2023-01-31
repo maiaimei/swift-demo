@@ -1,7 +1,7 @@
-package cn.maiaimei.example.handler;
+package cn.maiaimei.framework.swift.handler;
 
-import cn.maiaimei.example.annotation.SwiftHandler;
-import cn.maiaimei.example.converter.XxxConverter;
+import cn.maiaimei.framework.swift.annotation.SwiftHandler;
+import cn.maiaimei.framework.swift.converter.XxxConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SwiftHandler

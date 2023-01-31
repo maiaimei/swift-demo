@@ -1,8 +1,8 @@
-package cn.maiaimei.example.validation;
+package cn.maiaimei.framework.swift.validation;
 
-import cn.maiaimei.example.validation.model.FieldConfig;
-import cn.maiaimei.example.validation.model.MT798ValidationConfig;
-import cn.maiaimei.example.validation.model.ValidationResult;
+import cn.maiaimei.framework.swift.validation.model.FieldConfig;
+import cn.maiaimei.framework.swift.validation.model.MT798ValidationConfig;
+import cn.maiaimei.framework.swift.validation.model.ValidationResult;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.Tag;
 import com.prowidesoftware.swift.model.field.Field12;

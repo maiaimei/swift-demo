@@ -1,7 +1,7 @@
-package cn.maiaimei.example;
+package cn.maiaimei.framework.swift;
 
-import cn.maiaimei.example.validation.ValidationProcessor;
-import cn.maiaimei.example.validation.model.ValidationResult;
+import cn.maiaimei.framework.swift.validation.ValidationProcessor;
+import cn.maiaimei.framework.swift.validation.model.ValidationResult;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.field.*;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;

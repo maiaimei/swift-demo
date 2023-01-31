@@ -1,6 +1,6 @@
-package cn.maiaimei.example.converter;
+package cn.maiaimei.framework.swift.converter;
 
-import cn.maiaimei.example.model.MT7xxModel;
+import cn.maiaimei.framework.swift.model.MT7xxModel;
 import org.springframework.stereotype.Component;
 
 @Component

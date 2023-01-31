@@ -1,7 +1,7 @@
-package cn.maiaimei.example.converter;
+package cn.maiaimei.framework.swift.converter;
 
-import cn.maiaimei.example.annotation.SwiftMTTag;
-import cn.maiaimei.example.model.MT7xxMessage;
+import cn.maiaimei.framework.swift.annotation.SwiftMTTag;
+import cn.maiaimei.framework.swift.model.MT7xxMessage;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.Tag;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
@@ -70,7 +70,7 @@ public class StringToMT7xxMessageConverter implements Converter<String, MT7xxMes
         }
         return tags[idx].getValue();
     }
-    
+
     /**
      * get all fields including super class
      *

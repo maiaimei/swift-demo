@@ -1,6 +1,6 @@
-package cn.maiaimei.example.model;
+package cn.maiaimei.framework.swift.model;
 
-import cn.maiaimei.example.annotation.SwiftMTTag;
+import cn.maiaimei.framework.swift.annotation.SwiftMTTag;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

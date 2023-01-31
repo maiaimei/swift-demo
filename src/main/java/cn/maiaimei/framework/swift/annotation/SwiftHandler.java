@@ -1,4 +1,4 @@
-package cn.maiaimei.example.annotation;
+package cn.maiaimei.framework.swift.annotation;
 
 import org.springframework.stereotype.Component;
 
