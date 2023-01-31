@@ -13,7 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public abstract class AbstractMTValidation implements MTValidation {
@@ -33,6 +35,7 @@ public abstract class AbstractMTValidation implements MTValidation {
         doValidateFields(result, mt798, block);
     }
 
+    // TODO: validate mandatory fields by Sequence A,B,C
     protected void validateMandatoryFields(ValidationResult result, MT798 mt798, SwiftTagListBlock block) {
         List<String> mandatoryFields = getMandatoryFields();
         if (!CollectionUtils.isEmpty(mandatoryFields)) {
@@ -51,10 +54,72 @@ public abstract class AbstractMTValidation implements MTValidation {
     }
 
     protected void validateFieldsByTags(ValidationResult result, MT798 mt798, SwiftTagListBlock block) {
+        boolean isExistField15A = false, isExistField15B = false, isExistField15C = false;
+        if (block.getTagByName("15A") != null) {
+            isExistField15A = true;
+            SwiftTagListBlock sequenceA = getSequenceA(mt798);
+            doValidateFieldsInternal(result, sequenceA, sequenceA.getTags());
+        } else if (requiredSequenceA()) {
+            result.addErrorMessage("MT" + mt798.getField12().getValue() + " Sequence A is mandatory");
+        }
+        if (block.getTagByName("15B") != null) {
+            isExistField15B = true;
+            SwiftTagListBlock sequenceB = getSequenceB(mt798);
+            doValidateFieldsInternal(result, sequenceB, sequenceB.getTags());
+        } else if (requiredSequenceB()) {
+            result.addErrorMessage("MT" + mt798.getField12().getValue() + " Sequence B is mandatory");
+        }
+        if (block.getTagByName("15C") != null) {
+            isExistField15C = true;
+            SwiftTagListBlock sequenceC = getSequenceC(mt798);
+            doValidateFieldsInternal(result, sequenceC, sequenceC.getTags());
+        } else if (requiredSequenceC()) {
+            result.addErrorMessage("MT" + mt798.getField12().getValue() + " Sequence C is mandatory");
+        }
+        if (!isExistField15A && !isExistField15B && !isExistField15C) {
+            doValidateFieldsInternal(result, block, block.getTags());
+        } else {
+            // TODO: validate other fields except Sequence A,B,C
+        }
+    }
+
+    protected boolean requiredSequenceA() {
+        return false;
+    }
+
+    protected boolean requiredSequenceB() {
+        return false;
+    }
+
+    protected boolean requiredSequenceC() {
+        return false;
+    }
+
+    protected SwiftTagListBlock getSequenceA(MT798 mt798) {
+        return null;
+    }
+
+    protected SwiftTagListBlock getSequenceB(MT798 mt798) {
+        return null;
+    }
+
+    protected SwiftTagListBlock getSequenceC(MT798 mt798) {
+        return null;
+    }
+
+    protected abstract void doValidateFields(ValidationResult result, MT798 mt798, SwiftTagListBlock block);
+
+    private void doValidateFieldsInternal(ValidationResult result, SwiftTagListBlock block, List<Tag> tags) {
+        if (CollectionUtils.isEmpty(tags)) {
+            return;
+        }
         List<FieldEnum> fieldEnums = getEnums();
-        for (Tag tag : block.getTags()) {
-            String name = tag.getName();
+        for (Tag tag : tags) {
             String value = tag.getValue();
+            if (StringUtils.isBlank(value)) {
+                continue;
+            }
+            String name = tag.getName();
             String format = getFormat(block, name);
             Field field = block.getFieldByName(name);
             // validate field by format
@@ -63,7 +128,7 @@ public abstract class AbstractMTValidation implements MTValidation {
                 result.addErrorMessage(formatValidator.validate(field, name, format, value));
             }
             // validate field by enum
-            FieldEnum fieldEnum = fieldEnums.stream().filter(w -> w.getTag().equals(name)).findAny().orElseGet(FieldEnum::new);
+            FieldEnum fieldEnum = Optional.ofNullable(fieldEnums).orElseGet(ArrayList::new).stream().filter(w -> w.getTag().equals(name)).findAny().orElseGet(FieldEnum::new);
             if (!CollectionUtils.isEmpty(fieldEnum.getEnumItems())) {
                 result.addErrorMessage(enumFieldValidator.validate(field, name, value, fieldEnum));
             }
@@ -74,8 +139,6 @@ public abstract class AbstractMTValidation implements MTValidation {
             }
         }
     }
-
-    protected abstract void doValidateFields(ValidationResult result, MT798 mt798, SwiftTagListBlock block);
 
     private String getFormat(SwiftTagListBlock block, String name) {
         Field field = block.getFieldByName(name);

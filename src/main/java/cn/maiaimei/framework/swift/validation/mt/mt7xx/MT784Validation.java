@@ -1,8 +1,9 @@
-package cn.maiaimei.framework.swift.validation.mt;
+package cn.maiaimei.framework.swift.validation.mt.mt7xx;
 
 import cn.maiaimei.framework.swift.enumeration.*;
 import cn.maiaimei.framework.swift.validation.FieldEnum;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
+import cn.maiaimei.framework.swift.validation.mt.AbstractMTValidation;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import org.springframework.stereotype.Component;

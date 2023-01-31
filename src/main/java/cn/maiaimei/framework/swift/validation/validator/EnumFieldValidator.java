@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * validate field enum, e.g. CODES
+ */
 @Component
 public class EnumFieldValidator<T extends Field> implements FieldValidator<T> {
     @Override

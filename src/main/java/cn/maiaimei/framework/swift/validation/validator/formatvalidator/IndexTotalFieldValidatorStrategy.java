@@ -6,7 +6,7 @@ import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IndexTotalValidatorStrategy<T extends Field> implements FormatValidatorStrategy<T> {
+public class IndexTotalFieldValidatorStrategy<T extends Field> implements FormatValidatorStrategy<T> {
     private static final String FORMAT = "1!n/1!n";
 
     @Override

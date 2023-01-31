@@ -18,15 +18,6 @@ public enum Field29SCustomerIdentifierEnum {
         return description;
     }
 
-    public static boolean matches(String value) {
-        for (Field29SCustomerIdentifierEnum item : Field29SCustomerIdentifierEnum.values()) {
-            if (item.name().equals(value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static List<String> getCodes() {
         return Arrays.stream(Field29SCustomerIdentifierEnum.values()).map(Enum::name).collect(Collectors.toList());
     }

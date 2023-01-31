@@ -25,15 +25,6 @@ public enum Field23EMethodOfTransmissionEnum {
         return description;
     }
 
-    public static boolean matches(String value) {
-        for (Field23EMethodOfTransmissionEnum item : Field23EMethodOfTransmissionEnum.values()) {
-            if (item.name().equals(value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static List<String> getCodes() {
         return Arrays.stream(Field23EMethodOfTransmissionEnum.values()).map(Enum::name).collect(Collectors.toList());
     }

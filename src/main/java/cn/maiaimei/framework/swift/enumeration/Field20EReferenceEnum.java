@@ -23,15 +23,6 @@ public enum Field20EReferenceEnum {
         return description;
     }
 
-    public static boolean matches(String value) {
-        for (Field20EReferenceEnum item : Field20EReferenceEnum.values()) {
-            if (item.name().equals(value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static List<String> getCodes() {
         return Arrays.stream(Field20EReferenceEnum.values()).map(Enum::name).collect(Collectors.toList());
     }

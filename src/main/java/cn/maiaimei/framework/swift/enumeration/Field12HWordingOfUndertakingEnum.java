@@ -9,7 +9,7 @@ public enum Field12HWordingOfUndertakingEnum {
     WDAP("WORDING DRAFTED BY APPLICANT"),
     WDBF("WORDING DRAFTED BY BENEFICIARY"),
     OTHR("must be specified in Narrative");
-    
+
     private String description;
 
     Field12HWordingOfUndertakingEnum(String description) {
@@ -18,15 +18,6 @@ public enum Field12HWordingOfUndertakingEnum {
 
     public String getDescription() {
         return description;
-    }
-
-    public static boolean matches(String value) {
-        for (Field12HWordingOfUndertakingEnum item : Field12HWordingOfUndertakingEnum.values()) {
-            if (item.name().equals(value)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static List<String> getCodes() {

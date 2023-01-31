@@ -12,7 +12,7 @@ public enum Field23XFileIdentificationEnum {
     COUR("Courier delivery (e.g., FedEx, DHL, UPS)"),
     HOST("Host-to-Host (Proprietary bank channel)"),
     OTHR("Other delivery channel");
-    
+
     private String description;
 
     Field23XFileIdentificationEnum(String description) {
@@ -21,15 +21,6 @@ public enum Field23XFileIdentificationEnum {
 
     public String getDescription() {
         return description;
-    }
-
-    public static boolean matches(String value) {
-        for (Field23XFileIdentificationEnum item : Field23XFileIdentificationEnum.values()) {
-            if (item.name().equals(value)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static List<String> getCodes() {

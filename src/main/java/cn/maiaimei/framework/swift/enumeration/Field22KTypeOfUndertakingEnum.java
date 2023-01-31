@@ -13,7 +13,7 @@ public enum Field22KTypeOfUndertakingEnum {
     SHIP("Shipping"),
     TEND("Tender or Bid"),
     WARR("Warranty/Maintenance");
-    
+
     private String description;
 
     Field22KTypeOfUndertakingEnum(String description) {
@@ -22,15 +22,6 @@ public enum Field22KTypeOfUndertakingEnum {
 
     public String getDescription() {
         return description;
-    }
-
-    public static boolean matches(String value) {
-        for (Field22KTypeOfUndertakingEnum item : Field22KTypeOfUndertakingEnum.values()) {
-            if (item.name().equals(value)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static List<String> getCodes() {

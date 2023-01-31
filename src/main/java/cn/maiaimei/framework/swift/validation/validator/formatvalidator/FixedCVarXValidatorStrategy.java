@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * validate fixed length alpha-numeric and optional Swift X set, Swift X set start with slash, e.g. 4!c[/35x]
+ */
 @Component
 public class FixedCVarXValidatorStrategy<T extends Field> implements FormatValidatorStrategy<T> {
     @Override

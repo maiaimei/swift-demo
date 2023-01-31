@@ -124,12 +124,12 @@ public final class ValidatorUtils {
     private static final String MULTILINE_SWIFT_SET_FORMAT_REGEX = "^[1-9]{1}[0-9]*\\*[1-9]{1}[0-9]*[xz]$";
 
     /**
-     * [/35x]
+     * optional Swift X set, Swift X set start with slash, e.g. [/35x]
      */
     private static final String VAR_X_FORMAT_REGEX = "\\[/[1-9]{1}[0-9]*\\*[1-9]{1}[0-9]*x]";
 
     /**
-     * 4!c[/35x]
+     * fixed length alpha-numeric and optional Swift X set, Swift X set start with slash, e.g. 4!c[/35x]
      */
     private static final String FIXED_C_VAR_X_FORMAT_REGEX = "^[1-9]{1}[0-9]*!c\\[/[1-9]{1}[0-9]*\\*[1-9]{1}[0-9]*x]$";
 

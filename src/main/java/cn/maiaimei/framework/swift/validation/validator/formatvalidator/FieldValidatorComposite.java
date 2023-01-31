@@ -7,8 +7,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+/**
+ * validate other format
+ * in order to validate special format, you need implements {@link FormatValidatorStrategy} interface
+ */
 @Component
-public class CompositeFormatFieldValidator<T extends Field> extends AbstractFormatValidator<T> {
+public class FieldValidatorComposite<T extends Field> extends AbstractFormatValidator<T> {
     @Autowired
     private Set<FormatValidatorStrategy> formatValidatorStrategySet;
 
