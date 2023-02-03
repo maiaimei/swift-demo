@@ -1,0 +1,136 @@
+{
+  "subMessageType": "760",
+  "fields": [
+    {
+      "tag": "27A",
+      "label": "Message Index/Total",
+      "format": "1!n/1!n",
+      "isMandatory": true
+    },
+    {
+      "tag": "21A",
+      "label": "Customer Reference Number",
+      "format": "16x",
+      "isMandatory": true
+    }
+  ],
+  "sequences": [
+    {
+      "sequenceName": "A",
+      "fields": [
+        {
+          "tag": "27",
+          "label": "Sequence of Total",
+          "format": "1!n/1!n",
+          "isMandatory": true
+        },
+        {
+          "tag": "22A",
+          "label": "Purpose of Message",
+          "format": "4!c",
+          "isMandatory": true,
+          "options": [
+            "ACNF",
+            "ADVI",
+            "ICCO",
+            "ISCO",
+            "ISSU"
+          ]
+        },
+        {
+          "tag": "72Z",
+          "label": "Sender to Receiver Information",
+          "format": "6*35z",
+          "isMandatory": false
+        },
+        {
+          "tag": "23X",
+          "label": "File Identification",
+          "format": "4!c/65x",
+          "isMandatory": false,
+          "components": [
+            {
+              "number": 1,
+              "label": "Code",
+              "format": "4!c",
+              "isMandatory": true,
+              "options": [
+                "FACT",
+                "FAXT",
+                "EMAL",
+                "MAIL",
+                "COUR",
+                "HOST",
+                "OTHR"
+              ]
+            },
+            {
+              "number": 2,
+              "label": "File Name or Reference",
+              "format": "65x",
+              "isMandatory": true
+            }
+          ]
+        }
+      ],
+      "isMandatory": true
+    },
+    {
+      "sequenceName": "B",
+      "fields": [
+        {
+          "tag": "20",
+          "label": "Undertaking Number",
+          "format": "16x",
+          "isMandatory": true
+        },
+        {
+          "tag": "30",
+          "label": "Date of Issue",
+          "format": "6!n",
+          "pattern": "YYMMDD",
+          "isMandatory": true
+        },
+        {
+          "tag": "22D",
+          "label": "Form of Undertaking",
+          "format": "4!c",
+          "isMandatory": true,
+          "options": [
+            "DGAR",
+            "STBY",
+            "DEPU"
+          ]
+        },
+        {
+          "tag": "40C",
+          "label": "Applicable Rules",
+          "format": "4!a[/35x]",
+          "isMandatory": false,
+          "components": [
+            {
+              "number": 1,
+              "label": "Type",
+              "format": "4!a",
+              "isMandatory": true,
+              "options": [
+                "ISPR",
+                "NONE",
+                "OTHR",
+                "UCPR",
+                "URDG"
+              ]
+            },
+            {
+              "number": 2,
+              "label": "Narrative",
+              "format": "35x",
+              "isMandatory": false
+            }
+          ]
+        }
+      ],
+      "isMandatory": true
+    }
+  ]
+}

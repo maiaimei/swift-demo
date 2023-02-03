@@ -1,48 +1,37 @@
 package cn.maiaimei.framework.swift.validation.validator;
 
-import cn.maiaimei.framework.swift.validation.FieldEnum;
 import cn.maiaimei.framework.swift.validation.ValidationError;
-import com.prowidesoftware.swift.model.field.Field;
-import org.apache.commons.lang3.StringUtils;
+import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 /**
- * validate field enum, e.g. CODES
+ * Validate field by enum
  */
 @Component
-public class EnumFieldValidator<T extends Field> implements FieldValidator<T> {
+public class EnumFieldValidator implements FieldValidator {
     @Override
     public boolean supportsFormat(String format) {
         return false;
     }
 
     @Override
-    public boolean supportsName(String name) {
+    public boolean supportsPattern(String pattern) {
         return false;
     }
 
     @Override
-    public String validate(T field, String tag, String format, String value) {
-        return null;
+    public boolean supportsType(String type) {
+        return false;
     }
 
-    public String validate(T field, String tag, String value, FieldEnum fieldEnum) {
-        String valueToValidate;
-        int number = fieldEnum.getNumber();
-        if (number != 0) {
-            valueToValidate = field.getComponent(number);
-        } else {
-            valueToValidate = value;
-        }
-        String name = tag.concat(StringUtils.SPACE).concat(field.getComponentLabels().get(number));
-        if (fieldEnum.isRequired() && StringUtils.isBlank(valueToValidate)) {
-            return ValidationError.mustNotBeBlank(name);
-        }
-        List<String> enumItems = fieldEnum.getEnumItems();
-        if (!enumItems.contains(valueToValidate)) {
-            return ValidationError.mustInEnum(name, valueToValidate, enumItems);
+    @Override
+    public String validate(BaseValidationInfo validationInfo, String label, String value) {
+        List<String> options = validationInfo.getOptions();
+        if (!CollectionUtils.isEmpty(options) && !options.contains(value)) {
+            return ValidationError.mustIn(label, value, options);
         }
         return null;
     }

@@ -6,27 +6,23 @@ import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Validate multi line SWIFT X set or SWIFT Z set
+ * Validate fixed length of alphabetic, alpha-numeric, numeric, SWIFT X set, SWIFT Z set or decimals
  */
 @Component
-public class MultilineSwiftSetFieldValidator extends AbstractFormatValidator {
+public class FixedLengthCharacterValidator extends AbstractFormatValidator {
     @Override
     public boolean supportsFormat(String format) {
-        return ValidatorUtils.isMatchMultilineSwiftSet(format);
+        return ValidatorUtils.isMatchFixedLengthCharacter(format);
     }
 
     @Override
     public String validate(BaseValidationInfo validationInfo, String label, String value) {
         String format = validationInfo.getFormat();
-        List<Integer> numbers = ValidatorUtils.getNumbers(format);
-        int rowcount = numbers.get(0);
-        int maxlength = numbers.get(1);
+        int length = getLength(format);
         String type = getType(format);
-        if (!ValidatorUtils.validateMultilineSwiftSet(rowcount, maxlength, type, value)) {
-            return ValidationError.mustBeMultilineSwiftSet(label, rowcount, maxlength, type, value);
+        if (!ValidatorUtils.validateFixedLengthCharacter(length, type, value)) {
+            return ValidationError.mustBeFixedLengthCharacter(label, length, type, value);
         }
         return null;
     }

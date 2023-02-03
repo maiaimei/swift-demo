@@ -1,19 +1,15 @@
 package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.validation.ValidationError;
-import com.prowidesoftware.swift.model.field.Field;
+import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * validate mandatory field
+ * Validate mandatory field
  */
 @Component
-public class MandatoryFieldValidator<T extends Field> implements FieldValidator<T> {
-    @Override
-    public boolean supportsName(String name) {
-        return false;
-    }
+public class MandatoryFieldValidator implements FieldValidator {
 
     @Override
     public boolean supportsFormat(String format) {
@@ -21,12 +17,19 @@ public class MandatoryFieldValidator<T extends Field> implements FieldValidator<
     }
 
     @Override
-    public String validate(T field, String tag, String format, String value) {
-        if (field == null) {
-            return ValidationError.mustBePresent(tag);
-        }
-        if (StringUtils.isBlank(value)) {
-            return ValidationError.mustNotBeBlank(tag);
+    public boolean supportsPattern(String pattern) {
+        return false;
+    }
+
+    @Override
+    public boolean supportsType(String type) {
+        return false;
+    }
+
+    @Override
+    public String validate(BaseValidationInfo validationInfo, String label, String value) {
+        if (validationInfo.isMandatory() && StringUtils.isBlank(value)) {
+            return ValidationError.mustNotBeBlank(label);
         }
         return null;
     }
