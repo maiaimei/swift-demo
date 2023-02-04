@@ -2,6 +2,7 @@ package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
+import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class MandatoryFieldValidator implements FieldValidator {
     }
 
     @Override
-    public boolean supportsPattern(String pattern) {
+    public boolean supportsPattern(String pattern, Field field) {
         return false;
     }
 

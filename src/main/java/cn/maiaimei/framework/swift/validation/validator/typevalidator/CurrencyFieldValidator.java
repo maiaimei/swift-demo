@@ -5,12 +5,9 @@ import cn.maiaimei.framework.swift.validation.validator.AbstractTypeValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-/**
- * TODO:  2 alphabetic, ISO 639 Language Code, e.g., en = English, fr = French, de = German.
- */
 @Component
-public class ISO639LanguageCodeValidator extends AbstractTypeValidator {
-    private static final String TYPE = "Language";
+public class CurrencyFieldValidator extends AbstractTypeValidator {
+    private static final String TYPE = "Currency";
 
     @Override
     public boolean supportsType(String type) {
@@ -19,6 +16,7 @@ public class ISO639LanguageCodeValidator extends AbstractTypeValidator {
 
     @Override
     public String validate(BaseValidationInfo validationInfo, String label, String value) {
+        // TODO: validate currency
         return null;
     }
 }

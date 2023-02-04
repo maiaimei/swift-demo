@@ -8,12 +8,16 @@ import com.prowidesoftware.swift.model.field.Field;
 public interface FieldValidator {
     boolean supportsFormat(String format);
 
-    boolean supportsPattern(String pattern);
+    boolean supportsPattern(String pattern, Field field);
 
     boolean supportsType(String type);
 
     String validate(BaseValidationInfo validationInfo, String label, String value);
 
-    default void validate(ValidationResult result, Field field, FieldInfo fieldInfo, String label, String value) {
+    default String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
+        return null;
+    }
+
+    default void validate(ValidationResult result, FieldInfo fieldInfo, Field field, String label, String value) {
     }
 }

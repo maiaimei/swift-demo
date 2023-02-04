@@ -2,6 +2,7 @@ package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
+import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class FieldValidatorChain {
     @Autowired
     private Set<AbstractTypeValidator> typeValidatorSet;
 
-    public void doValidation(ValidationResult result, BaseValidationInfo validationInfo, String label, String value) {
+    public void doValidation(ValidationResult result, BaseValidationInfo validationInfo, Field field, String label, String value) {
         String errorMessage;
         errorMessage = mandatoryFieldValidator.validate(validationInfo, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
@@ -40,7 +41,7 @@ public class FieldValidatorChain {
             result.addErrorMessage(errorMessage);
             return;
         }
-        errorMessage = validateByPattern(validationInfo, label, value);
+        errorMessage = validateByPattern(validationInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             result.addErrorMessage(errorMessage);
             return;
@@ -66,10 +67,14 @@ public class FieldValidatorChain {
         return null;
     }
 
-    private String validateByPattern(BaseValidationInfo validationInfo, String errorField, String tagValue) {
+    private String validateByPattern(BaseValidationInfo validationInfo, Field field, String errorField, String tagValue) {
         for (AbstractPatternValidator patternValidator : patternValidatorSet) {
-            if (patternValidator.supportsPattern(validationInfo.getPattern())) {
-                String errorMessage = patternValidator.validate(validationInfo, errorField, tagValue);
+            if (patternValidator.supportsPattern(validationInfo.getPattern(), field)) {
+                String errorMessage = patternValidator.validate(validationInfo, field, errorField, tagValue);
+                if (StringUtils.isNotBlank(errorMessage)) {
+                    return errorMessage;
+                }
+                errorMessage = patternValidator.validate(validationInfo, errorField, tagValue);
                 if (StringUtils.isNotBlank(errorMessage)) {
                     return errorMessage;
                 }

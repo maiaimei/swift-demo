@@ -1,6 +1,7 @@
 package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
+import com.prowidesoftware.swift.model.field.Field;
 
 /**
  * Validate field by format
@@ -8,7 +9,7 @@ import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 public abstract class AbstractFormatValidator implements FieldValidator {
 
     @Override
-    public boolean supportsPattern(String pattern) {
+    public boolean supportsPattern(String pattern, Field field) {
         return false;
     }
 

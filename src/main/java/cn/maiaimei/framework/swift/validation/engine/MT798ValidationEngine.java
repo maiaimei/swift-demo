@@ -3,27 +3,21 @@ package cn.maiaimei.framework.swift.validation.engine;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.config.model.FieldInfo;
-import cn.maiaimei.framework.swift.validation.config.model.MessageValidationCfg;
-import cn.maiaimei.framework.swift.validation.config.model.SequenceInfo;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.Tag;
 import com.prowidesoftware.swift.model.field.Field12;
 import com.prowidesoftware.swift.model.field.Field20;
 import com.prowidesoftware.swift.model.field.Field77E;
-import com.prowidesoftware.swift.model.mt.mt7xx.MT760;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
-public class MT798ValidationEngine extends AbstractValidationEngine {
-
-    @Autowired
-    private Set<MessageValidationCfg> messageValidationCfgSet;
+public class MT798ValidationEngine extends GenericValidationEngine {
 
     public ValidationResult validate(MT798 mt798) {
         ValidationResult result = new ValidationResult();
@@ -45,7 +39,7 @@ public class MT798ValidationEngine extends AbstractValidationEngine {
         // Validate Section 2
         String subMessageType = mt798.getField12().getValue();
         SwiftTagListBlock blockAfterFirst77E = block4.getSubBlockAfterFirst(Field77E.NAME, false);
-        validateSection2(result, mt798, blockAfterFirst77E, subMessageType);
+        validateSection2(result, blockAfterFirst77E, subMessageType);
         return result;
     }
 
@@ -76,57 +70,12 @@ public class MT798ValidationEngine extends AbstractValidationEngine {
         validateTags(result, fieldInfos, tags, blockBeforeFirst77E);
     }
 
-    private void validateSection2(ValidationResult result, MT798 mt798, SwiftTagListBlock blockAfterFirst77E, String subMessageType) {
+    private void validateSection2(ValidationResult result, SwiftTagListBlock blockAfterFirst77E, String subMessageType) {
         List<Tag> tags = blockAfterFirst77E.getTags();
         if (CollectionUtils.isEmpty(tags)) {
             result.addErrorMessage(ValidationError.mustBePresent("Section 2"));
             return;
         }
-        Optional<MessageValidationCfg> messageValidationCfgOptional = messageValidationCfgSet.stream().filter(w -> w.getSubMessageType().equals(subMessageType)).findAny();
-        if (!messageValidationCfgOptional.isPresent()) {
-            result.addErrorMessage("Can't find validation config for MT" + subMessageType);
-            return;
-        }
-        MessageValidationCfg messageValidationCfg = messageValidationCfgOptional.get();
-        if (CollectionUtils.isEmpty(messageValidationCfg.getSequences())) {
-            List<FieldInfo> fieldInfos = messageValidationCfg.getFields();
-            validateMandatoryFields(result, fieldInfos, tags);
-            validateTags(result, fieldInfos, tags, blockAfterFirst77E);
-        } else {
-            List<FieldInfo> fieldInfos = messageValidationCfg.getFields();
-            validateMandatoryFields(result, fieldInfos, tags);
-            validateTags(result, fieldInfos, tags, blockAfterFirst77E);
-            Map<String, SwiftTagListBlock> sequenceBlockMap = getSwiftTagListBlocks(mt798, subMessageType);
-            for (SequenceInfo sequenceInfo : messageValidationCfg.getSequences()) {
-                String sequenceName = sequenceInfo.getSequenceName();
-                SwiftTagListBlock sequenceBlock = sequenceBlockMap.get(sequenceName);
-                List<Tag> sequenceTags = sequenceBlock.getTags();
-                if (sequenceInfo.isMandatory() && CollectionUtils.isEmpty(sequenceTags)) {
-                    result.addErrorMessage(ValidationError.mustBePresent("Sequence ".concat(sequenceName)));
-                    continue;
-                }
-                List<FieldInfo> sequenceFieldInfos = sequenceInfo.getFields();
-                validateSequenceMandatoryFields(result, sequenceFieldInfos, sequenceTags, sequenceName);
-                validateSequenceTags(result, sequenceFieldInfos, sequenceTags, sequenceBlock, sequenceName);
-            }
-        }
-    }
-
-    private Map<String, SwiftTagListBlock> getSwiftTagListBlocks(MT798 mt798, String subMessageType) {
-        switch (subMessageType) {
-            case "760":
-                return getMT760SwiftTagListBlocks(mt798);
-            default:
-                return Collections.emptyMap();
-        }
-    }
-
-    private Map<String, SwiftTagListBlock> getMT760SwiftTagListBlocks(MT798 mt798) {
-        MT760 mt760 = MT760.parse(mt798.message());
-        Map<String, SwiftTagListBlock> map = new HashMap<>();
-        map.put("A", mt760.getSequenceA());
-        map.put("B", mt760.getSequenceB());
-        map.put("C", mt760.getSequenceC());
-        return map;
+        validate(result, blockAfterFirst77E, subMessageType);
     }
 }

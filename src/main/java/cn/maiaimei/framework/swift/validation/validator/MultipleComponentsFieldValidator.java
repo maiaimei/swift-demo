@@ -22,12 +22,9 @@ public class MultipleComponentsFieldValidator implements FieldValidator {
     private static final String YYYYMMDD_HHMM_FORMAT = "8!n4!n";
     private static final String YYYYMMDD_HHMM_REGEX = "^[0-9]{12}$";
     private static final Pattern YYYYMMDD_HHMM_PATTERN = Pattern.compile(YYYYMMDD_HHMM_REGEX);
-    
-    @Autowired
-    private FieldValidatorChain fieldValidatorChain;
 
     @Autowired
-    private CurrencyAmountFieldValidator currencyAmountFieldValidator;
+    private FieldValidatorChain fieldValidatorChain;
 
     @Override
     public boolean supportsFormat(String format) {
@@ -35,7 +32,7 @@ public class MultipleComponentsFieldValidator implements FieldValidator {
     }
 
     @Override
-    public boolean supportsPattern(String pattern) {
+    public boolean supportsPattern(String pattern, Field field) {
         return false;
     }
 
@@ -50,7 +47,7 @@ public class MultipleComponentsFieldValidator implements FieldValidator {
     }
 
     @Override
-    public void validate(ValidationResult result, Field field, FieldInfo fieldInfo, String label, String value) {
+    public void validate(ValidationResult result, FieldInfo fieldInfo, Field field, String label, String value) {
         List<ComponentInfo> componentInfos = fieldInfo.getComponents();
         if (StringUtils.isBlank(value) || CollectionUtils.isEmpty(componentInfos)) {
             return;
@@ -68,14 +65,12 @@ public class MultipleComponentsFieldValidator implements FieldValidator {
             int number = componentInfo.getNumber() - 1;
             String componentValue = components.get(number);
             String componentLabel = Optional.ofNullable(componentInfo.getLabel()).orElse(componentLabels.get(number));
-            fieldValidatorChain.doValidation(res, componentInfo, componentLabel, componentValue);
+            fieldValidatorChain.doValidation(res, componentInfo, field, componentLabel, componentValue);
         }
         if (!CollectionUtils.isEmpty(res.getErrorMessages())) {
             errorMessage = String.join(", ", res.getErrorMessages());
             result.addErrorMessage(label + " error, " + errorMessage + ", original value is " + value);
-            return;
         }
-        currencyAmountFieldValidator.validate(result, field, fieldInfo, label, value);
     }
 
     private String validateFormat(String format, String label, String value) {
