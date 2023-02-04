@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class MessageValidationCfg {
-    private String subMessageType;
+    private String messageType;
     private List<FieldInfo> fields;
     private List<SequenceInfo> sequences;
     private List<String> rules;

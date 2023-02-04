@@ -28,7 +28,7 @@ public class GenericValidationEngine {
     private static final String IN_SEQUENCE = "In Sequence %s, ";
 
     @Autowired
-    private Set<MessageValidationCfg> messageValidationCfgSet;
+    private List<MessageValidationCfg> messageValidationCfgList;
 
     @Autowired
     private FieldValidatorChain fieldValidatorChain;
@@ -36,10 +36,10 @@ public class GenericValidationEngine {
     @Autowired
     private MultipleComponentsFieldValidator multipleComponentsFieldValidator;
 
-    public void validate(ValidationResult result, SwiftTagListBlock block, String subMessageType) {
-        Optional<MessageValidationCfg> messageValidationCfgOptional = messageValidationCfgSet.stream().filter(w -> w.getSubMessageType().equals(subMessageType)).findAny();
+    public void validate(ValidationResult result, SwiftTagListBlock block, String type) {
+        Optional<MessageValidationCfg> messageValidationCfgOptional = messageValidationCfgList.stream().filter(w -> w.getMessageType().equals(type)).findAny();
         if (!messageValidationCfgOptional.isPresent()) {
-            result.addErrorMessage("Can't find validation config for MT" + subMessageType);
+            result.addErrorMessage("Can't find validation config for MT" + type);
             return;
         }
         List<Tag> tags = block.getTags();
@@ -52,7 +52,7 @@ public class GenericValidationEngine {
             List<FieldInfo> fieldInfos = messageValidationCfg.getFields();
             validateMandatoryFields(result, fieldInfos, tags);
             validateTags(result, fieldInfos, tags, block);
-            Map<String, List<SwiftTagListBlock>> sequenceBlockMap = getSequenceBlockMap(subMessageType, block);
+            Map<String, List<SwiftTagListBlock>> sequenceBlockMap = getSequenceBlockMap(type, block);
             for (SequenceInfo sequenceInfo : messageValidationCfg.getSequences()) {
                 String sequenceName = sequenceInfo.getSequenceName();
                 List<SwiftTagListBlock> sequenceBlocks = sequenceBlockMap.get(sequenceName);
