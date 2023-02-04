@@ -10,13 +10,11 @@ import com.prowidesoftware.swift.model.field.Field12;
 import com.prowidesoftware.swift.model.field.Field20;
 import com.prowidesoftware.swift.model.field.Field77E;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class MT798ValidationEngine extends GenericValidationEngine {
 
     public ValidationResult validate(MT798 mt798) {
