@@ -2,6 +2,7 @@ package cn.maiaimei.framework.swift.validation.engine;
 
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
+import cn.maiaimei.framework.swift.validation.config.ValidationConfig;
 import cn.maiaimei.framework.swift.validation.config.model.FieldInfo;
 import cn.maiaimei.framework.swift.validation.config.model.MessageValidationCfg;
 import cn.maiaimei.framework.swift.validation.config.model.SequenceInfo;
@@ -30,10 +31,7 @@ public class GenericValidationEngine {
 
     private static final String GET_SEQUENCE = "getSequence";
     private static final String IN_SEQUENCE = "In Sequence %s, ";
-
-    @Autowired
-    private Set<MessageValidationCfg> messageValidationCfgSet;
-
+    
     @Autowired
     private FieldValidatorChain fieldValidatorChain;
 
@@ -85,7 +83,7 @@ public class GenericValidationEngine {
     }
 
     public void validate(ValidationResult result, SwiftTagListBlock block, String messageType) {
-        List<MessageValidationCfg> cfgList = messageValidationCfgSet.stream().filter(w -> w.getMessageType().equals(messageType)).collect(Collectors.toList());
+        List<MessageValidationCfg> cfgList = ValidationConfig.MESSAGE_VALIDATION_CONFIG_LIST.stream().filter(w -> w.getMessageType().equals(messageType)).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(cfgList)) {
             result.addErrorMessage("Can't find validation config for MT" + messageType);
             return;

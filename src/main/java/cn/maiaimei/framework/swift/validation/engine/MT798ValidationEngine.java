@@ -11,11 +11,15 @@ import com.prowidesoftware.swift.model.field.Field20;
 import com.prowidesoftware.swift.model.field.Field77E;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@ConditionalOnProperty(name = "swift.validation.enabled-mt7xx", havingValue = "true")
 public class MT798ValidationEngine {
 
     @Autowired
