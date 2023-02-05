@@ -1,0 +1,111 @@
+{
+  "messageType": "761",
+  "fields": [
+    {
+      "tag": "27A",
+      "label": "Message Index/Total",
+      "format": "1!n/1!n",
+      "isMandatory": true
+    },
+    {
+      "tag": "21A",
+      "label": "Customer Reference Number",
+      "format": "16x",
+      "isMandatory": false
+    },
+    {
+      "tag": "27",
+      "label": "Sequence of Total",
+      "format": "1!n/1!n",
+      "isMandatory": false
+    },
+    {
+      "tag": "20",
+      "label": "Undertaking Number",
+      "format": "16x",
+      "isMandatory": false
+    },
+    {
+      "tag": "52A",
+      "label": "Issuer",
+      "format": "[[/<DC>][/34x]$]<BIC>",
+      "isMandatory": false,
+      "components": [
+        {
+          "number": 1,
+          "label": "D/C Mark",
+          "format": "1!a",
+          "isMandatory": false
+        },
+        {
+          "number": 2,
+          "label": "Account",
+          "format": "34x",
+          "isMandatory": false
+        },
+        {
+          "number": 3,
+          "label": "Identifier Code",
+          "format": "4!a2!a2!c[3!c]",
+          "isMandatory": true
+        }
+      ]
+    },
+    {
+      "tag": "52D",
+      "label": "Issuer",
+      "format": "[[/<DC>][/34x]$]35x[$35x]0-3",
+      "isMandatory": false,
+      "components": [
+        {
+          "number": 1,
+          "label": "D/C Mark",
+          "format": "1!a",
+          "isMandatory": false
+        },
+        {
+          "number": 2,
+          "label": "Account",
+          "format": "34x",
+          "isMandatory": false
+        },
+        {
+          "number": 3,
+          "label": "Name And Address",
+          "format": "35x",
+          "isMandatory": true
+        },
+        {
+          "number": 4,
+          "label": "Name And Address 2",
+          "format": "35x",
+          "isMandatory": false
+        },
+        {
+          "number": 5,
+          "label": "Name And Address 3",
+          "format": "35x",
+          "isMandatory": false
+        },
+        {
+          "number": 6,
+          "label": "Name And Address 4",
+          "format": "35x",
+          "isMandatory": false
+        }
+      ]
+    },
+    {
+      "tag": "77U",
+      "label": "Undertaking Terms and Conditions",
+      "format": "150*65z",
+      "isMandatory": false
+    },
+    {
+      "tag": "77L",
+      "label": "Requested Local Undertaking Terms and Conditions",
+      "format": "150*65z",
+      "isMandatory": false
+    }
+  ]
+}

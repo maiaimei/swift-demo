@@ -2,7 +2,6 @@ package cn.maiaimei.framework.swift.validation.engine;
 
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
-import cn.maiaimei.framework.swift.validation.config.ValidationConfigUtils;
 import cn.maiaimei.framework.swift.validation.config.model.FieldInfo;
 import cn.maiaimei.framework.swift.validation.config.model.MessageValidationCfg;
 import cn.maiaimei.framework.swift.validation.config.model.SequenceInfo;
@@ -32,24 +31,6 @@ public class GenericValidationEngine {
     private static final String GET_SEQUENCE = "getSequence";
     private static final String IN_SEQUENCE = "In Sequence %s, ";
 
-    private static final Map<String, String> MESSAGE_CATAGORY_TYPE = new HashMap<>();
-
-    static {
-        MESSAGE_CATAGORY_TYPE.put("1", "mt1xx");
-        MESSAGE_CATAGORY_TYPE.put("2", "mt2xx");
-        MESSAGE_CATAGORY_TYPE.put("3", "mt3xx");
-        MESSAGE_CATAGORY_TYPE.put("4", "mt4xx");
-        MESSAGE_CATAGORY_TYPE.put("5", "mt5xx");
-        MESSAGE_CATAGORY_TYPE.put("6", "mt6xx");
-        MESSAGE_CATAGORY_TYPE.put("7", "mt7xx");
-        MESSAGE_CATAGORY_TYPE.put("8", "mt8xx");
-        MESSAGE_CATAGORY_TYPE.put("9", "mt9xx");
-    }
-
-    private static final Object EXTEND_MESSAGE_VALIDATION_CFG_LOCK = new Object();
-
-    private static final Map<String, MessageValidationCfg> EXTEND_MESSAGE_VALIDATION_CFG_MAP = new HashMap<>();
-
     @Autowired
     private Set<MessageValidationCfg> messageValidationCfgSet;
 
@@ -67,20 +48,11 @@ public class GenericValidationEngine {
         return result;
     }
 
-    public ValidationResult validateByConfigLocation(String message, String messageType, String configLocation) {
+    public ValidationResult validate(String message, String messageType, MessageValidationCfg messageValidationCfg) {
         ValidationResult result = getValidationResult();
         SwiftMessage swiftMessage = getSwiftMessage(message);
         SwiftBlock4 block4 = swiftMessage.getBlock4();
-        validateByConfigLocation(result, block4, messageType, configLocation);
-        return result;
-    }
-
-    public ValidationResult validateByConfigFileName(String message, String messageType, String configFileName) {
-        ValidationResult result = getValidationResult();
-        SwiftMessage swiftMessage = getSwiftMessage(message);
-        SwiftBlock4 block4 = swiftMessage.getBlock4();
-        String messageCatagory = getMessageCatagory(messageType);
-        validateByConfigFileName(result, block4, messageCatagory, messageType, configFileName);
+        validate(result, block4, messageType, messageValidationCfg);
         return result;
     }
 
@@ -91,18 +63,10 @@ public class GenericValidationEngine {
         return result;
     }
 
-    public ValidationResult validateByConfigLocation(SwiftMessage swiftMessage, String messageType, String configLocation) {
+    public ValidationResult validate(SwiftMessage swiftMessage, String messageType, MessageValidationCfg messageValidationCfg) {
         ValidationResult result = getValidationResult();
         SwiftBlock4 block4 = swiftMessage.getBlock4();
-        validateByConfigLocation(result, block4, messageType, configLocation);
-        return result;
-    }
-
-    public ValidationResult validateByConfigFileName(SwiftMessage swiftMessage, String messageType, String configFileName) {
-        ValidationResult result = getValidationResult();
-        SwiftBlock4 block4 = swiftMessage.getBlock4();
-        String messageCatagory = getMessageCatagory(messageType);
-        validateByConfigFileName(result, block4, messageCatagory, messageType, configFileName);
+        validate(result, block4, messageType, messageValidationCfg);
         return result;
     }
 
@@ -113,18 +77,10 @@ public class GenericValidationEngine {
         return result;
     }
 
-    public ValidationResult validateByConfigLocation(AbstractMT mt, String messageType, String configLocation) {
+    public ValidationResult validate(AbstractMT mt, String messageType, MessageValidationCfg messageValidationCfg) {
         ValidationResult result = getValidationResult();
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
-        validateByConfigLocation(result, block4, messageType, configLocation);
-        return result;
-    }
-
-    public ValidationResult validateByConfigFileName(AbstractMT mt, String messageType, String configFileName) {
-        ValidationResult result = getValidationResult();
-        SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
-        String messageCatagory = getMessageCatagory(messageType);
-        validateByConfigFileName(result, block4, messageCatagory, messageType, configFileName);
+        validate(result, block4, messageType, messageValidationCfg);
         return result;
     }
 
@@ -139,27 +95,6 @@ public class GenericValidationEngine {
             return;
         }
         MessageValidationCfg messageValidationCfg = cfgList.get(0);
-        validate(result, block, messageType, messageValidationCfg);
-    }
-
-    public void validateByConfigLocation(ValidationResult result, SwiftTagListBlock block, String messageType, String configLocation) {
-        MessageValidationCfg messageValidationCfg = getMessageValidationCfg(configLocation);
-        validate(result, block, messageType, messageValidationCfg);
-    }
-
-    public void validateByConfigFileName(ValidationResult result, SwiftTagListBlock block, String messageCatagory, String messageType, String configFileName) {
-        MessageValidationCfg messageValidationCfg = null;
-        for (MessageValidationCfg cfg : messageValidationCfgSet) {
-            String beanName = ValidationConfigUtils.getValidationConfigBeanName(messageCatagory, configFileName);
-            if (cfg.getClass().getSimpleName().equals(beanName)) {
-                messageValidationCfg = cfg;
-                break;
-            }
-        }
-        if (messageValidationCfg == null) {
-            result.addErrorMessage("Can't find validation config for MT" + messageType);
-            return;
-        }
         validate(result, block, messageType, messageValidationCfg);
     }
 
@@ -203,25 +138,6 @@ public class GenericValidationEngine {
     private SwiftMessage getSwiftMessage(String message) {
         SwiftParser parser = new SwiftParser(message);
         return parser.message();
-    }
-
-    private String getMessageCatagory(String messageType) {
-        String firstNumber = messageType.substring(0, 2);
-        return MESSAGE_CATAGORY_TYPE.get(firstNumber);
-    }
-
-    private MessageValidationCfg getMessageValidationCfg(String configLocation) {
-        if (EXTEND_MESSAGE_VALIDATION_CFG_MAP.get(configLocation) == null) {
-            synchronized (EXTEND_MESSAGE_VALIDATION_CFG_LOCK) {
-                if (EXTEND_MESSAGE_VALIDATION_CFG_MAP.get(configLocation) == null) {
-                    MessageValidationCfg messageValidationCfg = ValidationConfigUtils.getMessageValidationCfg(configLocation);
-                    EXTEND_MESSAGE_VALIDATION_CFG_MAP.put(configLocation, messageValidationCfg);
-                    return messageValidationCfg;
-                }
-                return EXTEND_MESSAGE_VALIDATION_CFG_MAP.get(configLocation);
-            }
-        }
-        return EXTEND_MESSAGE_VALIDATION_CFG_MAP.get(configLocation);
     }
 
     @SneakyThrows

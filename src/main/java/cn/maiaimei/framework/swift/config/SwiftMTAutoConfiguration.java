@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan({
         "cn.maiaimei.framework.swift.validation"
 })
-public class SwiftMTConfig {
+public class SwiftMTAutoConfiguration {
 }
