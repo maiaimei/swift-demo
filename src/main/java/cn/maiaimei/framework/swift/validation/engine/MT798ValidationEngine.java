@@ -10,12 +10,16 @@ import com.prowidesoftware.swift.model.field.Field12;
 import com.prowidesoftware.swift.model.field.Field20;
 import com.prowidesoftware.swift.model.field.Field77E;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MT798ValidationEngine extends GenericValidationEngine {
+public class MT798ValidationEngine {
+
+    @Autowired
+    private GenericValidationEngine genericValidationEngine;
 
     public ValidationResult validate(MT798 mt798) {
         ValidationResult result = new ValidationResult();
@@ -64,8 +68,8 @@ public class MT798ValidationEngine extends GenericValidationEngine {
         fieldInfos.add(field20Info);
         fieldInfos.add(field12Info);
 
-        validateMandatoryFields(result, fieldInfos, tags);
-        validateTags(result, fieldInfos, tags, blockBeforeFirst77E);
+        genericValidationEngine.validateMandatoryFields(result, fieldInfos, tags);
+        genericValidationEngine.validateTags(result, fieldInfos, tags, blockBeforeFirst77E);
     }
 
     private void validateSection2(ValidationResult result, SwiftTagListBlock blockAfterFirst77E, String subMessageType) {
@@ -74,6 +78,6 @@ public class MT798ValidationEngine extends GenericValidationEngine {
             result.addErrorMessage(ValidationError.mustBePresent("Section 2"));
             return;
         }
-        validate(result, blockAfterFirst77E, subMessageType);
+        genericValidationEngine.validate(result, blockAfterFirst77E, subMessageType);
     }
 }

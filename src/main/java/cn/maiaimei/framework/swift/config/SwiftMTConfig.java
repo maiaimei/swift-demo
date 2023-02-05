@@ -4,6 +4,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan("cn.maiaimei.framework.swift.validation")
+@ComponentScan({
+        "cn.maiaimei.framework.swift.validation"
+})
 public class SwiftMTConfig {
 }

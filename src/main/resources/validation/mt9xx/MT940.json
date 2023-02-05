@@ -1,0 +1,72 @@
+{
+  "messageType": "940",
+  "fields": [
+    {
+      "tag": "20",
+      "label": "Transaction Reference Number",
+      "format": "16x",
+      "isMandatory": true
+    },
+    {
+      "tag": "21",
+      "label": "Related Reference",
+      "format": "16x",
+      "isMandatory": false
+    },
+    {
+      "tag": "25",
+      "label": "Account Identification",
+      "format": "35x",
+      "isMandatory": true
+    },
+    {
+      "tag": "28C",
+      "label": "Statement Number / Sequence Number",
+      "format": "5n[/5n]",
+      "isMandatory": true
+    },
+    {
+      "tag": "62F",
+      "label": "Bank Business Reference",
+      "format": "16x",
+      "isMandatory": true
+    },
+    {
+      "tag": "64",
+      "label": "Closing Available Balance",
+      "format": "1!a6!n3!a15d",
+      "isMandatory": false
+    },
+    {
+      "tag": "65",
+      "label": "Forward Available Balance",
+      "format": "1!a6!n3!a15d",
+      "isMandatory": false
+    },
+    {
+      "tag": "86",
+      "label": "Information to Account Owner",
+      "format": "6*65x",
+      "isMandatory": false
+    }
+  ],
+  "sequences": [
+    {
+      "sequenceName": "A",
+      "fields": [
+        {
+          "tag": "61",
+          "label": "Statement Line",
+          "format": "*",
+          "isMandatory": false
+        },
+        {
+          "tag": "86",
+          "label": "Information to Account Owner",
+          "format": "6*65x",
+          "isMandatory": false
+        }
+      ]
+    }
+  ]
+}
