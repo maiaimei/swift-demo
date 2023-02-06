@@ -17,7 +17,7 @@ public class ValidationEngine {
 
     public ValidationResult validate(MT798 mt798) {
         if (mt798ValidationEngine == null) {
-            log.warn("Please mark the @EnableSwiftMT7xx or @EnableSwiftMT on the configuration class to enables MT798 convert and validate capability");
+            log.warn("Please adjust swift.validation.enabled or swift.validation.enabled-mt7xx to true in the configuration file");
             ValidationResult result = new ValidationResult();
             result.setErrorMessages(new ArrayList<>());
             return result;

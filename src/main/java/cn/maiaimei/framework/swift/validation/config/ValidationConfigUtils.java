@@ -1,5 +1,6 @@
 package cn.maiaimei.framework.swift.validation.config;
 
+import cn.maiaimei.framework.swift.validation.config.model.MT798MessageValidationCfg;
 import cn.maiaimei.framework.swift.validation.config.model.MessageValidationCfg;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
@@ -39,9 +40,24 @@ public class ValidationConfigUtils {
 
     @SneakyThrows
     public static MessageValidationCfg getMessageValidationCfg(Resource resource) {
+        return resourceToMessageValidationCfg(resource, MessageValidationCfg.class);
+    }
+
+    public static MessageValidationCfg getMT798MessageValidationCfg(String configLocation) {
+        Resource[] resources = getResources(configLocation);
+        return getMT798MessageValidationCfg(resources[0]);
+    }
+
+    @SneakyThrows
+    public static MessageValidationCfg getMT798MessageValidationCfg(Resource resource) {
+        return resourceToMessageValidationCfg(resource, MT798MessageValidationCfg.class);
+    }
+
+    @SneakyThrows
+    private static <T> T resourceToMessageValidationCfg(Resource resource, Class<T> classOfT) {
         InputStream inputStream = resource.getInputStream();
         String json = FileCopyUtils.copyToString(new InputStreamReader(inputStream));
-        return GSON.fromJson(json, MessageValidationCfg.class);
+        return GSON.fromJson(json, classOfT);
     }
 
     private ValidationConfigUtils() {

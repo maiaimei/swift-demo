@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableConfigurationProperties(ValidationConfigProperties.class)
@@ -34,10 +33,34 @@ public class ValidationConfig {
 
     @PostConstruct
     public void initMessageValidationCfgList() {
-        List<String> configLocations = getConfigLocations();
-        if (CollectionUtils.isEmpty(configLocations)) {
+        if (properties.isEnabled()) {
+            addConfig(Boolean.TRUE, properties.getMt1xxConfigLocations(), MT1XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(Boolean.TRUE, properties.getMt2xxConfigLocations(), MT2XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(Boolean.TRUE, properties.getMt3xxConfigLocations(), MT3XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(Boolean.TRUE, properties.getMt4xxConfigLocations(), MT4XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(Boolean.TRUE, properties.getMt5xxConfigLocations(), MT5XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(Boolean.TRUE, properties.getMt6xxConfigLocations(), MT6XX_DEFAULT_CONFIG_LOCATIONS);
+            addMT798Config(Boolean.TRUE, properties.getMt7xxConfigLocations(), MT7XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(Boolean.TRUE, properties.getMt8xxConfigLocations(), MT8XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(Boolean.TRUE, properties.getMt9xxConfigLocations(), MT9XX_DEFAULT_CONFIG_LOCATIONS);
+        } else {
+            addConfig(properties.isEnabledMt1xx(), properties.getMt1xxConfigLocations(), MT1XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(properties.isEnabledMt2xx(), properties.getMt2xxConfigLocations(), MT2XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(properties.isEnabledMt3xx(), properties.getMt3xxConfigLocations(), MT3XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(properties.isEnabledMt4xx(), properties.getMt4xxConfigLocations(), MT4XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(properties.isEnabledMt5xx(), properties.getMt5xxConfigLocations(), MT5XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(properties.isEnabledMt6xx(), properties.getMt6xxConfigLocations(), MT6XX_DEFAULT_CONFIG_LOCATIONS);
+            addMT798Config(properties.isEnabledMt7xx(), properties.getMt7xxConfigLocations(), MT7XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(properties.isEnabledMt8xx(), properties.getMt8xxConfigLocations(), MT8XX_DEFAULT_CONFIG_LOCATIONS);
+            addConfig(properties.isEnabledMt9xx(), properties.getMt9xxConfigLocations(), MT9XX_DEFAULT_CONFIG_LOCATIONS);
+        }
+    }
+
+    private void addConfig(boolean isEnabledMtXxx, List<String> mtXxxConfigLocations, List<String> mtXxxDefaultConfigLocations) {
+        if (!isEnabledMtXxx) {
             return;
         }
+        List<String> configLocations = getConfigLocations(mtXxxConfigLocations, mtXxxDefaultConfigLocations);
         Resource[] resources = ValidationConfigUtils.resolveConfigLocations(configLocations.toArray(new String[0]));
         for (Resource resource : resources) {
             MessageValidationCfg cfg = ValidationConfigUtils.getMessageValidationCfg(resource);
@@ -45,45 +68,23 @@ public class ValidationConfig {
         }
     }
 
-    private List<String> getConfigLocations() {
-        List<String> configLocations = new ArrayList<>();
-        if (properties.isEnabled()) {
-            List<String> locations = properties.getConfigLocations();
-            if (!CollectionUtils.isEmpty(locations)) {
-                configLocations.addAll(locations);
-            } else {
-                configLocations.addAll(MT1XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT2XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT3XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT4XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT5XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT6XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT7XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT8XX_DEFAULT_CONFIG_LOCATIONS);
-                configLocations.addAll(MT9XX_DEFAULT_CONFIG_LOCATIONS);
-            }
-        } else {
-            addConfigLocations(configLocations, properties.isEnabledMt1xx(), properties.getMt1xxConfigLocations(), MT1XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt2xx(), properties.getMt2xxConfigLocations(), MT2XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt3xx(), properties.getMt3xxConfigLocations(), MT3XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt4xx(), properties.getMt4xxConfigLocations(), MT4XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt5xx(), properties.getMt5xxConfigLocations(), MT5XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt6xx(), properties.getMt6xxConfigLocations(), MT6XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt7xx(), properties.getMt7xxConfigLocations(), MT7XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt8xx(), properties.getMt8xxConfigLocations(), MT8XX_DEFAULT_CONFIG_LOCATIONS);
-            addConfigLocations(configLocations, properties.isEnabledMt9xx(), properties.getMt9xxConfigLocations(), MT9XX_DEFAULT_CONFIG_LOCATIONS);
+    private void addMT798Config(boolean isEnabledMtXxx, List<String> mtXxxConfigLocations, List<String> mtXxxDefaultConfigLocations) {
+        if (!isEnabledMtXxx) {
+            return;
         }
-        return configLocations.stream().distinct().collect(Collectors.toList());
+        List<String> configLocations = getConfigLocations(mtXxxConfigLocations, mtXxxDefaultConfigLocations);
+        Resource[] resources = ValidationConfigUtils.resolveConfigLocations(configLocations.toArray(new String[0]));
+        for (Resource resource : resources) {
+            MessageValidationCfg cfg = ValidationConfigUtils.getMT798MessageValidationCfg(resource);
+            MESSAGE_VALIDATION_CONFIG_LIST.add(cfg);
+        }
     }
 
-    private void addConfigLocations(List<String> configLocations,
-                                    boolean isEnabled, List<String> mtXxxConfigLocations, List<String> mtXxxDefaultConfigLocations) {
-        if (isEnabled) {
-            if (CollectionUtils.isEmpty(mtXxxConfigLocations)) {
-                configLocations.addAll(mtXxxDefaultConfigLocations);
-            } else {
-                configLocations.addAll(mtXxxConfigLocations);
-            }
+    private List<String> getConfigLocations(List<String> mtXxxConfigLocations, List<String> mtXxxDefaultConfigLocations) {
+        if (!CollectionUtils.isEmpty(mtXxxConfigLocations)) {
+            return mtXxxConfigLocations;
+        } else {
+            return mtXxxDefaultConfigLocations;
         }
     }
 }

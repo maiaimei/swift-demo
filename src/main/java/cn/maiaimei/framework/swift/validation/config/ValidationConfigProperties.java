@@ -9,7 +9,6 @@ import java.util.List;
 @ConfigurationProperties(prefix = "swift.validation")
 public class ValidationConfigProperties {
     private boolean enabled;
-    private List<String> configLocations;
 
     private boolean enabledMt1xx;
     private List<String> mt1xxConfigLocations;
