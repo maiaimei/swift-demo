@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.model.mt7xx;
 
-import cn.maiaimei.framework.swift.annotation.Tag;
+import cn.maiaimei.framework.swift.annotation.SwiftTag;
 import cn.maiaimei.framework.swift.model.BaseMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,12 +8,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class BaseMT798Message extends BaseMessage {
-    @Tag("20")
+    @SwiftTag("20")
     private String transactionReferenceNumber;
 
-    @Tag("12")
+    @SwiftTag("12")
     private String subMessageType;
-    
-    @Tag("27A")
+
+    @SwiftTag("27A")
     private String messageIndexTotal;
 }
