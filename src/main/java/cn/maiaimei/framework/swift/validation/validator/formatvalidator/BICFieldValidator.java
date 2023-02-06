@@ -3,6 +3,7 @@ package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
+import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
@@ -15,12 +16,12 @@ public class BICFieldValidator extends AbstractFormatValidator {
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
     @Override
-    public boolean supportsFormat(String format) {
+    public boolean supportsFormat(Field field, String format) {
         return FORMAT.equals(format);
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, String label, String value) {
+    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
         if (!PATTERN.matcher(value).matches()) {
             return ValidationError.mustMatchFormat(label, FORMAT, value);
         }

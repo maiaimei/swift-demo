@@ -4,6 +4,7 @@ import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
+import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,12 +15,12 @@ import java.util.List;
 @Component
 public class MultilineSwiftSetFieldValidator extends AbstractFormatValidator {
     @Override
-    public boolean supportsFormat(String format) {
+    public boolean supportsFormat(Field field, String format) {
         return ValidatorUtils.isMatchMultilineSwiftSet(format);
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, String label, String value) {
+    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
         String format = validationInfo.getFormat();
         List<Integer> numbers = ValidatorUtils.getNumbers(format);
         int rowcount = numbers.get(0);

@@ -8,7 +8,6 @@ import cn.maiaimei.framework.swift.validation.config.model.MessageValidationCfg;
 import cn.maiaimei.framework.swift.validation.config.model.SequenceInfo;
 import cn.maiaimei.framework.swift.validation.constants.MTXxx;
 import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
-import cn.maiaimei.framework.swift.validation.validator.MultipleComponentsFieldValidator;
 import com.prowidesoftware.swift.io.parser.SwiftParser;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftMessage;
@@ -31,12 +30,9 @@ public class GenericValidationEngine {
 
     private static final String GET_SEQUENCE = "getSequence";
     private static final String IN_SEQUENCE = "In Sequence %s, ";
-    
-    @Autowired
-    private FieldValidatorChain fieldValidatorChain;
 
     @Autowired
-    private MultipleComponentsFieldValidator multipleComponentsFieldValidator;
+    private FieldValidatorChain fieldValidatorChain;
 
     public ValidationResult validate(String message, String messageType) {
         ValidationResult result = getValidationResult();
@@ -126,6 +122,43 @@ public class GenericValidationEngine {
         }
     }
 
+    protected void validateMandatoryFields(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags) {
+        validateSequenceMandatoryFields(result, fieldInfos, tags, StringUtils.EMPTY);
+    }
+
+    protected void validateTags(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, SwiftTagListBlock block) {
+        validateSequenceTags(result, fieldInfos, tags, block, StringUtils.EMPTY);
+    }
+
+    protected void validateSequenceMandatoryFields(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, String sequenceName) {
+        List<String> tagNames = tags.stream().map(Tag::getName).collect(Collectors.toList());
+        for (FieldInfo fieldInfo : fieldInfos) {
+            if (!fieldInfo.isMandatory()) {
+                continue;
+            }
+            String tag = fieldInfo.getTag();
+            if (!tagNames.contains(tag)) {
+                String label = getLabel(sequenceName, tag, fieldInfo.getLabel());
+                result.addErrorMessage(ValidationError.mustBePresent(label));
+            }
+        }
+    }
+
+    protected void validateSequenceTags(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, SwiftTagListBlock block, String sequenceName) {
+        for (Tag tag : tags) {
+            String tagName = tag.getName();
+            String tagValue = tag.getValue();
+            Field field = block.getFieldByName(tagName);
+            Optional<FieldInfo> fieldInfoOptional = fieldInfos.stream().filter(w -> w.getTag().equals(tagName)).findAny();
+            if (!fieldInfoOptional.isPresent()) {
+                continue;
+            }
+            FieldInfo fieldInfo = fieldInfoOptional.get();
+            String label = getLabel(sequenceName, tagName, fieldInfo.getLabel());
+            fieldValidatorChain.doValidation(result, fieldInfo, field, label, tagValue);
+        }
+    }
+
     private ValidationResult getValidationResult() {
         ValidationResult result = new ValidationResult();
         result.setErrorMessages(new ArrayList<>());
@@ -163,44 +196,6 @@ public class GenericValidationEngine {
             }
         }
         return sequenceBlockMap;
-    }
-
-    protected void validateMandatoryFields(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags) {
-        validateSequenceMandatoryFields(result, fieldInfos, tags, StringUtils.EMPTY);
-    }
-
-    protected void validateTags(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, SwiftTagListBlock block) {
-        validateSequenceTags(result, fieldInfos, tags, block, StringUtils.EMPTY);
-    }
-
-    protected void validateSequenceMandatoryFields(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, String sequenceName) {
-        List<String> tagNames = tags.stream().map(Tag::getName).collect(Collectors.toList());
-        for (FieldInfo fieldInfo : fieldInfos) {
-            if (!fieldInfo.isMandatory()) {
-                continue;
-            }
-            String tag = fieldInfo.getTag();
-            if (!tagNames.contains(tag)) {
-                String label = getLabel(sequenceName, tag, fieldInfo.getLabel());
-                result.addErrorMessage(ValidationError.mustBePresent(label));
-            }
-        }
-    }
-
-    protected void validateSequenceTags(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, SwiftTagListBlock block, String sequenceName) {
-        for (Tag tag : tags) {
-            String tagName = tag.getName();
-            String tagValue = tag.getValue();
-            Field field = block.getFieldByName(tagName);
-            Optional<FieldInfo> fieldInfoOptional = fieldInfos.stream().filter(w -> w.getTag().equals(tagName)).findAny();
-            if (!fieldInfoOptional.isPresent()) {
-                continue;
-            }
-            FieldInfo fieldInfo = fieldInfoOptional.get();
-            String label = getLabel(sequenceName, tagName, fieldInfo.getLabel());
-            fieldValidatorChain.doValidation(result, fieldInfo, field, label, tagValue);
-            multipleComponentsFieldValidator.validate(result, fieldInfo, field, label, tagValue);
-        }
     }
 
     private String getLabel(String sequenceName, String tagName, String fieldLabel) {

@@ -9,12 +9,12 @@ import com.prowidesoftware.swift.model.field.Field;
 public abstract class AbstractFormatValidator implements FieldValidator {
 
     @Override
-    public boolean supportsPattern(String pattern, Field field) {
+    public boolean supportsPattern(Field field, String pattern) {
         return false;
     }
 
     @Override
-    public boolean supportsType(String type) {
+    public boolean supportsType(Field field, String type) {
         return false;
     }
 

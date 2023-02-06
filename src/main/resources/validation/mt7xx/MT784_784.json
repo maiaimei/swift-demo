@@ -45,23 +45,8 @@
       "tag": "13E",
       "label": "Message Creation Date Time",
       "format": "8!n4!n",
-      "isMandatory": true,
-      "components": [
-        {
-          "number": 1,
-          "label": "Date",
-          "format": "8!n",
-          "pattern": "YYYYMMDD",
-          "isMandatory": true
-        },
-        {
-          "number": 2,
-          "label": "Time",
-          "format": "4!n",
-          "pattern": "HHMM",
-          "isMandatory": true
-        }
-      ]
+      "pattern": "YYYYMMDDHHMM",
+      "isMandatory": true
     },
     {
       "tag": "23E",
@@ -240,21 +225,7 @@
       "tag": "71F",
       "label": "Total Order/Contract Amount",
       "format": "3!a15d",
-      "isMandatory": false,
-      "components": [
-        {
-          "number": 1,
-          "label": "Currency",
-          "format": "3!a",
-          "isMandatory": true
-        },
-        {
-          "number": 2,
-          "label": "Amount",
-          "format": "15d",
-          "isMandatory": true
-        }
-      ]
+      "isMandatory": false
     },
     {
       "tag": "37J",

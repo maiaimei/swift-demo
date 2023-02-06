@@ -36,12 +36,12 @@ public class DateTimeFieldValidator extends AbstractPatternValidator {
     );
 
     @Override
-    public boolean supportsPattern(String pattern, Field field) {
+    public boolean supportsPattern(Field field, String pattern) {
         return isMatchPattern(pattern);
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, String label, String value) {
+    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
         for (String p : PATTERN_LIST) {
             if (StringUtils.equalsIgnoreCase(p, validationInfo.getPattern())
                     && !ValidatorUtils.validateDatetime(p, value)) {

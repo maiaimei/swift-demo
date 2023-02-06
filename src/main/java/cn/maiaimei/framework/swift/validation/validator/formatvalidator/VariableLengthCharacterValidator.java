@@ -4,17 +4,18 @@ import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
+import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VariableLengthCharacterValidator extends AbstractFormatValidator {
     @Override
-    public boolean supportsFormat(String format) {
+    public boolean supportsFormat(Field field, String format) {
         return ValidatorUtils.isMatchVariableLengthCharacter(format);
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, String label, String value) {
+    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
         String format = validationInfo.getFormat();
         int length = getLength(format);
         String type = getType(format);

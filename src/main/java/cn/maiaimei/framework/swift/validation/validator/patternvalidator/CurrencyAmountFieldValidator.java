@@ -24,13 +24,8 @@ public class CurrencyAmountFieldValidator extends AbstractPatternValidator {
     private CurrencyFieldValidator currencyFieldValidator;
 
     @Override
-    public boolean supportsPattern(String pattern, Field field) {
+    public boolean supportsPattern(Field field, String pattern) {
         return VALIDATOR_PATTERN.equals(field.validatorPattern());
-    }
-
-    @Override
-    public String validate(BaseValidationInfo validationInfo, String label, String value) {
-        return null;
     }
 
     @Override
@@ -43,7 +38,7 @@ public class CurrencyAmountFieldValidator extends AbstractPatternValidator {
         if (ValidatorUtils.gt(amount, 15)) {
             return ValidationError.mustBeVariableLengthCharacter(label, 15, "d", value);
         }
-        String errorMessage = currencyFieldValidator.validate(validationInfo, label, value);
+        String errorMessage = currencyFieldValidator.validate(validationInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             return errorMessage;
         }

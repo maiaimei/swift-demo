@@ -14,22 +14,22 @@ import java.util.List;
 @Component
 public class EnumFieldValidator implements FieldValidator {
     @Override
-    public boolean supportsFormat(String format) {
+    public boolean supportsFormat(Field field, String format) {
         return false;
     }
 
     @Override
-    public boolean supportsPattern(String pattern, Field field) {
+    public boolean supportsPattern(Field field, String pattern) {
         return false;
     }
 
     @Override
-    public boolean supportsType(String type) {
+    public boolean supportsType(Field field, String type) {
         return false;
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, String label, String value) {
+    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
         List<String> options = validationInfo.getOptions();
         if (!CollectionUtils.isEmpty(options) && !options.contains(value)) {
             return ValidationError.mustIn(label, value, options);
