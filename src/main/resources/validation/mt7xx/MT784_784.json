@@ -56,7 +56,7 @@
       "isMandatory": false,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "Method",
           "format": "4!c",
           "isMandatory": true,
@@ -66,7 +66,7 @@
           ]
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Additional Information",
           "format": "30x",
           "isMandatory": false
@@ -80,7 +80,7 @@
       "isMandatory": true,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "Code",
           "format": "4!c",
           "isMandatory": true,
@@ -102,7 +102,7 @@
           ]
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Narrative",
           "format": "35x",
           "isMandatory": false
@@ -116,7 +116,7 @@
       "isMandatory": true,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "Code",
           "format": "4!c",
           "isMandatory": true,
@@ -129,7 +129,7 @@
           ]
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Narrative",
           "format": "35x",
           "isMandatory": false
@@ -178,7 +178,7 @@
       "isMandatory": false,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "Code",
           "format": "4!c",
           "isMandatory": true,
@@ -193,7 +193,7 @@
           ]
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Reference",
           "format": "35x",
           "isMandatory": true
@@ -207,14 +207,14 @@
       "isMandatory": false,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "Date 1",
           "format": "6!n",
           "pattern": "YYMMDD",
           "isMandatory": true
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Date 2",
           "format": "6!n",
           "pattern": "YYMMDD",
@@ -271,7 +271,7 @@
       "isMandatory": false,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "Code",
           "format": "4!c",
           "isMandatory": true,
@@ -286,7 +286,7 @@
           ]
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "File Name or Reference",
           "format": "65x",
           "isMandatory": true
@@ -300,7 +300,7 @@
       "isMandatory": false,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "Code",
           "format": "4!c",
           "isMandatory": true,
@@ -310,7 +310,7 @@
           ]
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Party Identifier",
           "format": "35x",
           "isMandatory": true

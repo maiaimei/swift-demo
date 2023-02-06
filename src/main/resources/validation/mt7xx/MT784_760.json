@@ -51,7 +51,7 @@
           "isMandatory": false,
           "components": [
             {
-              "number": 1,
+              "index": 1,
               "label": "Code",
               "format": "4!c",
               "isMandatory": true,
@@ -66,7 +66,7 @@
               ]
             },
             {
-              "number": 2,
+              "index": 2,
               "label": "File Name or Reference",
               "format": "65x",
               "isMandatory": true
@@ -110,7 +110,7 @@
           "isMandatory": false,
           "components": [
             {
-              "number": 1,
+              "index": 1,
               "label": "Type",
               "format": "4!a",
               "isMandatory": true,
@@ -123,7 +123,7 @@
               ]
             },
             {
-              "number": 2,
+              "index": 2,
               "label": "Narrative",
               "format": "35x",
               "isMandatory": false
