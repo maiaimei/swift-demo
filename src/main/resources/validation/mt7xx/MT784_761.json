@@ -33,19 +33,19 @@
       "isMandatory": false,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "D/C Mark",
           "format": "1!a",
           "isMandatory": false
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Account",
           "format": "34x",
           "isMandatory": false
         },
         {
-          "number": 3,
+          "index": 3,
           "label": "Identifier Code",
           "format": "4!a2!a2!c[3!c]",
           "isMandatory": true
@@ -59,38 +59,27 @@
       "isMandatory": false,
       "components": [
         {
-          "number": 1,
+          "index": 1,
           "label": "D/C Mark",
           "format": "1!a",
           "isMandatory": false
         },
         {
-          "number": 2,
+          "index": 2,
           "label": "Account",
           "format": "34x",
           "isMandatory": false
         },
         {
-          "number": 3,
+          "index": 3,
           "label": "Name And Address",
           "format": "35x",
           "isMandatory": true
         },
         {
-          "number": 4,
-          "label": "Name And Address 2",
-          "format": "35x",
-          "isMandatory": false
-        },
-        {
-          "number": 5,
-          "label": "Name And Address 3",
-          "format": "35x",
-          "isMandatory": false
-        },
-        {
-          "number": 6,
-          "label": "Name And Address 4",
+          "startIndex": 4,
+          "endIndex": 6,
+          "label": "Name And Address",
           "format": "35x",
           "isMandatory": false
         }

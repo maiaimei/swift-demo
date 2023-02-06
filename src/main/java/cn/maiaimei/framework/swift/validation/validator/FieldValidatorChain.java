@@ -33,6 +33,13 @@ public class FieldValidatorChain {
     private Set<AbstractTypeValidator> typeValidatorSet;
 
     public void doValidation(ValidationResult result, BaseValidationInfo validationInfo, Field field, String label, String value) {
+        doValidationInternal(result, validationInfo, field, label, value);
+        if (validationInfo instanceof FieldInfo) {
+            validateComponents(result, (FieldInfo) validationInfo, field, label, value);
+        }
+    }
+
+    private void doValidationInternal(ValidationResult result, BaseValidationInfo validationInfo, Field field, String label, String value) {
         String errorMessage;
         errorMessage = mandatoryFieldValidator.validate(validationInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
@@ -58,13 +65,7 @@ public class FieldValidatorChain {
             return;
         }
         errorMessage = enumFieldValidator.validate(validationInfo, field, label, value);
-        if (StringUtils.isNotBlank(errorMessage)) {
-            result.addErrorMessage(errorMessage);
-            return;
-        }
-        if (validationInfo instanceof FieldInfo) {
-            validateComponents(result, (FieldInfo) validationInfo, field, label, value);
-        }
+        result.addErrorMessage(errorMessage);
     }
 
     private String validateByFormat(BaseValidationInfo validationInfo, Field field, String errorField, String tagValue) {
@@ -113,10 +114,21 @@ public class FieldValidatorChain {
         List<String> components = field.getComponents();
         List<String> componentLabels = field.getComponentLabels();
         for (ComponentInfo componentInfo : componentInfos) {
-            int number = componentInfo.getNumber() - 1;
-            String componentValue = components.get(number);
-            String componentLabel = Optional.ofNullable(componentInfo.getLabel()).orElse(componentLabels.get(number));
-            doValidation(res, componentInfo, field, componentLabel, componentValue);
+            if (componentInfo.getIndex() != null) {
+                int index = componentInfo.getIndex() - 1;
+                String componentLabel = Optional.ofNullable(componentInfo.getLabel()).orElse(componentLabels.get(index));
+                String componentValue = components.get(index);
+                doValidationInternal(res, componentInfo, field, componentLabel, componentValue);
+            } else if (componentInfo.getStartIndex() != null && componentInfo.getEndIndex() != null) {
+                for (int i = componentInfo.getStartIndex(); i <= componentInfo.getEndIndex(); i++) {
+                    int index = i - 1;
+                    String componentLabel = componentLabels.get(index);
+                    String componentValue = components.get(index);
+                    doValidationInternal(res, componentInfo, field, componentLabel, componentValue);
+                }
+            } else {
+                result.addErrorMessage(label + " component config error, please check each component index");
+            }
         }
         if (!CollectionUtils.isEmpty(res.getErrorMessages())) {
             String errorMessage = String.join(", ", res.getErrorMessages());
