@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.model.mt7xx;
 
-import cn.maiaimei.framework.swift.annotation.SwiftTag;
+import cn.maiaimei.framework.swift.annotation.SwiftMTTag;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,73 +9,73 @@ public class MT784Transaction extends BaseMT798Transaction {
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784IndexMessage extends BaseMT798IndexMessage {
-        @SwiftTag("27A")
+        @SwiftMTTag("27A")
         private String customerReferenceNumber;
-        @SwiftTag("21A")
+        @SwiftMTTag("21A")
         private String customerBusinessReference;
-        @SwiftTag("21T")
+        @SwiftMTTag("21T")
         private String textPurpose;
-        @SwiftTag("21P")
+        @SwiftMTTag("21P")
         private String bankReferenceNumber;
-        @SwiftTag("21S")
+        @SwiftMTTag("21S")
         private String bankBusinessReference;
-        @SwiftTag("13E")
+        @SwiftMTTag("13E")
         private String messageCreationDateTime;
-        @SwiftTag("23E")
+        @SwiftMTTag("23E")
         private String methodOfTransmission;
-        @SwiftTag("22K")
+        @SwiftMTTag("22K")
         private String typeOfUndertaking;
-        @SwiftTag("12H")
+        @SwiftMTTag("12H")
         private String wordingOfUndertaking;
-        @SwiftTag("22B")
+        @SwiftMTTag("22B")
         private String specialTerms;
-        @SwiftTag("12L")
+        @SwiftMTTag("12L")
         private String languageOfStandardWording;
-        @SwiftTag("31S")
+        @SwiftMTTag("31S")
         private String approximateExpiryDate;
-        @SwiftTag("53C")
+        @SwiftMTTag("53C")
         private String liabilityAccount;
-        @SwiftTag("25A")
+        @SwiftMTTag("25A")
         private String chargesAccount;
-        @SwiftTag("20E")
+        @SwiftMTTag("20E")
         private String reference;
-        @SwiftTag("31R")
+        @SwiftMTTag("31R")
         private String referenceDate;
-        @SwiftTag("71F")
+        @SwiftMTTag("71F")
         private String totalOrderContractAmount;
-        @SwiftTag("37J")
+        @SwiftMTTag("37J")
         private String undertakingValueInPercent;
-        @SwiftTag("49Z")
+        @SwiftMTTag("49Z")
         private String specialAgreements;
-        @SwiftTag("29A")
+        @SwiftMTTag("29A")
         private String customerContact;
-        @SwiftTag("29D")
+        @SwiftMTTag("29D")
         private String beneficiaryContact;
-        @SwiftTag("29F")
+        @SwiftMTTag("29F")
         private String localUndertakingBeneficiaryContact;
-        @SwiftTag("72Z")
+        @SwiftMTTag("72Z")
         private String corporateToBankInformation;
-        @SwiftTag("23X")
+        @SwiftMTTag("23X")
         private String fileIdentification;
-        @SwiftTag("29S")
+        @SwiftMTTag("29S")
         private String customerIdentifier;
-        @SwiftTag("29P")
+        @SwiftMTTag("29P")
         private String processingBankIdentifier;
-        @SwiftTag("29U")
+        @SwiftMTTag("29U")
         private String leadBankIdentifier;
     }
 
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784DetailMessage extends BaseMT798DetailMessage {
-        @SwiftTag("27A")
+        @SwiftMTTag("27A")
         private String customerReferenceNumber;
     }
 
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784ExtensionMessage extends BaseMT798ExtensionMessage {
-        @SwiftTag("27A")
+        @SwiftMTTag("27A")
         private String customerReferenceNumber;
     }
 }

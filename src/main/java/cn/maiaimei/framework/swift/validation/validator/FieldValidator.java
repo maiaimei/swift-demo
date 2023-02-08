@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.validation.validator;
 
-import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
+import cn.maiaimei.framework.swift.model.FieldComponentInfo;
 import com.prowidesoftware.swift.model.field.Field;
 
 public interface FieldValidator {
@@ -10,5 +10,5 @@ public interface FieldValidator {
 
     boolean supportsType(Field field, String type);
 
-    String validate(BaseValidationInfo validationInfo, Field field, String label, String value);
+    String validate(FieldComponentInfo validationInfo, Field field, String label, String value);
 }

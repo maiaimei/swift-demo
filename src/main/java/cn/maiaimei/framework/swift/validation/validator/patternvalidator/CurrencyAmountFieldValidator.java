@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.validation.validator.patternvalidator;
 
+import cn.maiaimei.framework.swift.model.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
-import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractPatternValidator;
 import cn.maiaimei.framework.swift.validation.validator.typevalidator.CurrencyFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
@@ -29,7 +29,7 @@ public class CurrencyAmountFieldValidator extends AbstractPatternValidator {
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
+    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
         if (!PATTERN.matcher(value).matches()) {
             return ValidationError.mustMatchFormat(label, FORMAT, value);
         }

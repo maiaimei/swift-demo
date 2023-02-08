@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.validation.config;
 
-import cn.maiaimei.framework.swift.validation.config.model.MessageValidationCfg;
+import cn.maiaimei.framework.swift.model.MessageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ public class ValidationConfig {
     private static final List<String> MT8XX_DEFAULT_CONFIG_LOCATIONS = Collections.singletonList("classpath*:validation/mt8xx/**/*.json");
     private static final List<String> MT9XX_DEFAULT_CONFIG_LOCATIONS = Collections.singletonList("classpath*:validation/mt9xx/**/*.json");
 
-    public static final List<MessageValidationCfg> MESSAGE_VALIDATION_CONFIG_LIST = new ArrayList<>();
+    public static final List<MessageInfo> MESSAGE_VALIDATION_CONFIG_LIST = new ArrayList<>();
 
     @Autowired
     private ValidationConfigProperties properties;
@@ -63,7 +63,7 @@ public class ValidationConfig {
         List<String> configLocations = getConfigLocations(mtXxxConfigLocations, mtXxxDefaultConfigLocations);
         Resource[] resources = ValidationConfigUtils.resolveConfigLocations(configLocations.toArray(new String[0]));
         for (Resource resource : resources) {
-            MessageValidationCfg cfg = ValidationConfigUtils.getMessageValidationCfg(resource);
+            MessageInfo cfg = ValidationConfigUtils.getMessageValidationCfg(resource);
             MESSAGE_VALIDATION_CONFIG_LIST.add(cfg);
         }
     }
@@ -75,7 +75,7 @@ public class ValidationConfig {
         List<String> configLocations = getConfigLocations(mtXxxConfigLocations, mtXxxDefaultConfigLocations);
         Resource[] resources = ValidationConfigUtils.resolveConfigLocations(configLocations.toArray(new String[0]));
         for (Resource resource : resources) {
-            MessageValidationCfg cfg = ValidationConfigUtils.getMT798MessageValidationCfg(resource);
+            MessageInfo cfg = ValidationConfigUtils.getMT798MessageValidationCfg(resource);
             MESSAGE_VALIDATION_CONFIG_LIST.add(cfg);
         }
     }

@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.validation.validator.typevalidator;
 
-import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
+import cn.maiaimei.framework.swift.model.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractTypeValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +16,7 @@ public class CurrencyFieldValidator extends AbstractTypeValidator {
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
+    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
         // TODO: validate currency
         return null;
     }

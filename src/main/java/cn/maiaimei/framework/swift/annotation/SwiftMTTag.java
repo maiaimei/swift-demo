@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface SwiftTag {
+public @interface SwiftMTTag {
     /**
      * tag
      */

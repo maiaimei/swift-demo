@@ -1,7 +1,7 @@
 package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 
+import cn.maiaimei.framework.swift.model.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
-import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class IndexTotalFieldValidator extends AbstractFormatValidator {
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
+    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
         if (!PATTERN.matcher(value).matches()) {
             return ValidationError.mustMatchFormat(label, FORMAT, value);
         }

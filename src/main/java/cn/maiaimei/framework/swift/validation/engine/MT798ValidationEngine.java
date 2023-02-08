@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.validation.engine;
 
+import cn.maiaimei.framework.swift.model.FieldInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
-import cn.maiaimei.framework.swift.validation.config.model.FieldInfo;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.Tag;
@@ -58,15 +58,15 @@ public class MT798ValidationEngine {
 
         FieldInfo field20Info = new FieldInfo();
         field20Info.setTag(Field20.NAME);
-        field20Info.setLabel("Transaction Reference Number");
+        field20Info.setFieldName("Transaction Reference Number");
         field20Info.setFormat("16x");
-        field20Info.setMandatory(true);
+        field20Info.setStatus("M");
 
         FieldInfo field12Info = new FieldInfo();
         field12Info.setTag(Field12.NAME);
-        field12Info.setLabel("Sub-Message Type");
+        field12Info.setFieldName("Sub-Message Type");
         field12Info.setFormat("3!n");
-        field12Info.setMandatory(true);
+        field12Info.setStatus("M");
 
         List<FieldInfo> fieldInfos = new ArrayList<>();
         fieldInfos.add(field20Info);

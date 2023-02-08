@@ -1,15 +1,14 @@
-package cn.maiaimei.framework.swift.validation.config.model;
+package cn.maiaimei.framework.swift.model;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class BaseValidationInfo {
-    String label;
+public class FieldComponentInfo {
     private String format;
+    private String status;
     private String pattern;
     private String type;
-    private boolean isMandatory;
     private List<String> options;
 }

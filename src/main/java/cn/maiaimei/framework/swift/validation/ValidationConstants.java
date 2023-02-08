@@ -8,6 +8,7 @@ public final class ValidationConstants {
     public static final String SLASH = "/";
     public static final String LEFT_SQUARE_BRACKET = "[";
     public static final String RIGHT_SQUARE_BRACKET = "]";
+    public static final String STATUS_MANDATORY = "M";
 
     /**
      * a, alphabetic, capital letters (A through Z), upper case only

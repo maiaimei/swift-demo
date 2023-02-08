@@ -1,9 +1,9 @@
 package cn.maiaimei.framework.swift.validation.validator;
 
+import cn.maiaimei.framework.swift.model.ComponentInfo;
+import cn.maiaimei.framework.swift.model.FieldComponentInfo;
+import cn.maiaimei.framework.swift.model.FieldInfo;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
-import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
-import cn.maiaimei.framework.swift.validation.config.model.ComponentInfo;
-import cn.maiaimei.framework.swift.validation.config.model.FieldInfo;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +32,14 @@ public class FieldValidatorChain {
     @Autowired
     private Set<AbstractTypeValidator> typeValidatorSet;
 
-    public void doValidation(ValidationResult result, BaseValidationInfo validationInfo, Field field, String label, String value) {
+    public void doValidation(ValidationResult result, FieldComponentInfo validationInfo, Field field, String label, String value) {
         doValidationInternal(result, validationInfo, field, label, value);
         if (validationInfo instanceof FieldInfo) {
             validateComponents(result, (FieldInfo) validationInfo, field, label, value);
         }
     }
 
-    private void doValidationInternal(ValidationResult result, BaseValidationInfo validationInfo, Field field, String label, String value) {
+    private void doValidationInternal(ValidationResult result, FieldComponentInfo validationInfo, Field field, String label, String value) {
         String errorMessage;
         errorMessage = mandatoryFieldValidator.validate(validationInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
@@ -68,7 +68,7 @@ public class FieldValidatorChain {
         result.addErrorMessage(errorMessage);
     }
 
-    private String validateByFormat(BaseValidationInfo validationInfo, Field field, String errorField, String tagValue) {
+    private String validateByFormat(FieldComponentInfo validationInfo, Field field, String errorField, String tagValue) {
         for (AbstractFormatValidator formatValidator : formatValidatorSet) {
             if (formatValidator.supportsFormat(field, validationInfo.getFormat())) {
                 String errorMessage = formatValidator.validate(validationInfo, field, errorField, tagValue);
@@ -80,7 +80,7 @@ public class FieldValidatorChain {
         return null;
     }
 
-    private String validateByPattern(BaseValidationInfo validationInfo, Field field, String errorField, String tagValue) {
+    private String validateByPattern(FieldComponentInfo validationInfo, Field field, String errorField, String tagValue) {
         for (AbstractPatternValidator patternValidator : patternValidatorSet) {
             if (patternValidator.supportsPattern(field, validationInfo.getPattern())) {
                 String errorMessage = patternValidator.validate(validationInfo, field, errorField, tagValue);
@@ -92,7 +92,7 @@ public class FieldValidatorChain {
         return null;
     }
 
-    private String validateByType(BaseValidationInfo validationInfo, Field field, String errorField, String tagValue) {
+    private String validateByType(FieldComponentInfo validationInfo, Field field, String errorField, String tagValue) {
         for (AbstractTypeValidator typeValidator : typeValidatorSet) {
             if (typeValidator.supportsType(field, validationInfo.getType())) {
                 String errorMessage = typeValidator.validate(validationInfo, field, errorField, tagValue);

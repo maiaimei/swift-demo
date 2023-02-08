@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swift-mt xmlns="https://maiamy.cn/schema/swift">
+    <message-type>784</message-type>
+    <fields>
+        <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+    </fields>
+</swift-mt>

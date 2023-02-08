@@ -127,6 +127,10 @@ public final class ValidatorUtils {
         return value.startsWith(ValidationConstants.SLASH);
     }
 
+    public static boolean isMandatory(String status) {
+        return ValidationConstants.STATUS_MANDATORY.equals(status);
+    }
+
     public static List<Integer> getNumbers(String format) {
         List<Integer> numbers = new ArrayList<>();
         Matcher matcher = ValidationConstants.NUMBER_PATTERN.matcher(format);

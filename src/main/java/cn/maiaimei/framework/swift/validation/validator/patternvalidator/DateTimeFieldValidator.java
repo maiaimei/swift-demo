@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.validation.validator.patternvalidator;
 
+import cn.maiaimei.framework.swift.model.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
-import cn.maiaimei.framework.swift.validation.config.model.BaseValidationInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractPatternValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +41,7 @@ public class DateTimeFieldValidator extends AbstractPatternValidator {
     }
 
     @Override
-    public String validate(BaseValidationInfo validationInfo, Field field, String label, String value) {
+    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
         for (String p : PATTERN_LIST) {
             if (StringUtils.equalsIgnoreCase(p, validationInfo.getPattern())
                     && !ValidatorUtils.validateDatetime(p, value)) {

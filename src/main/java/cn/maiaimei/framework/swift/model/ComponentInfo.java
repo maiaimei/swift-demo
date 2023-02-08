@@ -1,14 +1,11 @@
-package cn.maiaimei.framework.swift.validation.config.model;
+package cn.maiaimei.framework.swift.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * Component config
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ComponentInfo extends BaseValidationInfo {
+public class ComponentInfo extends FieldComponentInfo {
     /**
      * The first component index is 1, the second component index is 2, etc.
      */
@@ -23,4 +20,6 @@ public class ComponentInfo extends BaseValidationInfo {
      * Multiple components shared the same config, use this config item
      */
     private Integer endIndex;
+
+    private String label;
 }
