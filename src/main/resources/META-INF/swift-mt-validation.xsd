@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="https://maiamy.cn/schema/swift"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="https://maiamy.cn/schema/swift"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:element name="swift-mt-validation">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="id" type="xsd:string"/>
+                <xsd:element name="message-type" type="xsd:string"/>
+                <xsd:element name="is-b2c" type="xsd:boolean"/>
+                <xsd:element name="fields" type="fields"/>
+                <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>
+                <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="sequences">
+        <xsd:sequence>
+            <xsd:element name="sequence" type="sequence" nillable="true" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="sequence">
+        <xsd:sequence>
+            <xsd:element name="fields" type="fields" nillable="true"/>
+            <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" use="required" type="xsd:string"/>
+        <xsd:attribute name="status" use="required">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Sequence Status
+
+    "M" indicates a field is mandatory;
+    "O" indicates a field is optional.
+                ]]></xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="M"/>
+                    <xsd:enumeration value="O"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="fields">
+        <xsd:sequence>
+            <xsd:element name="field" type="field" nillable="true" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="field">
+        <xsd:sequence>
+            <xsd:element name="components" type="components" nillable="true" minOccurs="0"/>
+            <xsd:element name="fields" type="fields" nillable="true" minOccurs="0"/>
+            <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="no" use="required" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field No.
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="tag" use="required" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field Tag
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="field-name" use="required" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field Name
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="format" use="required" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field Format
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="pattern" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field Pattern
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="type" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field Type
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="status" use="required">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field Status
+
+    "M" indicates a field is mandatory;
+    "O" indicates a field is optional.
+                ]]></xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="M"/>
+                    <xsd:enumeration value="O"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="options" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Field Options
+    
+    Multiple option split by "|"
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="components">
+        <xsd:sequence>
+            <xsd:element name="component" type="component" nillable="true" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="component">
+        <xsd:attribute name="index" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Index
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="start-index" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Start Index
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="end-index" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component End Index
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="label" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Label
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="format" use="required" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Format
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="pattern" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Pattern
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="type" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Type
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="status" use="required">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Status
+
+    "M" indicates a component is mandatory;
+    "O" indicates a component is optional.
+                ]]></xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="M"/>
+                    <xsd:enumeration value="O"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="options" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Component Options
+    
+    Multiple option split by "|"
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="rules">
+        <xsd:sequence>
+            <xsd:element name="rule" type="rule" nillable="true" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="rule">
+        <xsd:attribute name="expression-string" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[
+    Spring Expression Language
+                ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="bean-name" type="xsd:string"/>
+        <xsd:attribute name="method-name" type="xsd:string"/>
+        <xsd:attribute name="error-message" type="xsd:string"/>
+    </xsd:complexType>
+
+</xsd:schema>

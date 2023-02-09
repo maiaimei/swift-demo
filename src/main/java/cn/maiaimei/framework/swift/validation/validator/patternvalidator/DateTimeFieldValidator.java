@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.validation.validator.patternvalidator;
 
-import cn.maiaimei.framework.swift.model.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
+import cn.maiaimei.framework.swift.validation.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractPatternValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +13,11 @@ import java.util.List;
 
 @Component
 public class DateTimeFieldValidator extends AbstractPatternValidator {
+
+    /**
+     * Dates defined as 8!n4!n must be in the form of YYYYMMDDHHMM.
+     */
+    private static final String PATTERN_YYYYMMDDHHMM = "yyyyMMddHHmm";
 
     /**
      * Dates defined as 8!n must be in the form of YYYYMMDD.
@@ -30,6 +35,7 @@ public class DateTimeFieldValidator extends AbstractPatternValidator {
     private static final String PATTERN_HHMM = "HHmm";
 
     private static final List<String> PATTERN_LIST = Arrays.asList(
+            PATTERN_YYYYMMDDHHMM,
             PATTERN_YYYYMMDD,
             PATTERN_YYMMDD,
             PATTERN_HHMM

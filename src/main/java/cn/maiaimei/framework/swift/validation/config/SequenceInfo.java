@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.model;
+package cn.maiaimei.framework.swift.validation.config;
 
 import lombok.Data;
 
@@ -9,4 +9,5 @@ public class SequenceInfo {
     private String name;
     private String status;
     private List<FieldInfo> fields;
+    private List<RuleInfo> rules;
 }

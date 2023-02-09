@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.validation.engine;
 
-import cn.maiaimei.framework.swift.model.FieldInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
+import cn.maiaimei.framework.swift.validation.config.FieldInfo;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.Tag;

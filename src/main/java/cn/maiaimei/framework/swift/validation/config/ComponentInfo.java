@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.model;
+package cn.maiaimei.framework.swift.validation.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

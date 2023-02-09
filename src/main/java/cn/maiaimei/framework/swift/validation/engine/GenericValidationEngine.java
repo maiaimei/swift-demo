@@ -1,11 +1,11 @@
 package cn.maiaimei.framework.swift.validation.engine;
 
-import cn.maiaimei.framework.swift.model.FieldInfo;
-import cn.maiaimei.framework.swift.model.MessageInfo;
-import cn.maiaimei.framework.swift.model.SequenceInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
+import cn.maiaimei.framework.swift.validation.config.FieldInfo;
+import cn.maiaimei.framework.swift.validation.config.MessageValidationConfig;
+import cn.maiaimei.framework.swift.validation.config.SequenceInfo;
 import cn.maiaimei.framework.swift.validation.config.ValidationConfig;
 import cn.maiaimei.framework.swift.validation.constants.MTXxx;
 import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
@@ -43,11 +43,11 @@ public class GenericValidationEngine {
         return result;
     }
 
-    public ValidationResult validate(String message, String messageType, MessageInfo messageInfo) {
+    public ValidationResult validate(String message, String messageType, MessageValidationConfig messageValidationConfig) {
         ValidationResult result = getValidationResult();
         SwiftMessage swiftMessage = getSwiftMessage(message);
         SwiftBlock4 block4 = swiftMessage.getBlock4();
-        validate(result, block4, messageType, messageInfo);
+        validate(result, block4, messageType, messageValidationConfig);
         return result;
     }
 
@@ -58,10 +58,10 @@ public class GenericValidationEngine {
         return result;
     }
 
-    public ValidationResult validate(SwiftMessage swiftMessage, String messageType, MessageInfo messageInfo) {
+    public ValidationResult validate(SwiftMessage swiftMessage, String messageType, MessageValidationConfig messageValidationConfig) {
         ValidationResult result = getValidationResult();
         SwiftBlock4 block4 = swiftMessage.getBlock4();
-        validate(result, block4, messageType, messageInfo);
+        validate(result, block4, messageType, messageValidationConfig);
         return result;
     }
 
@@ -72,15 +72,15 @@ public class GenericValidationEngine {
         return result;
     }
 
-    public ValidationResult validate(AbstractMT mt, String messageType, MessageInfo messageInfo) {
+    public ValidationResult validate(AbstractMT mt, String messageType, MessageValidationConfig messageValidationConfig) {
         ValidationResult result = getValidationResult();
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
-        validate(result, block4, messageType, messageInfo);
+        validate(result, block4, messageType, messageValidationConfig);
         return result;
     }
 
     public void validate(ValidationResult result, SwiftTagListBlock block, String messageType) {
-        List<MessageInfo> cfgList = ValidationConfig.MESSAGE_VALIDATION_CONFIG_LIST.stream().filter(w -> w.getMessageType().equals(messageType)).collect(Collectors.toList());
+        List<MessageValidationConfig> cfgList = ValidationConfig.MESSAGE_VALIDATION_CONFIG_LIST.stream().filter(w -> w.getMessageType().equals(messageType)).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(cfgList)) {
             result.addErrorMessage("Can't find validation config for MT" + messageType);
             return;
@@ -89,22 +89,22 @@ public class GenericValidationEngine {
             result.addErrorMessage("Can't determine which validation config to use for MT" + messageType);
             return;
         }
-        MessageInfo messageInfo = cfgList.get(0);
-        validate(result, block, messageType, messageInfo);
+        MessageValidationConfig messageValidationConfig = cfgList.get(0);
+        validate(result, block, messageType, messageValidationConfig);
     }
 
-    private void validate(ValidationResult result, SwiftTagListBlock block, String messageType, MessageInfo messageInfo) {
+    private void validate(ValidationResult result, SwiftTagListBlock block, String messageType, MessageValidationConfig messageValidationConfig) {
         List<Tag> tags = block.getTags();
-        if (CollectionUtils.isEmpty(messageInfo.getSequences())) {
-            List<FieldInfo> fieldInfos = messageInfo.getFields();
+        if (CollectionUtils.isEmpty(messageValidationConfig.getSequences())) {
+            List<FieldInfo> fieldInfos = messageValidationConfig.getFields();
             validateMandatoryFields(result, fieldInfos, tags);
             validateTags(result, fieldInfos, tags, block);
         } else {
-            List<FieldInfo> fieldInfos = messageInfo.getFields();
+            List<FieldInfo> fieldInfos = messageValidationConfig.getFields();
             validateMandatoryFields(result, fieldInfos, tags);
             validateTags(result, fieldInfos, tags, block);
             Map<String, List<SwiftTagListBlock>> sequenceBlockMap = getSequenceBlockMap(messageType, block);
-            for (SequenceInfo sequenceInfo : messageInfo.getSequences()) {
+            for (SequenceInfo sequenceInfo : messageValidationConfig.getSequences()) {
                 String sequenceName = sequenceInfo.getName();
                 List<SwiftTagListBlock> sequenceBlocks = sequenceBlockMap.get(sequenceName);
                 if (!CollectionUtils.isEmpty(sequenceBlocks)) {

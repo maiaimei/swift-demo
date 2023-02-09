@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.model;
+package cn.maiaimei.framework.swift.validation.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ public class FieldInfo extends FieldComponentInfo {
     private String no;
     private String tag;
     private String fieldName;
-    private List<ComponentInfo> components;
     private List<FieldInfo> fields;
+    private List<ComponentInfo> components;
     private List<RuleInfo> rules;
 }

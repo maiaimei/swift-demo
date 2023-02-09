@@ -1,7 +1,6 @@
 package cn.maiaimei.framework.swift.validation.config;
 
-import cn.maiaimei.framework.swift.model.MessageInfo;
-import cn.maiaimei.framework.swift.model.mt7xx.MT798MessageInfo;
+import cn.maiaimei.framework.swift.validation.config.mt.mt7xx.MT798ValidationConfig;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
@@ -33,24 +32,24 @@ public class ValidationConfigUtils {
         }
     }
 
-    public static MessageInfo getMessageValidationCfg(String configLocation) {
+    public static MessageValidationConfig getMessageValidationCfg(String configLocation) {
         Resource[] resources = getResources(configLocation);
         return getMessageValidationCfg(resources[0]);
     }
 
     @SneakyThrows
-    public static MessageInfo getMessageValidationCfg(Resource resource) {
-        return resourceToMessageValidationCfg(resource, MessageInfo.class);
+    public static MessageValidationConfig getMessageValidationCfg(Resource resource) {
+        return resourceToMessageValidationCfg(resource, MessageValidationConfig.class);
     }
 
-    public static MessageInfo getMT798MessageValidationCfg(String configLocation) {
+    public static MessageValidationConfig getMT798MessageValidationCfg(String configLocation) {
         Resource[] resources = getResources(configLocation);
         return getMT798MessageValidationCfg(resources[0]);
     }
 
     @SneakyThrows
-    public static MessageInfo getMT798MessageValidationCfg(Resource resource) {
-        return resourceToMessageValidationCfg(resource, MT798MessageInfo.class);
+    public static MessageValidationConfig getMT798MessageValidationCfg(Resource resource) {
+        return resourceToMessageValidationCfg(resource, MT798ValidationConfig.class);
     }
 
     @SneakyThrows

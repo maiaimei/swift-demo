@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.validation.validator.patternvalidator;
 
-import cn.maiaimei.framework.swift.model.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
+import cn.maiaimei.framework.swift.validation.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.validator.AbstractPatternValidator;
 import cn.maiaimei.framework.swift.validation.validator.typevalidator.CurrencyFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
