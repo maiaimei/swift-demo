@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class MessageValidationConfig {
-    private boolean isB2C;
+    private String b2c;
     private String messageType;
     private List<FieldInfo> fields;
     private List<SequenceInfo> sequences;

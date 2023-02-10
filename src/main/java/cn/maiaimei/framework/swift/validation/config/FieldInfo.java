@@ -11,7 +11,6 @@ public class FieldInfo extends FieldComponentInfo {
     private String no;
     private String tag;
     private String fieldName;
-    private List<FieldInfo> fields;
     private List<ComponentInfo> components;
     private List<RuleInfo> rules;
 }

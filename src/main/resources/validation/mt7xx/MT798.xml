@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swift-mt-validation xmlns="https://maiamy.cn/schema/swift"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+       https://maiamy.cn/schema/swift/swift-mt-validation.xsd">
+
+    <id>mt798ValidationConfig</id>
+    <message-type>798</message-type>
+    <b2c>false</b2c>
+    <fields>
+        <field no="1.1" tag="20" field-name="Transaction Reference Number" format="16x" status="M" />
+        <field no="1.2" tag="12" field-name="Sub-Message Type" format="3!n" status="M" />
+    </fields>
+
+</swift-mt-validation>

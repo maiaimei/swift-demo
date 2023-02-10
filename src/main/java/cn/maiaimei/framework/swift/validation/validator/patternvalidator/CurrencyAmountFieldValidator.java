@@ -29,7 +29,7 @@ public class CurrencyAmountFieldValidator extends AbstractPatternValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
+    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (!PATTERN.matcher(value).matches()) {
             return ValidationError.mustMatchFormat(label, FORMAT, value);
         }
@@ -38,7 +38,7 @@ public class CurrencyAmountFieldValidator extends AbstractPatternValidator {
         if (ValidatorUtils.gt(amount, 15)) {
             return ValidationError.mustBeVariableLengthCharacter(label, 15, "d", value);
         }
-        String errorMessage = currencyFieldValidator.validate(validationInfo, field, label, value);
+        String errorMessage = currencyFieldValidator.validate(fieldComponentInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             return errorMessage;
         }

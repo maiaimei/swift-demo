@@ -9,6 +9,5 @@ public class RuleInfo {
      */
     private String expressionString;
     private String beanName;
-    private String methodName;
     private String errorMessage;
 }

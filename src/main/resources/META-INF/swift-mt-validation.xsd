@@ -11,7 +11,7 @@
             <xsd:sequence>
                 <xsd:element name="id" type="xsd:string"/>
                 <xsd:element name="message-type" type="xsd:string"/>
-                <xsd:element name="is-b2c" type="xsd:boolean"/>
+                <xsd:element name="b2c" type="xsd:string"/>
                 <xsd:element name="fields" type="fields"/>
                 <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>
                 <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
@@ -58,10 +58,9 @@
     <xsd:complexType name="field">
         <xsd:sequence>
             <xsd:element name="components" type="components" nillable="true" minOccurs="0"/>
-            <xsd:element name="fields" type="fields" nillable="true" minOccurs="0"/>
             <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute name="no" use="required" type="xsd:string">
+        <xsd:attribute name="no" type="xsd:string">
             <xsd:annotation>
                 <xsd:documentation><![CDATA[
     Field No.
@@ -228,7 +227,6 @@
             </xsd:annotation>
         </xsd:attribute>
         <xsd:attribute name="bean-name" type="xsd:string"/>
-        <xsd:attribute name="method-name" type="xsd:string"/>
         <xsd:attribute name="error-message" type="xsd:string"/>
     </xsd:complexType>
 

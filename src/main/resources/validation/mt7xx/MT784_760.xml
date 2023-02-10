@@ -6,7 +6,7 @@
 
     <id>mt784760ValidationConfig</id>
     <message-type>760</message-type>
-    <is-b2c>false</is-b2c>
+    <b2c>false</b2c>
     <fields>
         <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
         <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
@@ -41,119 +41,87 @@
                 <field no="2.14" tag="35G" field-name="Expiry Condition/Event" format="12*65x" status="O" />
                 <field no="2.15" tag="50" field-name="Applicant" format="4*35x" status="O" />
                 <field no="2.16" tag="51" field-name="Obligor/Instructing Party" format="4*35x" status="O" />
-                <field no="2.17" tag="52a" field-name="Issuer" format="*" status="O">
-                    <fields>
-                        <field no="2.17" tag="52A" field-name="Issuer" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
-                            </components>
-                        </field>
-                        <field no="2.17" tag="52D" field-name="Issuer" format="[[/1!a][/34x]$]4*35x" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="35x" status="M"/>
-                                <component start-index="4" end-index="6" format="35x" status="O"/>
-                            </components>
-                        </field>
-                    </fields>
-                    <rules>
-                        <rule expression-string="#block.getTagByName('52A') and #block.getTagByName('52D')" 
-                              error-message="In sequence B, 52A or 52D must be present" />
-                    </rules>
+                <field no="2.17" tag="52A" field-name="Issuer" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                    </components>
                 </field>
-                <field no="2.18" tag="59a" field-name="Beneficiary" format="*" status="O">
-                    <fields>
-                        <field no="2.18" tag="59" field-name="Beneficiary" format="[[/34x]$]4*35x" status="O">
-                            <components>
-                                <component index="1" format="34x" status="O"/>
-                                <component index="2" format="35x" status="M"/>
-                                <component start-index="3" end-index="5" format="35x" status="O"/>
-                            </components>
-                        </field>
-                        <field no="2.18" tag="59A" field-name="Beneficiary" format="[[/34x]$]4!a2!a2!c[3!c]" status="O">
-                            <components>
-                                <component index="1" format="34x" status="O"/>
-                                <component index="2" format="4!a2!a2!c[3!c]" status="M"/>
-                            </components>
-                        </field>
-                    </fields>
-                    <rules>
-                        <rule expression-string="#block.getTagByName('59') and #block.getTagByName('59A')"
-                              error-message="In sequence B, 59 or 59A must be present" />
-                    </rules>
+                <field no="2.17" tag="52D" field-name="Issuer" format="[[/1!a][/34x]$]4*35x" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="35x" status="M"/>
+                        <component start-index="4" end-index="6" format="35x" status="O"/>
+                    </components>
                 </field>
-                <field no="2.19" tag="56a" field-name="Advising Bank" format="*" status="O">
-                    <fields>
-                        <field no="2.19" tag="56A" field-name="Advising Bank" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
-                            </components>
-                        </field>
-                        <field no="2.19" tag="56D" field-name="Advising Bank" format="[[/1!a][/34x]$]4*35x" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="35x" status="M"/>
-                                <component start-index="4" end-index="6" format="35x" status="O"/>
-                            </components>
-                        </field>
-                    </fields>
+                <field no="2.18" tag="59" field-name="Beneficiary" format="[[/34x]$]4*35x" status="O">
+                    <components>
+                        <component index="1" format="34x" status="O"/>
+                        <component index="2" format="35x" status="M"/>
+                        <component start-index="3" end-index="5" format="35x" status="O"/>
+                    </components>
+                </field>
+                <field no="2.18" tag="59A" field-name="Beneficiary" format="[[/34x]$]4!a2!a2!c[3!c]" status="O">
+                    <components>
+                        <component index="1" format="34x" status="O"/>
+                        <component index="2" format="4!a2!a2!c[3!c]" status="M"/>
+                    </components>
+                </field>
+                <field no="2.19" tag="56A" field-name="Advising Bank" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                    </components>
+                </field>
+                <field no="2.19" tag="56D" field-name="Advising Bank" format="[[/1!a][/34x]$]4*35x" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="35x" status="M"/>
+                        <component start-index="4" end-index="6" format="35x" status="O"/>
+                    </components>
                 </field>
                 <field no="2.20" tag="23" field-name="Advising Bank Reference" format="16x" status="O" />
-                <field no="2.21" tag="57a" field-name="‘Advise Through’Bank" format="*" status="O">
-                    <fields>
-                        <field no="2.21" tag="57A" field-name="‘Advise Through’Bank" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
-                            </components>
-                        </field>
-                        <field no="2.21" tag="57D" field-name="‘Advise Through’Bank" format="[[/1!a][/34x]$]4*35x" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="35x" status="M"/>
-                                <component start-index="4" end-index="6" format="35x" status="O"/>
-                            </components>
-                        </field>
-                    </fields>
+                <field no="2.21" tag="57A" field-name="‘Advise Through’Bank" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                    </components>
+                </field>
+                <field no="2.21" tag="57D" field-name="‘Advise Through’Bank" format="[[/1!a][/34x]$]4*35x" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="35x" status="M"/>
+                        <component start-index="4" end-index="6" format="35x" status="O"/>
+                    </components>
                 </field>
                 <field no="2.22" tag="32B" field-name="Undertaking Amount" format="3!a15d" status="M" />
                 <field no="2.23" tag="39D" field-name="Additional Amount Information" format="12*65z" status="O" />
-                <field no="2.24" tag="41a" field-name="Available With ..." format="*" status="O">
-                    <fields>
-                        <field no="2.24" tag="41F" field-name="Available With ..." format="4!a2!a2!c[3!c]" status="O" />
-                        <field no="2.24" tag="41G" field-name="Available With ..." format="4*35x" status="O" />
-                    </fields>
-                </field>
+                <field no="2.24" tag="41F" field-name="Available With ..." format="4!a2!a2!c[3!c]" status="O" />
+                <field no="2.24" tag="41G" field-name="Available With ..." format="4*35x" status="O" />
                 <field no="2.25" tag="71D" field-name="Charges" format="6*35z" status="O" />
                 <field no="2.26" tag="45C" field-name="Presentation Instructions" format="100*65z" status="O" />
                 <field no="2.27" tag="77U" field-name="Undertaking Terms and Conditions" format="150*65z" status="O" />
                 <field no="2.28" tag="49" field-name="Confirmation Instructions" format="7!x" status="O" />
-                <field no="2.29" tag="58a" field-name="Requested Confirmation Party" format="*" status="O">
-                    <fields>
-                        <field no="2.29" tag="58A" field-name="Requested Confirmation Party" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
-                            </components>
-                        </field>
-                        <field no="2.29" tag="58D" field-name="Requested Confirmation Party" format="[[/1!a][/34x]$]4*35x" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="35x" status="M"/>
-                                <component start-index="4" end-index="6" format="35x" status="O"/>
-                            </components>
-                        </field>
-                    </fields>
+                <field no="2.29" tag="58A" field-name="Requested Confirmation Party" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                    </components>
+                </field>
+                <field no="2.29" tag="58D" field-name="Requested Confirmation Party" format="[[/1!a][/34x]$]4*35x" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="35x" status="M"/>
+                        <component start-index="4" end-index="6" format="35x" status="O"/>
+                    </components>
                 </field>
                 <field no="2.30" tag="44H" field-name="Governing Law and/or Place of Jurisdiction" format="2!a[/65x]" status="O">
                     <components>
@@ -187,6 +155,12 @@
                     </components>
                 </field>
             </fields>
+            <rules>
+                <rule expression-string="#block.getTagByName('52A') == null and #block.getTagByName('52D') == null"
+                      error-message="In sequence B, 52A or 52D must be present" />
+                <rule expression-string="#block.getTagByName('59') == null and #block.getTagByName('59A') == null"
+                      error-message="In sequence B, 59 or 59A must be present" />
+            </rules>
         </sequence>
         <sequence name="C" status="O">
             <fields>
@@ -209,28 +183,20 @@
                 <field no="2.48" tag="35G" field-name="Expiry Condition/Event" format="12*65x" status="O" />
                 <field no="2.49" tag="50" field-name="Applicant" format="4*35x" status="M" />
                 <field no="2.50" tag="51" field-name="Obligor/Instructing Party" format="4*35x" status="O" />
-                <field no="2.51" tag="52a" field-name="Issuer" format="*" status="O">
-                    <fields>
-                        <field no="2.51" tag="52A" field-name="Issuer" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
-                            </components>
-                        </field>
-                        <field no="2.51" tag="52D" field-name="Issuer" format="[[/1!a][/34x]$]4*35x" status="O">
-                            <components>
-                                <component index="1" format="1!a" status="O"/>
-                                <component index="2" format="34x" status="O"/>
-                                <component index="3" format="35x" status="M"/>
-                                <component start-index="4" end-index="6" format="35x" status="O"/>
-                            </components>
-                        </field>
-                    </fields>
-                    <rules>
-                        <rule expression-string="#block.getTagByName('52A') and #block.getTagByName('52D')"
-                              error-message="In sequence B, 52A or 52D must be present" />
-                    </rules>
+                <field no="2.51" tag="52A" field-name="Issuer" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                    </components>
+                </field>
+                <field no="2.51" tag="52D" field-name="Issuer" format="[[/1!a][/34x]$]4*35x" status="O">
+                    <components>
+                        <component index="1" format="1!a" status="O"/>
+                        <component index="2" format="34x" status="O"/>
+                        <component index="3" format="35x" status="M"/>
+                        <component start-index="4" end-index="6" format="35x" status="O"/>
+                    </components>
                 </field>
                 <field no="2.52" tag="59" field-name="Beneficiary" format="[[/34x]$]4*35x" status="M">
                     <components>
@@ -242,12 +208,8 @@
                 <field no="2.53" tag="32B" field-name="Undertaking Amount" format="3!a15d" status="M" />
                 <field no="2.54" tag="39D" field-name="Additional Amount Information" format="12*65z" status="O" />
                 <field no="2.55" tag="71D" field-name="Charges" format="6*35z" status="O" />
-                <field no="2.56" tag="41a" field-name="Available With ..." format="*" status="O">
-                    <fields>
-                        <field no="2.56" tag="41F" field-name="Available With ..." format="4!a2!a2!c[3!c]" status="O" />
-                        <field no="2.56" tag="41G" field-name="Available With ..." format="4*35x" status="O" />
-                    </fields>
-                </field>
+                <field no="2.56" tag="41F" field-name="Available With ..." format="4!a2!a2!c[3!c]" status="O" />
+                <field no="2.56" tag="41G" field-name="Available With ..." format="4*35x" status="O" />
                 <field no="2.57" tag="45C" field-name="Presentation Instructions" format="100*65z" status="O" />
                 <field no="2.58" tag="77L" field-name="Requested Local Undertaking Terms and Conditions" format="150*65z" status="O" />
                 <field no="2.59" tag="22Y" field-name="Standard Wording Required" format="4!c" status="O" options="STND" />
@@ -284,6 +246,10 @@
                     </components>
                 </field>
             </fields>
+            <rules>
+                <rule expression-string="#block.getTagByName('52A') == null and #block.getTagByName('52D') == null"
+                      error-message="In sequence B, 52A or 52D must be present" />
+            </rules>
         </sequence>
     </sequences>
 

@@ -15,8 +15,8 @@ public class VariableLengthCharacterStartsWithSlashValidator extends AbstractFor
     }
 
     @Override
-    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
-        String format = validationInfo.getFormat();
+    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+        String format = fieldComponentInfo.getFormat();
         int length = getLength(format);
         String type = getType(format);
         String valueToValidate = trimStartSlash(format, value);

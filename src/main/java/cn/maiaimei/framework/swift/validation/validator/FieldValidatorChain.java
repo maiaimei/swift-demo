@@ -12,7 +12,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -32,16 +31,16 @@ public class FieldValidatorChain {
     @Autowired
     private Set<AbstractTypeValidator> typeValidatorSet;
 
-    public void doValidation(ValidationResult result, FieldComponentInfo validationInfo, Field field, String label, String value) {
-        doValidationInternal(result, validationInfo, field, label, value);
-        if (validationInfo instanceof FieldInfo) {
-            validateComponents(result, (FieldInfo) validationInfo, field, label, value);
+    public void doValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+        doValidationInternal(result, fieldComponentInfo, field, label, value);
+        if (fieldComponentInfo instanceof FieldInfo) {
+            validateComponents(result, (FieldInfo) fieldComponentInfo, field, label, value);
         }
     }
 
-    private void doValidationInternal(ValidationResult result, FieldComponentInfo validationInfo, Field field, String label, String value) {
+    private void doValidationInternal(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         String errorMessage;
-        errorMessage = mandatoryFieldValidator.validate(validationInfo, field, label, value);
+        errorMessage = mandatoryFieldValidator.validate(fieldComponentInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             result.addErrorMessage(errorMessage);
             return;
@@ -49,22 +48,22 @@ public class FieldValidatorChain {
         if (StringUtils.isBlank(value)) {
             return;
         }
-        errorMessage = validateByFormat(validationInfo, field, label, value);
+        errorMessage = validateByFormat(fieldComponentInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             result.addErrorMessage(errorMessage);
             return;
         }
-        errorMessage = validateByPattern(validationInfo, field, label, value);
+        errorMessage = validateByPattern(fieldComponentInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             result.addErrorMessage(errorMessage);
             return;
         }
-        errorMessage = validateByType(validationInfo, field, label, value);
+        errorMessage = validateByType(fieldComponentInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             result.addErrorMessage(errorMessage);
             return;
         }
-        errorMessage = enumFieldValidator.validate(validationInfo, field, label, value);
+        errorMessage = enumFieldValidator.validate(fieldComponentInfo, field, label, value);
         result.addErrorMessage(errorMessage);
     }
 
@@ -116,7 +115,7 @@ public class FieldValidatorChain {
         for (ComponentInfo componentInfo : componentInfos) {
             if (componentInfo.getIndex() != null) {
                 int index = componentInfo.getIndex() - 1;
-                String componentLabel = Optional.ofNullable(componentInfo.getLabel()).orElse(componentLabels.get(index));
+                String componentLabel = StringUtils.isNotBlank(componentInfo.getLabel()) ? componentInfo.getLabel() : componentLabels.get(index);
                 String componentValue = components.get(index);
                 doValidationInternal(res, componentInfo, field, componentLabel, componentValue);
             } else if (componentInfo.getStartIndex() != null && componentInfo.getEndIndex() != null) {

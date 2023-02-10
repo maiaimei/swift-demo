@@ -20,8 +20,8 @@ public class MultilineSwiftSetFieldValidator extends AbstractFormatValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
-        String format = validationInfo.getFormat();
+    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+        String format = fieldComponentInfo.getFormat();
         List<Integer> numbers = ValidatorUtils.getNumbers(format);
         int rowcount = numbers.get(0);
         int maxlength = numbers.get(1);

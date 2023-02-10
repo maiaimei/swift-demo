@@ -6,7 +6,7 @@
     
     <id>mt784ValidationConfig</id>
     <message-type>784</message-type>
-    <is-b2c>false</is-b2c>
+    <b2c>false</b2c>
     <fields>
         <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
         <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />

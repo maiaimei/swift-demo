@@ -19,7 +19,7 @@ public class ISO639LanguageCodeValidator extends AbstractTypeValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
+    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         return null;
     }
 }

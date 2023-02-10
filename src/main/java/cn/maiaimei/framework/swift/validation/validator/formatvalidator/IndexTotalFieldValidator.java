@@ -21,7 +21,7 @@ public class IndexTotalFieldValidator extends AbstractFormatValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo validationInfo, Field field, String label, String value) {
+    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (!PATTERN.matcher(value).matches()) {
             return ValidationError.mustMatchFormat(label, FORMAT, value);
         }
