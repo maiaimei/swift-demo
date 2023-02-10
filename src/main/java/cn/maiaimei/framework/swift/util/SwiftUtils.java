@@ -1,6 +1,8 @@
 package cn.maiaimei.framework.swift.util;
 
-import cn.maiaimei.framework.swift.validation.constants.SwiftMtClassNameUtils;
+import cn.maiaimei.framework.swift.annotation.SwiftTag;
+import cn.maiaimei.framework.swift.model.BaseMessage;
+import cn.maiaimei.framework.swift.validation.constants.MTClassNameUtils;
 import com.prowidesoftware.swift.io.parser.SwiftParser;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftMessage;
@@ -10,15 +12,39 @@ import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SwiftUtils {
 
     private static final String GET_SEQUENCE_METHOD_NAME = "getSequence";
+
+    @SneakyThrows
+    public static void populateMessage(SwiftTagListBlock block, BaseMessage message) {
+        Class<? extends BaseMessage> clazz = message.getClass();
+        List<Field> declaredFields = getDeclaredFields(clazz);
+        for (Field declaredField : declaredFields) {
+            SwiftTag swiftTag = declaredField.getAnnotation(SwiftTag.class);
+            com.prowidesoftware.swift.model.field.Field field = block.getFieldByName(swiftTag.value());
+            if (field == null) {
+                continue;
+            }
+            declaredField.setAccessible(Boolean.TRUE);
+            declaredField.set(message, swiftTag.index() == -1 ? field.getValue() : field.getComponent(swiftTag.index()));
+            declaredField.setAccessible(Boolean.FALSE);
+        }
+    }
+
+    private static List<Field> getDeclaredFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        while (clazz != null) {
+            Field[] declaredFields = clazz.getDeclaredFields();
+            fields.addAll(Arrays.asList(declaredFields));
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
+    }
 
     @SneakyThrows
     public static SwiftMessage parseToSwiftMessage(String message) {
@@ -53,7 +79,7 @@ public class SwiftUtils {
     @SneakyThrows
     public static Map<String, List<SwiftTagListBlock>> getSequenceMap(String messageType, SwiftTagListBlock block4) {
         Map<String, List<SwiftTagListBlock>> sequenceMap = new HashMap<>();
-        String className = SwiftMtClassNameUtils.MAP.get(messageType);
+        String className = MTClassNameUtils.MAP.get(messageType);
         if (StringUtils.isBlank(className)) {
             throw new ClassNotFoundException("Can't found class for MT" + messageType);
         }

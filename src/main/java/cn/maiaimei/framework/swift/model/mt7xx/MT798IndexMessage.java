@@ -5,5 +5,5 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BaseMT798ExtensionMessage extends BaseMT798Message {
+public class MT798IndexMessage extends MT798Message {
 }

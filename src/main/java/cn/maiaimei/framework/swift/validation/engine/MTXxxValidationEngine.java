@@ -9,7 +9,7 @@ import cn.maiaimei.framework.swift.validation.config.FieldInfo;
 import cn.maiaimei.framework.swift.validation.config.MessageValidationConfig;
 import cn.maiaimei.framework.swift.validation.config.RuleInfo;
 import cn.maiaimei.framework.swift.validation.config.SequenceInfo;
-import cn.maiaimei.framework.swift.validation.mt.MtValidation;
+import cn.maiaimei.framework.swift.validation.mt.MTXxxValidation;
 import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftMessage;
@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class GenericValidationEngine {
+public class MTXxxValidationEngine {
 
     private static final String LABEL_FORMAT_NO_SEQUENCE = "Field %s %s";
     private static final String LABEL_FORMAT_IN_SEQUENCE = "In Sequence %s, field %s %s";
@@ -41,6 +41,9 @@ public class GenericValidationEngine {
 
     @Autowired
     private Set<MessageValidationConfig> messageValidationConfigSet;
+
+    @Autowired(required = false)
+    private Map<String, MTXxxValidation> mtValidationMap;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -179,8 +182,14 @@ public class GenericValidationEngine {
                 break;
             }
             if (StringUtils.isNotBlank(ruleInfo.getBeanName())) {
-                MtValidation mtValidation = applicationContext.getBean(ruleInfo.getBeanName(), MtValidation.class);
-                mtValidation.validate(result, mt);
+                MTXxxValidation MTXxxValidation = null;
+                //mtValidation = applicationContext.getBean(ruleInfo.getBeanName(), MtValidation.class);
+                if (mtValidationMap != null) {
+                    MTXxxValidation = mtValidationMap.get(ruleInfo.getBeanName());
+                }
+                if (MTXxxValidation != null) {
+                    MTXxxValidation.validate(result, mt);
+                }
             }
         }
     }

@@ -9,5 +9,5 @@ import org.springframework.context.annotation.ImportResource;
         "cn.maiaimei.framework.swift"
 })
 @ImportResource("classpath*:validation/**/*.xml")
-public class SwiftMTAutoConfiguration {
+public class SwiftAutoConfiguration {
 }

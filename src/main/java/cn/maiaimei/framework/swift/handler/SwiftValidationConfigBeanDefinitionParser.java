@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
 import java.util.List;
 import java.util.function.Function;
 
-public class SwiftMTValidationConfigBeanDefinitionParser implements BeanDefinitionParser {
+public class SwiftValidationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
     private static final String ID_ELEMENT_NAME = "id";
     private static final String B2C_ELEMENT_NAME = "b2c";

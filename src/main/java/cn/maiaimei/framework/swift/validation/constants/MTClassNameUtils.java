@@ -3,7 +3,7 @@ package cn.maiaimei.framework.swift.validation.constants;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class SwiftMtClassNameUtils {
+public final class MTClassNameUtils {
     public static final Map<String, String> MAP = new HashMap<>();
 
     static {
@@ -285,7 +285,7 @@ public final class SwiftMtClassNameUtils {
         MAP.put("999", "com.prowidesoftware.swift.model.mt.mt9xx.MT999");
     }
 
-    private SwiftMtClassNameUtils() {
+    private MTClassNameUtils() {
         throw new UnsupportedOperationException();
     }
 }

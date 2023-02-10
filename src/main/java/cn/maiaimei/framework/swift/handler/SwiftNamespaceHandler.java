@@ -4,9 +4,9 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SwiftMTNamespaceHandler extends NamespaceHandlerSupport {
+public class SwiftNamespaceHandler extends NamespaceHandlerSupport {
     @Override
     public void init() {
-        this.registerBeanDefinitionParser("swift-mt-validation", new SwiftMTValidationConfigBeanDefinitionParser());
+        this.registerBeanDefinitionParser("swift-mt-validation", new SwiftValidationConfigBeanDefinitionParser());
     }
 }
