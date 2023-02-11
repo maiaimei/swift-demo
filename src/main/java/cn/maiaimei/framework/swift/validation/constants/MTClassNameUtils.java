@@ -3,6 +3,7 @@ package cn.maiaimei.framework.swift.validation.constants;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public final class MTClassNameUtils {
     public static final Map<String, String> MAP = new HashMap<>();
 
