@@ -23,7 +23,7 @@ public class MT798ValidationEngine {
     @Autowired
     private GenericMTValidationEngine genericMTValidationEngine;
 
-    public ValidationResult validate(MT798 mt798) {
+    public ValidationResult validate(MT798 mt798, boolean isB2C) {
         ValidationResult result = new ValidationResult();
         result.setErrorMessages(new ArrayList<>());
         // Validate Field77E
@@ -43,7 +43,9 @@ public class MT798ValidationEngine {
         // Validate Section 2
         String subMessageType = mt798.getField12().getValue();
         SwiftTagListBlock blockAfterFirst77E = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
-        genericMTValidationEngine.validate(result, mt798, blockAfterFirst77E, subMessageType);
+        MessageValidationConfig messageValidationConfig = genericMTValidationEngine.getMessageValidationConfig(subMessageType,
+                w -> w.getMessageType().equals(subMessageType) && Boolean.parseBoolean(w.getB2c()) == isB2C);
+        genericMTValidationEngine.validate(result, mt798, blockAfterFirst77E, messageValidationConfig, subMessageType);
         return result;
     }
 

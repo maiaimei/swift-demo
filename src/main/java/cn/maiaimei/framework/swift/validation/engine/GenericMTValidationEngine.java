@@ -1,6 +1,7 @@
 package cn.maiaimei.framework.swift.validation.engine;
 
 import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
+import cn.maiaimei.framework.swift.exception.ValidationException;
 import cn.maiaimei.framework.swift.processor.MTSequenceProcessor;
 import cn.maiaimei.framework.swift.util.SpelUtils;
 import cn.maiaimei.framework.swift.util.SwiftUtils;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
@@ -88,18 +90,7 @@ public class GenericMTValidationEngine {
     }
 
     public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, String messageType) {
-        List<MessageValidationConfig> messageValidationConfigs = messageValidationConfigSet.stream()
-                .filter(w -> w.getMessageType().equals(messageType))
-                .collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(messageValidationConfigs)) {
-            result.addErrorMessage("Can't found validation config for MT" + messageType);
-            return;
-        }
-        if (messageValidationConfigs.size() > 1) {
-            result.addErrorMessage("Can't determine which validation config to use for MT" + messageType);
-            return;
-        }
-        MessageValidationConfig messageValidationConfig = messageValidationConfigs.get(0);
+        MessageValidationConfig messageValidationConfig = getMessageValidationConfig(messageType, w -> w.getMessageType().equals(messageType));
         validate(result, mt, block, messageValidationConfig, messageType);
     }
 
@@ -217,6 +208,19 @@ public class GenericMTValidationEngine {
             }
         }
         throw new MTSequenceProcessorNotFoundException(messageType);
+    }
+
+    public MessageValidationConfig getMessageValidationConfig(String messageType, Predicate<? super MessageValidationConfig> predicate) {
+        List<MessageValidationConfig> messageValidationConfigs = messageValidationConfigSet.stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(messageValidationConfigs)) {
+            throw new ValidationException("Can't found validation config for MT" + messageType);
+        }
+        if (messageValidationConfigs.size() > 1) {
+            throw new ValidationException("Can't determine which validation config to use for MT" + messageType);
+        }
+        return messageValidationConfigs.get(0);
     }
 
 }
