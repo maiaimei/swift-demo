@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.handler;
+package cn.maiaimei.framework.swift.support;
 
 import cn.maiaimei.framework.swift.validation.config.*;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
 import java.util.List;
 import java.util.function.Function;
 
-public class SwiftValidationConfigBeanDefinitionParser implements BeanDefinitionParser {
+public class MTValidationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
     private static final String ID_ELEMENT_NAME = "id";
     private static final String B2C_ELEMENT_NAME = "b2c";
@@ -50,6 +50,7 @@ public class SwiftValidationConfigBeanDefinitionParser implements BeanDefinition
     private static final String BEAN_NAME_PROPERTY = "beanName";
     private static final String ERROR_MESSAGE_ATTRIBUTE = "error-message";
     private static final String ERROR_MESSAGE_PROPERTY = "errorMessage";
+    private static final String VERTICAL_LINE = "\\|";
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
@@ -145,7 +146,10 @@ public class SwiftValidationConfigBeanDefinitionParser implements BeanDefinition
         builder.addPropertyValue(STATUS_ATTRIBUTE, element.getAttribute(STATUS_ATTRIBUTE));
         addPropertyValue(element, builder, PATTERN_ATTRIBUTE, PATTERN_ATTRIBUTE);
         addPropertyValue(element, builder, TYPE_ATTRIBUTE, TYPE_ATTRIBUTE);
-        addPropertyValue(element, builder, OPTIONS_ATTRIBUTE, OPTIONS_ATTRIBUTE);
+        if (element.hasAttribute(OPTIONS_ATTRIBUTE)) {
+            String options = element.getAttribute(OPTIONS_ATTRIBUTE);
+            builder.addPropertyValue(OPTIONS_ATTRIBUTE, options.split(VERTICAL_LINE));
+        }
     }
 
     private BeanDefinition parseRuleInfo(Element element) {

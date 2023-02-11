@@ -10,11 +10,16 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface SwiftTag {
+public @interface Tag {
     /**
      * tag
      */
     String value();
+
+    /**
+     * tags
+     */
+    String[] tags() default {};
 
     /**
      * component index

@@ -1,5 +1,7 @@
 package cn.maiaimei.framework.swift.validation.engine;
 
+import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
+import cn.maiaimei.framework.swift.processor.MTSequenceProcessor;
 import cn.maiaimei.framework.swift.util.SpelUtils;
 import cn.maiaimei.framework.swift.util.SwiftUtils;
 import cn.maiaimei.framework.swift.validation.ValidationError;
@@ -9,7 +11,7 @@ import cn.maiaimei.framework.swift.validation.config.FieldInfo;
 import cn.maiaimei.framework.swift.validation.config.MessageValidationConfig;
 import cn.maiaimei.framework.swift.validation.config.RuleInfo;
 import cn.maiaimei.framework.swift.validation.config.SequenceInfo;
-import cn.maiaimei.framework.swift.validation.mt.MTXxxValidation;
+import cn.maiaimei.framework.swift.validation.mt.MTValidation;
 import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftMessage;
@@ -31,10 +33,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class MTXxxValidationEngine {
+public class GenericMTValidationEngine {
 
     private static final String LABEL_FORMAT_NO_SEQUENCE = "Field %s %s";
-    private static final String LABEL_FORMAT_IN_SEQUENCE = "In Sequence %s, field %s %s";
+    private static final String LABEL_FORMAT_IN_SEQUENCE = "In sequence %s, field %s %s";
 
     @Autowired
     private FieldValidatorChain fieldValidatorChain;
@@ -42,8 +44,11 @@ public class MTXxxValidationEngine {
     @Autowired
     private Set<MessageValidationConfig> messageValidationConfigSet;
 
+    @Autowired
+    private Set<MTSequenceProcessor> mtSequenceProcessorSet;
+
     @Autowired(required = false)
-    private Map<String, MTXxxValidation> mtValidationMap;
+    private Map<String, MTValidation> mtValidationMap;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -114,15 +119,19 @@ public class MTXxxValidationEngine {
 
     private void validateSequenceMessage(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, MessageValidationConfig messageValidationConfig, String messageType) {
         validateMessage(result, context, mt, block, messageValidationConfig);
-        Map<String, List<SwiftTagListBlock>> sequenceBlockMap = SwiftUtils.getSequenceMap(messageType, block);
+        //Map<String, List<SwiftTagListBlock>> sequenceMap = SwiftUtils.getSequenceMap(messageType, block);
+        MTSequenceProcessor sequenceProcessor = getMTSequenceProcessor(messageType);
+        Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
         for (SequenceInfo sequenceInfo : messageValidationConfig.getSequences()) {
             String sequenceName = sequenceInfo.getName();
-            List<SwiftTagListBlock> sequenceList = sequenceBlockMap.get(sequenceName);
+            List<SwiftTagListBlock> sequenceList = sequenceMap.get(sequenceName);
             if (!CollectionUtils.isEmpty(sequenceList)) {
                 for (SwiftTagListBlock sequenceBlock : sequenceList) {
                     List<Tag> tags = sequenceBlock.getTags();
-                    if (ValidatorUtils.isMandatory(sequenceInfo.getStatus()) && CollectionUtils.isEmpty(tags)) {
-                        result.addErrorMessage(ValidationError.mustBePresent("Sequence ".concat(sequenceName)));
+                    if (CollectionUtils.isEmpty(tags)) {
+                        if (ValidatorUtils.isMandatory(sequenceInfo.getStatus())) {
+                            result.addErrorMessage(ValidationError.mustBePresent("Sequence ".concat(sequenceName)));
+                        }
                         continue;
                     }
                     List<FieldInfo> fieldInfos = sequenceInfo.getFields();
@@ -182,13 +191,13 @@ public class MTXxxValidationEngine {
                 break;
             }
             if (StringUtils.isNotBlank(ruleInfo.getBeanName())) {
-                MTXxxValidation MTXxxValidation = null;
+                MTValidation MTValidation = null;
                 //mtValidation = applicationContext.getBean(ruleInfo.getBeanName(), MtValidation.class);
                 if (mtValidationMap != null) {
-                    MTXxxValidation = mtValidationMap.get(ruleInfo.getBeanName());
+                    MTValidation = mtValidationMap.get(ruleInfo.getBeanName());
                 }
-                if (MTXxxValidation != null) {
-                    MTXxxValidation.validate(result, mt);
+                if (MTValidation != null) {
+                    MTValidation.validate(result, mt);
                 }
             }
         }
@@ -199,6 +208,15 @@ public class MTXxxValidationEngine {
             return String.format(LABEL_FORMAT_NO_SEQUENCE, tagName, fieldName);
         }
         return String.format(LABEL_FORMAT_IN_SEQUENCE, sequenceName, tagName, fieldName);
+    }
+
+    private MTSequenceProcessor getMTSequenceProcessor(String messageType) {
+        for (MTSequenceProcessor processor : mtSequenceProcessorSet) {
+            if (processor.supportsMessageType(messageType)) {
+                return processor;
+            }
+        }
+        throw new MTSequenceProcessorNotFoundException(messageType);
     }
 
 }

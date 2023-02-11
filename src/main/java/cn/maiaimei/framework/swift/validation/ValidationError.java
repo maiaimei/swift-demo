@@ -1,11 +1,8 @@
 package cn.maiaimei.framework.swift.validation;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class ValidationError {
 
@@ -65,14 +62,6 @@ public final class ValidationError {
 
     public static String mustIn(String label, String value, List<String> options) {
         return String.format(MUST_IN, label, String.join(",", options), value);
-    }
-
-    public static String generateLabel(String... labels) {
-        List<String> list = Arrays.stream(labels).filter(StringUtils::isNotBlank).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(list)) {
-            return StringUtils.EMPTY;
-        }
-        return String.join(StringUtils.SPACE, list);
     }
 
     private static String getCharacterErrorMessage(String type) {

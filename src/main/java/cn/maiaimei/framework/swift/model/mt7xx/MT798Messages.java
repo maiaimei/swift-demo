@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MT798Dto {
+public class MT798Messages {
     private MT798 indexMessage;
     private List<MT798> detailMessages;
     private List<MT798> extensionMessages;

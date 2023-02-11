@@ -21,7 +21,7 @@ public class MT798ValidationEngine {
     private MessageValidationConfig mt798ValidationConfig;
 
     @Autowired
-    private MTXxxValidationEngine genericMTValidationEngine;
+    private GenericMTValidationEngine genericMTValidationEngine;
 
     public ValidationResult validate(MT798 mt798) {
         ValidationResult result = new ValidationResult();

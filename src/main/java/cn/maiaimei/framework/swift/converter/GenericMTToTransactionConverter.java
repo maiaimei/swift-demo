@@ -6,11 +6,11 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MTXxxToTransactionConverter implements Converter<AbstractMT, BaseTransaction> {
+public class GenericMTToTransactionConverter implements Converter<AbstractMT, BaseTransaction> {
 
     @Override
     public BaseTransaction convert(AbstractMT mt) {
         return null;
     }
-    
+
 }

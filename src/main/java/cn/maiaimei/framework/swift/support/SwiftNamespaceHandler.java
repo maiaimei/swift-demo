@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.handler;
+package cn.maiaimei.framework.swift.support;
 
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import org.springframework.stereotype.Component;
@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 public class SwiftNamespaceHandler extends NamespaceHandlerSupport {
     @Override
     public void init() {
-        this.registerBeanDefinitionParser("swift-mt-validation", new SwiftValidationConfigBeanDefinitionParser());
+        this.registerBeanDefinitionParser("swift-mt-validation", new MTValidationConfigBeanDefinitionParser());
     }
 }
