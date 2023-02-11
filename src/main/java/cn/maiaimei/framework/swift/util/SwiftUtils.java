@@ -74,7 +74,7 @@ public class SwiftUtils {
         declaredField.setAccessible(Boolean.FALSE);
     }
 
-    private static List<Field> getDeclaredFields(Class<?> clazz) {
+    public static List<Field> getDeclaredFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         while (clazz != null) {
             Field[] declaredFields = clazz.getDeclaredFields();
