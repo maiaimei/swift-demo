@@ -153,6 +153,13 @@ public final class ValidatorUtils {
         return "";
     }
 
+    public static String trimStartSlash(String format, String value) {
+        if (ValidatorUtils.isStartsWithSlash(format) && ValidatorUtils.isStartsWithSlash(value)) {
+            return value.substring(1);
+        }
+        return value;
+    }
+
     private ValidatorUtils() {
         throw new UnsupportedOperationException();
     }

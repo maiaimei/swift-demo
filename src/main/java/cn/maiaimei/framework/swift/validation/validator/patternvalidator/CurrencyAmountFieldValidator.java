@@ -3,7 +3,7 @@ package cn.maiaimei.framework.swift.validation.validator.patternvalidator;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import cn.maiaimei.framework.swift.validation.config.FieldComponentInfo;
-import cn.maiaimei.framework.swift.validation.validator.AbstractPatternValidator;
+import cn.maiaimei.framework.swift.validation.validator.PatternFieldValidator;
 import cn.maiaimei.framework.swift.validation.validator.typevalidator.CurrencyFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
-public class CurrencyAmountFieldValidator extends AbstractPatternValidator {
+public class CurrencyAmountFieldValidator implements PatternFieldValidator {
 
     private static final String FORMAT = "3!a15d";
     private static final String REGEX = "^[A-Z]{3}[0-9]+,([0-9]+)?$";

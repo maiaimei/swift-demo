@@ -12,22 +12,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MandatoryFieldValidator implements FieldValidator {
-
-    @Override
-    public boolean supportsFormat(Field field, String format) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsPattern(Field field, String pattern) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsType(Field field, String type) {
-        return false;
-    }
-
     @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (ValidatorUtils.isMandatory(fieldComponentInfo.getStatus()) && StringUtils.isBlank(value)) {

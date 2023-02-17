@@ -14,21 +14,6 @@ import java.util.List;
 @Component
 public class EnumFieldValidator implements FieldValidator {
     @Override
-    public boolean supportsFormat(Field field, String format) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsPattern(Field field, String pattern) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsType(Field field, String type) {
-        return false;
-    }
-
-    @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         List<String> options = fieldComponentInfo.getOptions();
         if (!CollectionUtils.isEmpty(options) && !options.contains(value)) {

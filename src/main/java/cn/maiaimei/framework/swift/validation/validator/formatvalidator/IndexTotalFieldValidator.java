@@ -2,14 +2,14 @@ package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.config.FieldComponentInfo;
-import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
+import cn.maiaimei.framework.swift.validation.validator.FormatFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
 @Component
-public class IndexTotalFieldValidator extends AbstractFormatValidator {
+public class IndexTotalFieldValidator implements FormatFieldValidator {
 
     private static final String FORMAT = "1!n/1!n";
     private static final String REGEX = "^[1-9]{1}/[1-9]{1}$";

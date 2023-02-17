@@ -3,7 +3,7 @@ package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import cn.maiaimei.framework.swift.validation.config.FieldComponentInfo;
-import cn.maiaimei.framework.swift.validation.validator.AbstractFormatValidator;
+import cn.maiaimei.framework.swift.validation.validator.FormatFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * Validate fixed length of alphabetic, alpha-numeric, numeric, SWIFT X set, SWIFT Z set or decimals, and starts with slash
  */
 @Component
-public class FixedLengthCharacterStartsWithSlashValidator extends AbstractFormatValidator {
+public class FixedLengthCharacterStartsWithSlashFieldValidator implements FormatFieldValidator {
     @Override
     public boolean supportsFormat(Field field, String format) {
         return ValidatorUtils.isMatchFixedLengthCharacterStartsWithSlash(format);
@@ -20,9 +20,9 @@ public class FixedLengthCharacterStartsWithSlashValidator extends AbstractFormat
     @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         String format = fieldComponentInfo.getFormat();
-        int length = getLength(format);
-        String type = getType(format);
-        String valueToValidate = trimStartSlash(format, value);
+        int length = ValidatorUtils.getNumber(format);
+        String type = ValidatorUtils.getType(format);
+        String valueToValidate = ValidatorUtils.trimStartSlash(format, value);
         if (!ValidatorUtils.validateFixedLengthCharacter(length, type, valueToValidate)) {
             return ValidationError.mustBeFixedLengthCharacterStartsWithSlash(label, length, type, value);
         }

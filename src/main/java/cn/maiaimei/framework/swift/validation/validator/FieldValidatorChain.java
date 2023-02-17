@@ -23,13 +23,13 @@ public class FieldValidatorChain {
     private EnumFieldValidator enumFieldValidator;
 
     @Autowired
-    private Set<AbstractFormatValidator> formatValidatorSet;
+    private Set<FormatFieldValidator> formatValidatorSet;
 
     @Autowired
-    private Set<AbstractPatternValidator> patternValidatorSet;
+    private Set<PatternFieldValidator> patternValidatorSet;
 
     @Autowired
-    private Set<AbstractTypeValidator> typeValidatorSet;
+    private Set<TypeFieldValidator> typeValidatorSet;
 
     public void doValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         doValidationInternal(result, fieldComponentInfo, field, label, value);
@@ -68,7 +68,7 @@ public class FieldValidatorChain {
     }
 
     private String validateByFormat(FieldComponentInfo validationInfo, Field field, String errorField, String tagValue) {
-        for (AbstractFormatValidator formatValidator : formatValidatorSet) {
+        for (FormatFieldValidator formatValidator : formatValidatorSet) {
             if (formatValidator.supportsFormat(field, validationInfo.getFormat())) {
                 String errorMessage = formatValidator.validate(validationInfo, field, errorField, tagValue);
                 if (StringUtils.isNotBlank(errorMessage)) {
@@ -80,7 +80,7 @@ public class FieldValidatorChain {
     }
 
     private String validateByPattern(FieldComponentInfo validationInfo, Field field, String errorField, String tagValue) {
-        for (AbstractPatternValidator patternValidator : patternValidatorSet) {
+        for (PatternFieldValidator patternValidator : patternValidatorSet) {
             if (patternValidator.supportsPattern(field, validationInfo.getPattern())) {
                 String errorMessage = patternValidator.validate(validationInfo, field, errorField, tagValue);
                 if (StringUtils.isNotBlank(errorMessage)) {
@@ -92,7 +92,7 @@ public class FieldValidatorChain {
     }
 
     private String validateByType(FieldComponentInfo validationInfo, Field field, String errorField, String tagValue) {
-        for (AbstractTypeValidator typeValidator : typeValidatorSet) {
+        for (TypeFieldValidator typeValidator : typeValidatorSet) {
             if (typeValidator.supportsType(field, validationInfo.getType())) {
                 String errorMessage = typeValidator.validate(validationInfo, field, errorField, tagValue);
                 if (StringUtils.isNotBlank(errorMessage)) {
