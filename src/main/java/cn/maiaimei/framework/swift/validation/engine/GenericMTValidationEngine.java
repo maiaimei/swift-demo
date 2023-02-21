@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
@@ -90,7 +89,16 @@ public class GenericMTValidationEngine {
     }
 
     public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, String messageType) {
-        MessageValidationConfig messageValidationConfig = getMessageValidationConfig(messageType, w -> w.getMessageType().equals(messageType));
+        List<MessageValidationConfig> messageValidationConfigs = messageValidationConfigSet.stream()
+                .filter(w -> w.getMessageType().equals(messageType))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(messageValidationConfigs)) {
+            throw new ValidationException("Can't found validation config for MT" + messageType);
+        }
+        if (messageValidationConfigs.size() > 1) {
+            throw new ValidationException("Can't determine which validation config to use for MT" + messageType);
+        }
+        MessageValidationConfig messageValidationConfig = messageValidationConfigs.get(0);
         validate(result, mt, block, messageValidationConfig, messageType);
     }
 
@@ -166,7 +174,7 @@ public class GenericMTValidationEngine {
             }
             FieldInfo fieldInfo = fieldInfoOptional.get();
             String label = getLabel(sequenceName, tagName, fieldInfo.getFieldName());
-            fieldValidatorChain.doValidation(result, fieldInfo, field, label, tagValue);
+            fieldValidatorChain.handleValidation(result, fieldInfo, field, label, tagValue);
             validateByRules(result, context, mt, fieldInfo.getRules());
         }
     }
@@ -208,19 +216,6 @@ public class GenericMTValidationEngine {
             }
         }
         throw new MTSequenceProcessorNotFoundException(messageType);
-    }
-
-    public MessageValidationConfig getMessageValidationConfig(String messageType, Predicate<? super MessageValidationConfig> predicate) {
-        List<MessageValidationConfig> messageValidationConfigs = messageValidationConfigSet.stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(messageValidationConfigs)) {
-            throw new ValidationException("Can't found validation config for MT" + messageType);
-        }
-        if (messageValidationConfigs.size() > 1) {
-            throw new ValidationException("Can't determine which validation config to use for MT" + messageType);
-        }
-        return messageValidationConfigs.get(0);
     }
 
 }

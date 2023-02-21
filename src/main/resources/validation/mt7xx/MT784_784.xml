@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<swift-mt-validation xmlns="https://maiamy.cn/schema/swift"
+<swift-mt798-validation xmlns="https://maiamy.cn/schema/swift"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="https://maiamy.cn/schema/swift 
        https://maiamy.cn/schema/swift/swift-mt-validation.xsd">
     
     <id>mt784ValidationConfig</id>
-    <message-type>784</message-type>
-    <b2c>false</b2c>
+    <index-message-type>784</index-message-type>
+    <sub-message-type>784</sub-message-type>
+    <corporate-to-bank>true</corporate-to-bank>
     <fields>
         <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
         <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
@@ -73,4 +74,4 @@
         <field no="2.28" tag="29U" field-name="Lead Bank Identifier" format="4!a2!a2!c[3!c]" status="O" />
     </fields>
     
-</swift-mt-validation>
+</swift-mt798-validation>

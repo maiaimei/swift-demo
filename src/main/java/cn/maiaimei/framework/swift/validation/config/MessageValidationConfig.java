@@ -6,7 +6,8 @@ import java.util.List;
 
 @Data
 public class MessageValidationConfig {
-    private String b2c;
+    private Boolean bankToCorporate;
+    private Boolean corporateToBank;
     private String messageType;
     private List<FieldInfo> fields;
     private List<SequenceInfo> sequences;

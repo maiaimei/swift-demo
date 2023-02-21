@@ -1,12 +1,13 @@
 package cn.maiaimei.framework.swift.support;
 
-import cn.maiaimei.framework.swift.validation.config.*;
+import cn.maiaimei.framework.swift.validation.config.ComponentInfo;
+import cn.maiaimei.framework.swift.validation.config.FieldInfo;
+import cn.maiaimei.framework.swift.validation.config.RuleInfo;
+import cn.maiaimei.framework.swift.validation.config.SequenceInfo;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
-import org.springframework.beans.factory.xml.ParserContext;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
@@ -14,12 +15,14 @@ import org.w3c.dom.Element;
 import java.util.List;
 import java.util.function.Function;
 
-public class MTValidationConfigBeanDefinitionParser implements BeanDefinitionParser {
+public abstract class AbstractMTValidationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
-    private static final String ID_ELEMENT_NAME = "id";
-    private static final String B2C_ELEMENT_NAME = "b2c";
-    private static final String MESSAGE_TYPE_ELEMENT_NAME = "message-type";
-    private static final String MESSAGE_TYPE_PROPERTY = "messageType";
+    protected static final String ID_ELEMENT_NAME = "id";
+    protected static final String BANK_TO_CORPORATE_ELEMENT_NAME = "bank-to-corporate";
+    protected static final String BANK_TO_CORPORATE_PROPERTY = "bankToCorporate";
+    protected static final String CORPORATE_TO_BANK_ELEMENT_NAME = "corporate-to-bank";
+    protected static final String CORPORATE_TO_BANK_PROPERTY = "corporateToBank";
+
     private static final String FIELDS = "fields";
     private static final String FIELD = "field";
     private static final String COMPONENTS = "components";
@@ -52,35 +55,11 @@ public class MTValidationConfigBeanDefinitionParser implements BeanDefinitionPar
     private static final String ERROR_MESSAGE_PROPERTY = "errorMessage";
     private static final String VERTICAL_LINE = "\\|";
 
-    @Override
-    public BeanDefinition parse(Element element, ParserContext parserContext) {
-
-        Element idElement = DomUtils.getChildElementByTagName(element, ID_ELEMENT_NAME);
-        Element messageTypeElement = DomUtils.getChildElementByTagName(element, MESSAGE_TYPE_ELEMENT_NAME);
-        Element b2cElement = DomUtils.getChildElementByTagName(element, B2C_ELEMENT_NAME);
-        Assert.notNull(idElement, "id element must be present");
-        Assert.notNull(messageTypeElement, "message-type element must be present");
-        Assert.notNull(b2cElement, "is-b2c element must be present");
-        String id = idElement.getTextContent();
-        String messageType = messageTypeElement.getTextContent();
-        String b2c = b2cElement.getTextContent();
-
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MessageValidationConfig.class);
-        builder.addPropertyValue(B2C_ELEMENT_NAME, b2c);
-        builder.addPropertyValue(MESSAGE_TYPE_PROPERTY, messageType);
-        parseFields(element, builder);
-        parseSequences(element, builder);
-        parseRules(element, builder);
-        parserContext.getRegistry().registerBeanDefinition(id, builder.getBeanDefinition());
-
-        return null;
-    }
-
-    private void parseSequences(Element element, BeanDefinitionBuilder builder) {
+    protected void parseSequences(Element element, BeanDefinitionBuilder builder) {
         parseElements(element, SEQUENCES, SEQUENCE, SEQUENCES, builder, this::parseSequenceInfo);
     }
 
-    private void parseFields(Element element, BeanDefinitionBuilder builder) {
+    protected void parseFields(Element element, BeanDefinitionBuilder builder) {
         parseElements(element, FIELDS, FIELD, FIELDS, builder, this::parseFieldInfo);
     }
 
@@ -88,7 +67,7 @@ public class MTValidationConfigBeanDefinitionParser implements BeanDefinitionPar
         parseElements(element, COMPONENTS, COMPONENT, COMPONENTS, builder, this::parseComponentInfo);
     }
 
-    private void parseRules(Element element, BeanDefinitionBuilder builder) {
+    protected void parseRules(Element element, BeanDefinitionBuilder builder) {
         parseElements(element, RULES, RULE, RULES, builder, this::parseRuleInfo);
     }
 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class FixedLengthCharacterFieldValidator implements FormatFieldValidator {
     @Override
     public boolean supportsFormat(Field field, String format) {
-        return ValidatorUtils.isMatchFixedLengthCharacter(format);
+        return ValidatorUtils.isFixedLengthCharacter(format);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class FixedLengthCharacterFieldValidator implements FormatFieldValidator 
         String format = fieldComponentInfo.getFormat();
         int length = ValidatorUtils.getNumber(format);
         String type = ValidatorUtils.getType(format);
-        if (!ValidatorUtils.validateFixedLengthCharacter(length, type, value)) {
+        if (ValidatorUtils.ne(value, length) || ValidatorUtils.containsOther(value, type)) {
             return ValidationError.mustBeFixedLengthCharacter(label, length, type, value);
         }
         return null;

@@ -1,6 +1,5 @@
 package cn.maiaimei.framework.swift.validation;
 
-import com.prowidesoftware.swift.model.field.SwiftParseUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -78,21 +77,27 @@ public final class ValidatorUtils {
         return !containsOnly(value, type);
     }
 
-    public static boolean validateFixedLengthCharacter(int length, String type, String value) {
-        return ValidatorUtils.eq(value, length) && containsOnly(value, type);
+    public static boolean isFixedLengthCharacter(String format) {
+        return ValidationConstants.FIXED_LENGTH_CHARACTER_PATTERN.matcher(format).matches();
     }
 
-    public static boolean validateVariableLengthCharacter(int length, String type, String value) {
-        return ValidatorUtils.le(value, length) && containsOnly(value, type);
+    public static boolean isFixedLengthCharacterStartsWithSlash(String format) {
+        return ValidationConstants.FIXED_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN.matcher(format).matches();
     }
 
-    public static boolean validateMultilineSwiftSet(int rowcount, int maxlength, String type, String value) {
-        List<String> lines = SwiftParseUtils.getLines(value);
-        return lines.size() <= rowcount
-                && lines.stream().noneMatch(line -> gt(line, maxlength) || containsOther(line, type));
+    public static boolean isVariableLengthCharacter(String format) {
+        return ValidationConstants.VARIABLE_LENGTH_CHARACTER_PATTERN.matcher(format).matches();
     }
 
-    public static boolean validateDatetime(String pattern, String value) {
+    public static boolean isVariableLengthCharacterStartsWithSlash(String format) {
+        return ValidationConstants.VARIABLE_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN.matcher(format).matches();
+    }
+
+    public static boolean isMultilineSwiftSet(String format) {
+        return ValidationConstants.MULTILINE_SWIFT_SET_PATTERN.matcher(format).matches();
+    }
+
+    public static boolean isDatetime(String pattern, String value) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         try {
             dateFormat.setLenient(false);
@@ -101,26 +106,6 @@ public final class ValidatorUtils {
         } catch (ParseException e) {
             return false;
         }
-    }
-
-    public static boolean isMatchFixedLengthCharacter(String format) {
-        return ValidationConstants.FIXED_LENGTH_CHARACTER_PATTERN.matcher(format).matches();
-    }
-
-    public static boolean isMatchFixedLengthCharacterStartsWithSlash(String format) {
-        return ValidationConstants.FIXED_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN.matcher(format).matches();
-    }
-
-    public static boolean isMatchVariableLengthCharacter(String format) {
-        return ValidationConstants.VARIABLE_LENGTH_CHARACTER_PATTERN.matcher(format).matches();
-    }
-
-    public static boolean isMatchVariableLengthCharacterStartsWithSlash(String format) {
-        return ValidationConstants.VARIABLE_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN.matcher(format).matches();
-    }
-
-    public static boolean isMatchMultilineSwiftSet(String format) {
-        return ValidationConstants.MULTILINE_SWIFT_SET_PATTERN.matcher(format).matches();
     }
 
     public static boolean isStartsWithSlash(String value) {

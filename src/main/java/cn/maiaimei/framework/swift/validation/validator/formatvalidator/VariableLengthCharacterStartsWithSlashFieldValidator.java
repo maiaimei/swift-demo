@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class VariableLengthCharacterStartsWithSlashFieldValidator implements FormatFieldValidator {
     @Override
     public boolean supportsFormat(Field field, String format) {
-        return ValidatorUtils.isMatchVariableLengthCharacterStartsWithSlash(format);
+        return ValidatorUtils.isVariableLengthCharacterStartsWithSlash(format);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class VariableLengthCharacterStartsWithSlashFieldValidator implements For
         int length = ValidatorUtils.getNumber(format);
         String type = ValidatorUtils.getType(format);
         String valueToValidate = ValidatorUtils.trimStartSlash(format, value);
-        if (!ValidatorUtils.validateVariableLengthCharacter(length, type, valueToValidate)) {
+        if (ValidatorUtils.gt(value, length) || ValidatorUtils.containsOther(value, type)) {
             return ValidationError.mustBeVariableLengthCharacterStartsWithSlash(label, length, type, value);
         }
         return null;

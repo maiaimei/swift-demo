@@ -6,7 +6,7 @@
 
     <id>mt940ValidationConfig</id>
     <message-type>940</message-type>
-    <b2c>false</b2c>
+    <bank-to-corporate>false</bank-to-corporate>
     <fields>
         <field tag="20" field-name="Transaction Reference Number" format="16x" status="M" />
         <field tag="21" field-name="Related Reference" format="16x" status="O" />

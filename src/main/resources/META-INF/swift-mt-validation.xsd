@@ -11,7 +11,23 @@
             <xsd:sequence>
                 <xsd:element name="id" type="xsd:string"/>
                 <xsd:element name="message-type" type="xsd:string"/>
-                <xsd:element name="b2c" type="xsd:string"/>
+                <xsd:element name="bank-to-corporate" type="xsd:boolean" nillable="true" minOccurs="0"/>
+                <xsd:element name="corporate-to-bank" type="xsd:boolean" nillable="true" minOccurs="0"/>
+                <xsd:element name="fields" type="fields"/>
+                <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>
+                <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="swift-mt798-validation">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="id" type="xsd:string"/>
+                <xsd:element name="index-message-type" type="xsd:string"/>
+                <xsd:element name="sub-message-type" type="xsd:string"/>
+                <xsd:element name="bank-to-corporate" type="xsd:boolean" nillable="true" minOccurs="0"/>
+                <xsd:element name="corporate-to-bank" type="xsd:boolean" nillable="true" minOccurs="0"/>
                 <xsd:element name="fields" type="fields"/>
                 <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>
                 <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>

@@ -50,7 +50,7 @@ public class DateTimeFieldValidator implements PatternFieldValidator {
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         for (String p : PATTERN_LIST) {
             if (StringUtils.equalsIgnoreCase(p, fieldComponentInfo.getPattern())
-                    && !ValidatorUtils.validateDatetime(p, value)) {
+                    && !ValidatorUtils.isDatetime(p, value)) {
                 return ValidationError.mustMatchFormat(label, p.toUpperCase(), value);
             }
         }
