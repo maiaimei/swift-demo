@@ -6,32 +6,45 @@
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
-    <xsd:element name="swift-mt-validation">
+    <xsd:element name="mts">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="id" type="xsd:string"/>
-                <xsd:element name="message-type" type="xsd:string"/>
-                <xsd:element name="bank-to-corporate" type="xsd:boolean" nillable="true" minOccurs="0"/>
-                <xsd:element name="corporate-to-bank" type="xsd:boolean" nillable="true" minOccurs="0"/>
-                <xsd:element name="fields" type="fields"/>
-                <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>
-                <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
+                <xsd:choice>
+                    <xsd:element ref="mt"/>
+                    <xsd:element ref="mt798"/>
+                </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="swift-mt798-validation">
+    <xsd:element name="mt">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="id" type="xsd:string"/>
-                <xsd:element name="index-message-type" type="xsd:string"/>
-                <xsd:element name="sub-message-type" type="xsd:string"/>
-                <xsd:element name="bank-to-corporate" type="xsd:boolean" nillable="true" minOccurs="0"/>
-                <xsd:element name="corporate-to-bank" type="xsd:boolean" nillable="true" minOccurs="0"/>
+                <xsd:element name="description" type="xsd:string" nillable="true" minOccurs="0"/>
                 <xsd:element name="fields" type="fields"/>
                 <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>
                 <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
             </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="message-type" type="xsd:string" use="required"/>
+            <xsd:attribute name="bank-to-corporate" type="xsd:boolean"/>
+            <xsd:attribute name="corporate-to-bank" type="xsd:boolean"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="mt798">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="description" type="xsd:string" nillable="true" minOccurs="0"/>
+                <xsd:element name="fields" type="fields"/>
+                <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>
+                <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="index-message-type" type="xsd:string" use="required"/>
+            <xsd:attribute name="sub-message-type" type="xsd:string" use="required"/>
+            <xsd:attribute name="bank-to-corporate" type="xsd:boolean"/>
+            <xsd:attribute name="corporate-to-bank" type="xsd:boolean"/>
         </xsd:complexType>
     </xsd:element>
 

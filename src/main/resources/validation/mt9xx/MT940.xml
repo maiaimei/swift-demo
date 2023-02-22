@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<swift-mt-validation xmlns="https://maiamy.cn/schema/swift"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="https://maiamy.cn/schema/swift 
-       https://maiamy.cn/schema/swift/swift-mt-validation.xsd">
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+    
+    <mt id="mt940Config" message-type="940">
+        <description>customer statement message</description>
+        <fields>
+            <field tag="20" field-name="Transaction Reference Number" format="16x" status="M" />
+            <field tag="21" field-name="Related Reference" format="16x" status="O" />
+            <field tag="25" field-name="Account Identification" format="35x" status="M" />
+            <field tag="28C" field-name="Statement Number / Sequence Number" format="5n[/5n]" status="M" />
+            <field tag="60F" field-name="Opening Balance" format="1!a6!n3!a15d" status="O">
+                <components>
+                    <component index="1" label="D/C Mark" format="1!a" status="M"/>
+                    <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
+                    <component index="3" label="Currency" format="3!a" status="M"/>
+                    <component index="4" label="Amount" format="15d" status="M"/>
+                </components>
+            </field>
+            <field tag="60M" field-name="Opening Balance" format="1!a6!n3!a15d" status="O">
+                <components>
+                    <component index="1" label="D/C Mark" format="1!a" status="M"/>
+                    <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
+                    <component index="3" label="Currency" format="3!a" status="M"/>
+                    <component index="4" label="Amount" format="15d" status="M"/>
+                </components>
+            </field>
+            <field tag="62F" field-name="Closing Balance (Booked Funds)" format="1!a6!n3!a15d" status="O">
+                <components>
+                    <component index="1" label="D/C Mark" format="1!a" status="M"/>
+                    <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
+                    <component index="3" label="Currency" format="3!a" status="M"/>
+                    <component index="4" label="Amount" format="15d" status="M"/>
+                </components>
+            </field>
+            <field tag="62M" field-name="Closing Balance (Booked Funds)" format="1!a6!n3!a15d" status="O">
+                <components>
+                    <component index="1" label="D/C Mark" format="1!a" status="M"/>
+                    <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
+                    <component index="3" label="Currency" format="3!a" status="M"/>
+                    <component index="4" label="Amount" format="15d" status="M"/>
+                </components>
+            </field>
+            <field tag="64" field-name="Closing Available Balance(Available Funds)" format="1!a6!n3!a15d" status="O" />
+            <field tag="65" field-name="Forward Available Balance" format="1!a6!n3!a15d" status="O" />
+            <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O" />
+        </fields>
+        <sequences>
+            <sequence name="A" status="O">
+                <fields>
+                    <field tag="61" field-name="Statement Line" format="" status="O" />
+                    <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O" />
+                </fields>
+            </sequence>
+        </sequences>
+        <rules>
+            <rule expression-string="#block.getTagByName('60F') == null and #block.getTagByName('60M') == null"
+                  error-message="60F or 60M must be present"/>
+            <rule expression-string="#block.getTagByName('62F') == null and #block.getTagByName('62M') == null"
+                  error-message="62F or 62M must be present"/>
+        </rules>
+    </mt>
 
-    <id>mt940ValidationConfig</id>
-    <message-type>940</message-type>
-    <bank-to-corporate>false</bank-to-corporate>
-    <fields>
-        <field tag="20" field-name="Transaction Reference Number" format="16x" status="M" />
-        <field tag="21" field-name="Related Reference" format="16x" status="O" />
-        <field tag="25" field-name="Account Identification" format="35x" status="M" />
-        <field tag="28C" field-name="Statement Number / Sequence Number" format="5n[/5n]" status="M" />
-        <field tag="60F" field-name="Opening Balance" format="1!a6!n3!a15d" status="O">
-            <components>
-                <component index="1" label="D/C Mark" format="1!a" status="M"/>
-                <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
-                <component index="3" label="Currency" format="3!a" status="M"/>
-                <component index="4" label="Amount" format="15d" status="M"/>
-            </components>
-        </field>
-        <field tag="60M" field-name="Opening Balance" format="1!a6!n3!a15d" status="O">
-            <components>
-                <component index="1" label="D/C Mark" format="1!a" status="M"/>
-                <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
-                <component index="3" label="Currency" format="3!a" status="M"/>
-                <component index="4" label="Amount" format="15d" status="M"/>
-            </components>
-        </field>
-        <field tag="62F" field-name="Closing Balance (Booked Funds)" format="1!a6!n3!a15d" status="O">
-            <components>
-                <component index="1" label="D/C Mark" format="1!a" status="M"/>
-                <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
-                <component index="3" label="Currency" format="3!a" status="M"/>
-                <component index="4" label="Amount" format="15d" status="M"/>
-            </components>
-        </field>
-        <field tag="62M" field-name="Closing Balance (Booked Funds)" format="1!a6!n3!a15d" status="O">
-            <components>
-                <component index="1" label="D/C Mark" format="1!a" status="M"/>
-                <component index="2" label="Date" format="6!n" pattern="YYMMDD" status="M"/>
-                <component index="3" label="Currency" format="3!a" status="M"/>
-                <component index="4" label="Amount" format="15d" status="M"/>
-            </components>
-        </field>
-        <field tag="64" field-name="Closing Available Balance(Available Funds)" format="1!a6!n3!a15d" status="O" />
-        <field tag="65" field-name="Forward Available Balance" format="1!a6!n3!a15d" status="O" />
-        <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O" />
-    </fields>
-    <sequences>
-        <sequence name="A" status="O">
-            <fields>
-                <field tag="61" field-name="Statement Line" format="" status="O" />
-                <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O" />
-            </fields>
-        </sequence>
-    </sequences>
-    <rules>
-        <rule expression-string="#block.getTagByName('60F') == null and #block.getTagByName('60M') == null" 
-              error-message="60F or 60M must be present"/>
-        <rule expression-string="#block.getTagByName('62F') == null and #block.getTagByName('62M') == null"
-              error-message="62F or 62M must be present"/>
-    </rules>
-
-</swift-mt-validation>
+</mts>

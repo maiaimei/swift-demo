@@ -1,9 +1,9 @@
 package cn.maiaimei.framework.swift.converter.mt.mt7xx;
 
-import cn.maiaimei.framework.swift.model.mt7xx.MT784Transaction;
-import cn.maiaimei.framework.swift.model.mt7xx.MT798DetailMessage;
-import cn.maiaimei.framework.swift.model.mt7xx.MT798ExtensionMessage;
-import cn.maiaimei.framework.swift.model.mt7xx.MT798IndexMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT784Transaction;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798DetailMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798ExtensionMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798IndexMessage;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -2,7 +2,7 @@ package cn.maiaimei.framework.swift.converter.mt.mt7xx;
 
 import cn.maiaimei.framework.swift.annotation.SequenceMessage;
 import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
-import cn.maiaimei.framework.swift.model.mt7xx.*;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
 import cn.maiaimei.framework.swift.processor.mt.mt7xx.AbstractMT798SequenceProcessor;
 import cn.maiaimei.framework.swift.util.SwiftUtils;
 import com.prowidesoftware.swift.model.SwiftBlock4;

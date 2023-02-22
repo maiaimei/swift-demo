@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.validation.config;
+package cn.maiaimei.framework.swift.model.mt.config;
 
 import lombok.Data;
 

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<swift-mt798-validation xmlns="https://maiamy.cn/schema/swift"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="https://maiamy.cn/schema/swift 
-       https://maiamy.cn/schema/swift/swift-mt-validation.xsd">
+<mts xmlns="https://maiamy.cn/schema/swift" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+     https://maiamy.cn/schema/swift/swift-mts.xsd">
 
-    <id>mt762760ValidationConfig</id>
-    <index-message-type>762</index-message-type>
-    <sub-message-type>760</sub-message-type>
-    <corporate-to-bank>true</corporate-to-bank>
-    <fields>
-        <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
-        <field no="2.2" tag="21P" field-name="Bank Reference Number" format="16x" status="M" />
-        <field no="2.3" tag="22D" field-name="Form of Undertaking" format="4!c" status="M" options="DGAR|STBY|DEPU" />
-    </fields>
+    <mt798 id="mt762760Config" index-message-type="762" sub-message-type="760" bank-to-corporate="true">
+        <description>Notification of Guarantee / Standby LC / Undertaking Details</description>
+        <fields>
+            <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
+            <field no="2.2" tag="21P" field-name="Bank Reference Number" format="16x" status="M" />
+            <field no="2.3" tag="22D" field-name="Form of Undertaking" format="4!c" status="M" options="DGAR|STBY|DEPU" />
+        </fields>
+    </mt798>
 
-</swift-mt798-validation>
+</mts>

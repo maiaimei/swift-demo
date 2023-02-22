@@ -2,16 +2,13 @@ package cn.maiaimei.framework.swift.validation.engine;
 
 import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
 import cn.maiaimei.framework.swift.exception.ValidationException;
+import cn.maiaimei.framework.swift.model.mt.config.*;
 import cn.maiaimei.framework.swift.processor.MTSequenceProcessor;
 import cn.maiaimei.framework.swift.util.SpelUtils;
 import cn.maiaimei.framework.swift.util.SwiftUtils;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
-import cn.maiaimei.framework.swift.validation.config.FieldInfo;
-import cn.maiaimei.framework.swift.validation.config.MessageValidationConfig;
-import cn.maiaimei.framework.swift.validation.config.RuleInfo;
-import cn.maiaimei.framework.swift.validation.config.SequenceInfo;
 import cn.maiaimei.framework.swift.validation.mt.MTValidation;
 import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
@@ -43,7 +40,7 @@ public class GenericMTValidationEngine {
     private FieldValidatorChain fieldValidatorChain;
 
     @Autowired
-    private Set<MessageValidationConfig> messageValidationConfigSet;
+    private Set<GenericMTConfig> genericMTConfigSet;
 
     @Autowired
     private Set<MTSequenceProcessor> mtSequenceProcessorSet;
@@ -59,9 +56,9 @@ public class GenericMTValidationEngine {
         return validate(mt, messageType);
     }
 
-    public ValidationResult validate(String message, String messageType, MessageValidationConfig messageValidationConfig) {
+    public ValidationResult validate(String message, String messageType, MessageConfig messageConfig) {
         AbstractMT mt = SwiftUtils.parseToAbstractMT(message, messageType);
-        return validate(mt, messageType, messageValidationConfig);
+        return validate(mt, messageType, messageConfig);
     }
 
     public ValidationResult validate(SwiftMessage swiftMessage, String messageType) {
@@ -69,9 +66,9 @@ public class GenericMTValidationEngine {
         return validate(mt, messageType);
     }
 
-    public ValidationResult validate(SwiftMessage swiftMessage, String messageType, MessageValidationConfig messageValidationConfig) {
+    public ValidationResult validate(SwiftMessage swiftMessage, String messageType, MessageConfig messageConfig) {
         AbstractMT mt = SwiftUtils.parseToAbstractMT(swiftMessage, messageType);
-        return validate(mt, messageType, messageValidationConfig);
+        return validate(mt, messageType, messageConfig);
     }
 
     public ValidationResult validate(AbstractMT mt, String messageType) {
@@ -81,47 +78,47 @@ public class GenericMTValidationEngine {
         return result;
     }
 
-    public ValidationResult validate(AbstractMT mt, String messageType, MessageValidationConfig messageValidationConfig) {
+    public ValidationResult validate(AbstractMT mt, String messageType, MessageConfig messageConfig) {
         ValidationResult result = ValidationResult.newInstance();
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
-        validate(result, mt, block4, messageValidationConfig, messageType);
+        validate(result, mt, block4, messageConfig, messageType);
         return result;
     }
 
     public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, String messageType) {
-        List<MessageValidationConfig> messageValidationConfigs = messageValidationConfigSet.stream()
+        List<MessageConfig> messageConfigs = genericMTConfigSet.stream()
                 .filter(w -> w.getMessageType().equals(messageType))
                 .collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(messageValidationConfigs)) {
+        if (CollectionUtils.isEmpty(messageConfigs)) {
             throw new ValidationException("Can't found validation config for MT" + messageType);
         }
-        if (messageValidationConfigs.size() > 1) {
+        if (messageConfigs.size() > 1) {
             throw new ValidationException("Can't determine which validation config to use for MT" + messageType);
         }
-        MessageValidationConfig messageValidationConfig = messageValidationConfigs.get(0);
-        validate(result, mt, block, messageValidationConfig, messageType);
+        MessageConfig messageConfig = messageConfigs.get(0);
+        validate(result, mt, block, messageConfig, messageType);
     }
 
-    public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageValidationConfig messageValidationConfig) {
-        validate(result, mt, block, messageValidationConfig, StringUtils.EMPTY);
+    public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig) {
+        validate(result, mt, block, messageConfig, StringUtils.EMPTY);
     }
 
-    public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageValidationConfig messageValidationConfig, String messageType) {
+    public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig, String messageType) {
         StandardEvaluationContext context = SpelUtils.newStandardEvaluationContext("block", block);
-        if (CollectionUtils.isEmpty(messageValidationConfig.getSequences())) {
-            validateMessage(result, context, mt, block, messageValidationConfig);
+        if (CollectionUtils.isEmpty(messageConfig.getSequences())) {
+            validateMessage(result, context, mt, block, messageConfig);
         } else {
-            validateSequenceMessage(result, context, mt, block, messageValidationConfig, messageType);
+            validateSequenceMessage(result, context, mt, block, messageConfig, messageType);
         }
-        validateByRules(result, context, mt, messageValidationConfig.getRules());
+        validateByRules(result, context, mt, messageConfig.getRules());
     }
 
-    private void validateSequenceMessage(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, MessageValidationConfig messageValidationConfig, String messageType) {
-        validateMessage(result, context, mt, block, messageValidationConfig);
+    private void validateSequenceMessage(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig, String messageType) {
+        validateMessage(result, context, mt, block, messageConfig);
         //Map<String, List<SwiftTagListBlock>> sequenceMap = SwiftUtils.getSequenceMap(messageType, block);
         MTSequenceProcessor sequenceProcessor = getMTSequenceProcessor(messageType);
         Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
-        for (SequenceInfo sequenceInfo : messageValidationConfig.getSequences()) {
+        for (SequenceInfo sequenceInfo : messageConfig.getSequences()) {
             String sequenceName = sequenceInfo.getName();
             List<SwiftTagListBlock> sequenceList = sequenceMap.get(sequenceName);
             if (!CollectionUtils.isEmpty(sequenceList)) {
@@ -142,8 +139,8 @@ public class GenericMTValidationEngine {
         }
     }
 
-    private void validateMessage(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, MessageValidationConfig messageValidationConfig) {
-        List<FieldInfo> fieldInfos = messageValidationConfig.getFields();
+    private void validateMessage(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig) {
+        List<FieldInfo> fieldInfos = messageConfig.getFields();
         List<Tag> tags = block.getTags();
         validateMandatoryFields(result, fieldInfos, tags, StringUtils.EMPTY);
         validateFields(result, context, mt, block, tags, fieldInfos, StringUtils.EMPTY);

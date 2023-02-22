@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.validation.validator.typevalidator;
 
-import cn.maiaimei.framework.swift.validation.config.FieldComponentInfo;
+import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.validator.TypeFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;

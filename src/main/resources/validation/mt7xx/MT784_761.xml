@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<swift-mt798-validation xmlns="https://maiamy.cn/schema/swift"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="https://maiamy.cn/schema/swift 
-       https://maiamy.cn/schema/swift/swift-mt-validation.xsd">
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
 
-    <id>mt784761ValidationConfig</id>
-    <index-message-type>784</index-message-type>
-    <sub-message-type>761</sub-message-type>
-    <corporate-to-bank>true</corporate-to-bank>
-    <fields>
-        <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
-        <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
-        <field no="2.3" tag="27" field-name="Sequence of Total" format="1!n/1!n" status="M" />
-        <field no="2.4" tag="20" field-name="Undertaking Number" format="16x" status="M" />
-        <field no="2.5" tag="52A" field-name="Issuer" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
-            <components>
-                <component index="1" format="1!a" status="O"/>
-                <component index="2" format="34x" status="O"/>
-                <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
-            </components>
-        </field>
-        <field no="2.5" tag="52D" field-name="Issuer" format="[[/1!a][/34x]$]4*35x" status="O">
-            <components>
-                <component index="1" format="1!a" status="O"/>
-                <component index="2" format="34x" status="O"/>
-                <component index="3" format="35x" status="M"/>
-                <component start-index="4" end-index="6" format="35x" status="O"/>
-            </components>
-        </field>
-        <field no="2.6" tag="77U" field-name="Undertaking Terms and Conditions" format="150*65z" status="O" />
-        <field no="2.7" tag="77L" field-name="Requested Local Undertaking Terms and Conditions" format="150*65z" status="O" />
-    </fields>
-    <rules>
-        <rule expression-string="#block.getTagByName('52A') == null and #block.getTagByName('52D') == null"
-              error-message="52A or 52D must be present" />
-    </rules>
+    <mt798 id="mt784761Config" index-message-type="784" sub-message-type="761" corporate-to-bank="true">
+        <description>Application for issuance of Guarantee / Standby LC / Undertaking Extension</description>
+        <fields>
+            <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
+            <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
+            <field no="2.3" tag="27" field-name="Sequence of Total" format="1!n/1!n" status="M" />
+            <field no="2.4" tag="20" field-name="Undertaking Number" format="16x" status="M" />
+            <field no="2.5" tag="52A" field-name="Issuer" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
+                <components>
+                    <component index="1" format="1!a" status="O"/>
+                    <component index="2" format="34x" status="O"/>
+                    <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                </components>
+            </field>
+            <field no="2.5" tag="52D" field-name="Issuer" format="[[/1!a][/34x]$]4*35x" status="O">
+                <components>
+                    <component index="1" format="1!a" status="O"/>
+                    <component index="2" format="34x" status="O"/>
+                    <component index="3" format="35x" status="M"/>
+                    <component start-index="4" end-index="6" format="35x" status="O"/>
+                </components>
+            </field>
+            <field no="2.6" tag="77U" field-name="Undertaking Terms and Conditions" format="150*65z" status="O" />
+            <field no="2.7" tag="77L" field-name="Requested Local Undertaking Terms and Conditions" format="150*65z" status="O" />
+        </fields>
+        <rules>
+            <rule expression-string="#block.getTagByName('52A') == null and #block.getTagByName('52D') == null"
+                  error-message="52A or 52D must be present" />
+        </rules>
+    </mt798>
 
-</swift-mt798-validation>
+</mts>

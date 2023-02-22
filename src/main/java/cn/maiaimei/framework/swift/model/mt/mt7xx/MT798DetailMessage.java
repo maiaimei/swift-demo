@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.model.mt7xx;
+package cn.maiaimei.framework.swift.model.mt.mt7xx;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

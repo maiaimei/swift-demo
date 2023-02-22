@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.converter.mt.mt7xx;
 
 import cn.maiaimei.framework.swift.exception.MT798ToTransactionConvertException;
-import cn.maiaimei.framework.swift.model.mt7xx.MT798Messages;
-import cn.maiaimei.framework.swift.model.mt7xx.MT798Transaction;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Messages;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Transaction;
 import com.prowidesoftware.swift.model.field.Field12;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import org.apache.commons.lang3.StringUtils;

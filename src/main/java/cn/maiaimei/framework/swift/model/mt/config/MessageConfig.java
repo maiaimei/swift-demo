@@ -1,14 +1,13 @@
-package cn.maiaimei.framework.swift.validation.config;
+package cn.maiaimei.framework.swift.model.mt.config;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class MessageValidationConfig {
+public class MessageConfig {
     private Boolean bankToCorporate;
     private Boolean corporateToBank;
-    private String messageType;
     private List<FieldInfo> fields;
     private List<SequenceInfo> sequences;
     private List<RuleInfo> rules;

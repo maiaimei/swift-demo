@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.model.mt7xx;
+package cn.maiaimei.framework.swift.model.mt.mt7xx;
 
 import cn.maiaimei.framework.swift.annotation.Sequence;
 import cn.maiaimei.framework.swift.annotation.SequenceMessage;

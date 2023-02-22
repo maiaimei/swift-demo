@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.model.mt7xx;
+package cn.maiaimei.framework.swift.model.mt.mt7xx;
 
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import lombok.Data;

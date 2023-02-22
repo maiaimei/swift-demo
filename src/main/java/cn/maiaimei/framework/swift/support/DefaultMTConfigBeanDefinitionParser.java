@@ -1,13 +1,11 @@
 package cn.maiaimei.framework.swift.support;
 
-import cn.maiaimei.framework.swift.validation.config.ComponentInfo;
-import cn.maiaimei.framework.swift.validation.config.FieldInfo;
-import cn.maiaimei.framework.swift.validation.config.RuleInfo;
-import cn.maiaimei.framework.swift.validation.config.SequenceInfo;
+import cn.maiaimei.framework.swift.model.mt.config.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
+import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
@@ -15,14 +13,19 @@ import org.w3c.dom.Element;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class AbstractMTValidationConfigBeanDefinitionParser implements BeanDefinitionParser {
+public class DefaultMTConfigBeanDefinitionParser implements BeanDefinitionParser {
 
-    protected static final String ID_ELEMENT_NAME = "id";
-    protected static final String BANK_TO_CORPORATE_ELEMENT_NAME = "bank-to-corporate";
-    protected static final String BANK_TO_CORPORATE_PROPERTY = "bankToCorporate";
-    protected static final String CORPORATE_TO_BANK_ELEMENT_NAME = "corporate-to-bank";
-    protected static final String CORPORATE_TO_BANK_PROPERTY = "corporateToBank";
-
+    private static final String ID_ATTRIBUTE = "id";
+    private static final String MESSAGE_TYPE_ATTRIBUTE = "message-type";
+    private static final String MESSAGE_TYPE_PROPERTY = "messageType";
+    private static final String INDEX_MESSAGE_TYPE_ATTRIBUTE = "index-message-type";
+    private static final String INDEX_MESSAGE_TYPE_PROPERTY = "indexMessageType";
+    private static final String SUB_MESSAGE_TYPE_ATTRIBUTE = "sub-message-type";
+    private static final String SUB_MESSAGE_TYPE_PROPERTY = "subMessageType";
+    private static final String BANK_TO_CORPORATE_ATTRIBUTE = "bank-to-corporate";
+    private static final String BANK_TO_CORPORATE_PROPERTY = "bankToCorporate";
+    private static final String CORPORATE_TO_BANK_ATTRIBUTE = "corporate-to-bank";
+    private static final String CORPORATE_TO_BANK_PROPERTY = "corporateToBank";
     private static final String FIELDS = "fields";
     private static final String FIELD = "field";
     private static final String COMPONENTS = "components";
@@ -55,11 +58,51 @@ public abstract class AbstractMTValidationConfigBeanDefinitionParser implements 
     private static final String ERROR_MESSAGE_PROPERTY = "errorMessage";
     private static final String VERTICAL_LINE = "\\|";
 
-    protected void parseSequences(Element element, BeanDefinitionBuilder builder) {
+    @Override
+    public BeanDefinition parse(Element element, ParserContext parserContext) {
+        doParse(element, parserContext, GenericMTConfig.class, "mt");
+        doParse(element, parserContext, MT798Config.class, "mt798");
+        return null;
+    }
+
+    private void doParse(Element element, ParserContext parserContext, Class<?> beanClass, String childEleName) {
+        List<Element> childElements = DomUtils.getChildElementsByTagName(element, childEleName);
+        if (CollectionUtils.isEmpty(childElements)) {
+            return;
+        }
+        for (Element childElement : childElements) {
+            doParse(childElement, parserContext, beanClass);
+        }
+    }
+
+    private void doParse(Element element, ParserContext parserContext, Class<?> beanClass) {
+        String id = element.getAttribute(ID_ATTRIBUTE);
+        Boolean bankToCorporate = Boolean.parseBoolean(element.getAttribute(BANK_TO_CORPORATE_ATTRIBUTE));
+        Boolean corporateToBank = Boolean.parseBoolean(element.getAttribute(CORPORATE_TO_BANK_ATTRIBUTE));
+        String messageType = element.getAttribute(MESSAGE_TYPE_ATTRIBUTE);
+        String indexMessageType = element.getAttribute(INDEX_MESSAGE_TYPE_ATTRIBUTE);
+        String subMessageType = element.getAttribute(SUB_MESSAGE_TYPE_ATTRIBUTE);
+
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
+        if (GenericMTConfig.class.isAssignableFrom(beanClass)) {
+            builder.addPropertyValue(MESSAGE_TYPE_PROPERTY, messageType);
+        } else {
+            builder.addPropertyValue(INDEX_MESSAGE_TYPE_PROPERTY, indexMessageType);
+            builder.addPropertyValue(SUB_MESSAGE_TYPE_PROPERTY, subMessageType);
+        }
+        builder.addPropertyValue(BANK_TO_CORPORATE_PROPERTY, bankToCorporate);
+        builder.addPropertyValue(CORPORATE_TO_BANK_PROPERTY, corporateToBank);
+        parseFields(element, builder);
+        parseSequences(element, builder);
+        parseRules(element, builder);
+        parserContext.getRegistry().registerBeanDefinition(id, builder.getBeanDefinition());
+    }
+
+    private void parseSequences(Element element, BeanDefinitionBuilder builder) {
         parseElements(element, SEQUENCES, SEQUENCE, SEQUENCES, builder, this::parseSequenceInfo);
     }
 
-    protected void parseFields(Element element, BeanDefinitionBuilder builder) {
+    private void parseFields(Element element, BeanDefinitionBuilder builder) {
         parseElements(element, FIELDS, FIELD, FIELDS, builder, this::parseFieldInfo);
     }
 
@@ -67,7 +110,7 @@ public abstract class AbstractMTValidationConfigBeanDefinitionParser implements 
         parseElements(element, COMPONENTS, COMPONENT, COMPONENTS, builder, this::parseComponentInfo);
     }
 
-    protected void parseRules(Element element, BeanDefinitionBuilder builder) {
+    private void parseRules(Element element, BeanDefinitionBuilder builder) {
         parseElements(element, RULES, RULE, RULES, builder, this::parseRuleInfo);
     }
 

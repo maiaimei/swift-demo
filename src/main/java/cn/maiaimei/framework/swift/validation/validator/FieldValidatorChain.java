@@ -1,9 +1,9 @@
 package cn.maiaimei.framework.swift.validation.validator;
 
+import cn.maiaimei.framework.swift.model.mt.config.ComponentInfo;
+import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
+import cn.maiaimei.framework.swift.model.mt.config.FieldInfo;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
-import cn.maiaimei.framework.swift.validation.config.ComponentInfo;
-import cn.maiaimei.framework.swift.validation.config.FieldComponentInfo;
-import cn.maiaimei.framework.swift.validation.config.FieldInfo;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
