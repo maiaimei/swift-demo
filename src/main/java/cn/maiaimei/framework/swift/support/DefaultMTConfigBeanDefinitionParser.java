@@ -60,19 +60,15 @@ public class DefaultMTConfigBeanDefinitionParser implements BeanDefinitionParser
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
-        doParse(element, parserContext, GenericMTConfig.class, "mt");
-        doParse(element, parserContext, MT798Config.class, "mt798");
-        return null;
-    }
+        List<Element> childElements = DomUtils.getChildElements(element);
+        if (!CollectionUtils.isEmpty(childElements)) {
+            for (Element childElement : childElements) {
+                Class<?> beanClass = "mt".equals(childElement.getNodeName()) ? GenericMTConfig.class : MT798Config.class;
+                doParse(childElement, parserContext, beanClass);
+            }
+        }
 
-    private void doParse(Element element, ParserContext parserContext, Class<?> beanClass, String childEleName) {
-        List<Element> childElements = DomUtils.getChildElementsByTagName(element, childEleName);
-        if (CollectionUtils.isEmpty(childElements)) {
-            return;
-        }
-        for (Element childElement : childElements) {
-            doParse(childElement, parserContext, beanClass);
-        }
+        return null;
     }
 
     private void doParse(Element element, ParserContext parserContext, Class<?> beanClass) {

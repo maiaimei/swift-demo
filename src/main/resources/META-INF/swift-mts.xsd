@@ -9,7 +9,7 @@
     <xsd:element name="mts">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:choice>
+                <xsd:choice maxOccurs="unbounded">
                     <xsd:element ref="mt"/>
                     <xsd:element ref="mt798"/>
                 </xsd:choice>
