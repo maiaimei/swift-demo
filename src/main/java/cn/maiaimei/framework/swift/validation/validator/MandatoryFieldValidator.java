@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MandatoryFieldValidator implements FieldValidator {
+
     @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (ValidatorUtils.isMandatory(fieldComponentInfo.getStatus()) && StringUtils.isBlank(value)) {

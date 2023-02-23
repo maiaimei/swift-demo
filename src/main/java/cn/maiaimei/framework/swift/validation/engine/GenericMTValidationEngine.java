@@ -9,8 +9,8 @@ import cn.maiaimei.framework.swift.util.SwiftUtils;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
+import cn.maiaimei.framework.swift.validation.handler.FieldValidationChain;
 import cn.maiaimei.framework.swift.validation.mt.MTValidation;
-import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftMessage;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
@@ -37,7 +37,7 @@ public class GenericMTValidationEngine {
     private static final String LABEL_FORMAT_IN_SEQUENCE = "In sequence %s, field %s %s";
 
     @Autowired
-    private FieldValidatorChain fieldValidatorChain;
+    private FieldValidationChain fieldValidationChain;
 
     @Autowired
     private Set<GenericMTConfig> genericMTConfigSet;
@@ -171,7 +171,7 @@ public class GenericMTValidationEngine {
             }
             FieldInfo fieldInfo = fieldInfoOptional.get();
             String label = getLabel(sequenceName, tagName, fieldInfo.getFieldName());
-            fieldValidatorChain.handleValidation(result, fieldInfo, field, label, tagValue);
+            fieldValidationChain.handleValidation(result, fieldInfo, field, label, tagValue);
             validateByRules(result, context, mt, fieldInfo.getRules());
         }
     }
