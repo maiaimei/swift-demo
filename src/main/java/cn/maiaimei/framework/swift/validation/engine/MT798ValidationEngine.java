@@ -58,8 +58,8 @@ public class MT798ValidationEngine {
     public ValidationResult validate(MT798 mt798, String indexMessageType, String subMessageType) {
         Supplier<MT798Config> mt798ConfigSupplier = () -> getMT798Config(
                 w -> w.getIndexMessageType().equals(indexMessageType) && w.getSubMessageType().equals(subMessageType),
-                "Can't found validation config, Index Message is MT 798<" + indexMessageType + ">, Message is MT 798<" + subMessageType + ">",
-                "Can't determine which validation config to use, Index Message is MT 798<" + indexMessageType + ">, Message is MT 798<" + subMessageType + ">"
+                "Can't found validation config for MT 798<" + indexMessageType + "> + MT 798<" + subMessageType + ">",
+                "Can't determine which validation config to use for MT 798<" + indexMessageType + "> + MT 798<" + subMessageType + ">"
         );
         return doValidate(mt798, mt798ConfigSupplier);
     }
