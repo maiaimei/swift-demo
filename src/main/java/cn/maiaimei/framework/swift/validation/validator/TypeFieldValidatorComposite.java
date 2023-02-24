@@ -1,8 +1,7 @@
-package cn.maiaimei.framework.swift.validation.handler;
+package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
-import cn.maiaimei.framework.swift.validation.validator.FormatFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +10,18 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class FormatValidationHandler extends AbstractValidationHandler {
+public class TypeFieldValidatorComposite implements FieldValidatorHandler {
     @Autowired
-    private Set<FormatFieldValidator> formatValidatorSet;
+    private Set<TypeFieldValidator> typeValidatorSet;
 
     @Autowired
-    private PatternValidationHandler patternFieldValidatorHandler;
+    private EnumFieldValidator enumFieldValidator;
 
     @Override
     public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
-        for (FormatFieldValidator formatValidator : formatValidatorSet) {
-            if (formatValidator.supportsFormat(field, fieldComponentInfo.getFormat())) {
-                String errorMessage = formatValidator.validate(fieldComponentInfo, field, label, value);
+        for (TypeFieldValidator typeValidator : typeValidatorSet) {
+            if (typeValidator.supportsType(field, fieldComponentInfo.getType())) {
+                String errorMessage = typeValidator.validate(fieldComponentInfo, field, label, value);
                 if (StringUtils.isNotBlank(errorMessage)) {
                     result.addErrorMessage(errorMessage);
                     return;
@@ -34,7 +33,7 @@ public class FormatValidationHandler extends AbstractValidationHandler {
     }
 
     @Override
-    public ValidationHandler getNextValidationHandler() {
-        return patternFieldValidatorHandler;
+    public FieldValidatorHandler getNextValidationHandler() {
+        return enumFieldValidator;
     }
 }

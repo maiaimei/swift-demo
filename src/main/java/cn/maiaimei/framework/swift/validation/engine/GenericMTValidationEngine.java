@@ -3,14 +3,15 @@ package cn.maiaimei.framework.swift.validation.engine;
 import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
 import cn.maiaimei.framework.swift.exception.ValidationException;
 import cn.maiaimei.framework.swift.model.mt.config.*;
+import cn.maiaimei.framework.swift.processor.DefaultMTSequenceProcessor;
 import cn.maiaimei.framework.swift.processor.MTSequenceProcessor;
 import cn.maiaimei.framework.swift.util.SpelUtils;
 import cn.maiaimei.framework.swift.util.SwiftUtils;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
-import cn.maiaimei.framework.swift.validation.handler.FieldValidationChain;
 import cn.maiaimei.framework.swift.validation.mt.MTValidation;
+import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftMessage;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
@@ -19,7 +20,6 @@ import com.prowidesoftware.swift.model.field.Field;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -37,7 +37,7 @@ public class GenericMTValidationEngine {
     private static final String LABEL_FORMAT_IN_SEQUENCE = "In sequence %s, field %s %s";
 
     @Autowired
-    private FieldValidationChain fieldValidationChain;
+    private FieldValidatorChain fieldValidatorChain;
 
     @Autowired
     private Set<GenericMTConfig> genericMTConfigSet;
@@ -45,11 +45,11 @@ public class GenericMTValidationEngine {
     @Autowired
     private Set<MTSequenceProcessor> mtSequenceProcessorSet;
 
+    @Autowired
+    private DefaultMTSequenceProcessor defaultMTSequenceProcessor;
+
     @Autowired(required = false)
     private Map<String, MTValidation> mtValidationMap;
-
-    @Autowired
-    private ApplicationContext applicationContext;
 
     public ValidationResult validate(String message, String messageType) {
         AbstractMT mt = SwiftUtils.parseToAbstractMT(message, messageType);
@@ -104,20 +104,20 @@ public class GenericMTValidationEngine {
     }
 
     public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig, String messageType) {
-        StandardEvaluationContext context = SpelUtils.newStandardEvaluationContext("block", block);
         if (CollectionUtils.isEmpty(messageConfig.getSequences())) {
-            validateMessage(result, context, mt, block, messageConfig);
+            validateMessage(result, mt, block, messageConfig);
         } else {
-            validateSequenceMessage(result, context, mt, block, messageConfig, messageType);
+            validateSequenceMessage(result, mt, block, messageConfig, messageType);
         }
-        validateByRules(result, context, mt, messageConfig.getRules());
     }
 
-    private void validateSequenceMessage(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig, String messageType) {
-        validateMessage(result, context, mt, block, messageConfig);
-        //Map<String, List<SwiftTagListBlock>> sequenceMap = SwiftUtils.getSequenceMap(messageType, block);
+    private void validateSequenceMessage(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig, String messageType) {
+        validateMessage(result, mt, block, messageConfig);
         MTSequenceProcessor sequenceProcessor = getMTSequenceProcessor(messageType);
         Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
+        if (CollectionUtils.isEmpty(sequenceMap)) {
+            return;
+        }
         for (SequenceInfo sequenceInfo : messageConfig.getSequences()) {
             String sequenceName = sequenceInfo.getName();
             List<SwiftTagListBlock> sequenceList = sequenceMap.get(sequenceName);
@@ -132,18 +132,19 @@ public class GenericMTValidationEngine {
                     }
                     List<FieldInfo> fieldInfos = sequenceInfo.getFields();
                     validateMandatoryFields(result, fieldInfos, tags, sequenceName);
-                    validateFields(result, context, mt, sequenceBlock, tags, fieldInfos, sequenceName);
+                    validateFields(result, mt, sequenceBlock, tags, fieldInfos, sequenceName);
+                    validateByRules(result, newStandardEvaluationContext(sequenceBlock), mt, sequenceInfo.getRules());
                 }
             }
-            validateByRules(result, context, mt, sequenceInfo.getRules());
         }
     }
 
-    private void validateMessage(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig) {
+    private void validateMessage(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig) {
         List<FieldInfo> fieldInfos = messageConfig.getFields();
         List<Tag> tags = block.getTags();
         validateMandatoryFields(result, fieldInfos, tags, StringUtils.EMPTY);
-        validateFields(result, context, mt, block, tags, fieldInfos, StringUtils.EMPTY);
+        validateFields(result, mt, block, tags, fieldInfos, StringUtils.EMPTY);
+        validateByRules(result, newStandardEvaluationContext(block), mt, messageConfig.getRules());
     }
 
     private void validateMandatoryFields(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, String sequenceName) {
@@ -160,7 +161,8 @@ public class GenericMTValidationEngine {
         }
     }
 
-    private void validateFields(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, SwiftTagListBlock block, List<Tag> tags, List<FieldInfo> fieldInfos, String sequenceName) {
+    private void validateFields(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, List<Tag> tags, List<FieldInfo> fieldInfos, String sequenceName) {
+        StandardEvaluationContext context = newStandardEvaluationContext(block);
         for (Tag tag : tags) {
             String tagName = tag.getName();
             String tagValue = tag.getValue();
@@ -171,7 +173,7 @@ public class GenericMTValidationEngine {
             }
             FieldInfo fieldInfo = fieldInfoOptional.get();
             String label = getLabel(sequenceName, tagName, fieldInfo.getFieldName());
-            fieldValidationChain.handleValidation(result, fieldInfo, field, label, tagValue);
+            fieldValidatorChain.handleValidation(result, fieldInfo, field, label, tagValue);
             validateByRules(result, context, mt, fieldInfo.getRules());
         }
     }
@@ -187,13 +189,12 @@ public class GenericMTValidationEngine {
                 break;
             }
             if (StringUtils.isNotBlank(ruleInfo.getBeanName())) {
-                MTValidation MTValidation = null;
-                //mtValidation = applicationContext.getBean(ruleInfo.getBeanName(), MtValidation.class);
+                MTValidation mtValidation = null;
                 if (mtValidationMap != null) {
-                    MTValidation = mtValidationMap.get(ruleInfo.getBeanName());
+                    mtValidation = mtValidationMap.get(ruleInfo.getBeanName());
                 }
-                if (MTValidation != null) {
-                    MTValidation.validate(result, mt);
+                if (mtValidation != null) {
+                    mtValidation.validate(result, mt);
                 }
             }
         }
@@ -207,12 +208,19 @@ public class GenericMTValidationEngine {
     }
 
     private MTSequenceProcessor getMTSequenceProcessor(String messageType) {
+        if (StringUtils.isBlank(messageType)) {
+            return defaultMTSequenceProcessor;
+        }
         for (MTSequenceProcessor processor : mtSequenceProcessorSet) {
             if (processor.supportsMessageType(messageType)) {
                 return processor;
             }
         }
         throw new MTSequenceProcessorNotFoundException(messageType);
+    }
+
+    private StandardEvaluationContext newStandardEvaluationContext(SwiftTagListBlock block) {
+        return SpelUtils.newStandardEvaluationContext("block", block);
     }
 
 }

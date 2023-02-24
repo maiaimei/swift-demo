@@ -1,8 +1,7 @@
-package cn.maiaimei.framework.swift.validation.handler;
+package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
-import cn.maiaimei.framework.swift.validation.validator.TypeFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +10,18 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class TypeValidationHandler extends AbstractValidationHandler {
+public class PatternFieldValidatorComposite implements FieldValidatorHandler {
     @Autowired
-    private Set<TypeFieldValidator> typeValidatorSet;
+    private Set<PatternFieldValidator> patternValidatorSet;
 
     @Autowired
-    private EnumValidationHandler enumFieldValidationHandler;
+    private TypeFieldValidatorComposite typeFieldValidatorComposite;
 
     @Override
     public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
-        for (TypeFieldValidator typeValidator : typeValidatorSet) {
-            if (typeValidator.supportsType(field, fieldComponentInfo.getType())) {
-                String errorMessage = typeValidator.validate(fieldComponentInfo, field, label, value);
+        for (PatternFieldValidator patternValidator : patternValidatorSet) {
+            if (patternValidator.supportsPattern(field, fieldComponentInfo.getPattern())) {
+                String errorMessage = patternValidator.validate(fieldComponentInfo, field, label, value);
                 if (StringUtils.isNotBlank(errorMessage)) {
                     result.addErrorMessage(errorMessage);
                     return;
@@ -34,7 +33,7 @@ public class TypeValidationHandler extends AbstractValidationHandler {
     }
 
     @Override
-    public ValidationHandler getNextValidationHandler() {
-        return enumFieldValidationHandler;
+    public FieldValidatorHandler getNextValidationHandler() {
+        return typeFieldValidatorComposite;
     }
 }

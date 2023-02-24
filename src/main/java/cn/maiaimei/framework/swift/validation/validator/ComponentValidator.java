@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.validation.handler;
+package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.model.mt.config.ComponentInfo;
 import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ComponentValidationHandler implements ValidationHandler {
+public class ComponentValidator implements FieldValidatorHandler {
     @Autowired
-    private MandatoryValidationHandler mandatoryFieldValidationHandler;
+    private MandatoryFieldValidator mandatoryFieldValidator;
 
     @Override
     public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
@@ -37,13 +37,13 @@ public class ComponentValidationHandler implements ValidationHandler {
                 int index = componentInfo.getIndex() - 1;
                 String componentLabel = StringUtils.isNotBlank(componentInfo.getLabel()) ? componentInfo.getLabel() : componentLabels.get(index);
                 String componentValue = components.get(index);
-                mandatoryFieldValidationHandler.handleValidation(res, componentInfo, field, componentLabel, componentValue);
+                mandatoryFieldValidator.handleValidation(res, componentInfo, field, componentLabel, componentValue);
             } else if (componentInfo.getStartIndex() != null && componentInfo.getEndIndex() != null) {
                 for (int i = componentInfo.getStartIndex(); i <= componentInfo.getEndIndex(); i++) {
                     int index = i - 1;
                     String componentLabel = componentLabels.get(index);
                     String componentValue = components.get(index);
-                    mandatoryFieldValidationHandler.handleValidation(res, componentInfo, field, componentLabel, componentValue);
+                    mandatoryFieldValidator.handleValidation(res, componentInfo, field, componentLabel, componentValue);
                 }
             } else {
                 result.addErrorMessage(label + " component config error, please check each component index");
@@ -56,7 +56,7 @@ public class ComponentValidationHandler implements ValidationHandler {
     }
 
     @Override
-    public ValidationHandler getNextValidationHandler() {
+    public FieldValidatorHandler getNextValidationHandler() {
         return null;
     }
 }

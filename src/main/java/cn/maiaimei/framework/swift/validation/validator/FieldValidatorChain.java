@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.validation.handler;
+package cn.maiaimei.framework.swift.validation.validator;
 
 import cn.maiaimei.framework.swift.model.mt.config.FieldInfo;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FieldValidationChain {
+public class FieldValidatorChain {
     @Autowired
-    private MandatoryValidationHandler mandatoryFieldValidationHandler;
+    private MandatoryFieldValidator mandatoryFieldValidator;
 
     public void handleValidation(ValidationResult result, FieldInfo fieldInfo, Field field, String label, String value) {
-        mandatoryFieldValidationHandler.handleValidation(result, fieldInfo, field, label, value);
+        mandatoryFieldValidator.handleValidation(result, fieldInfo, field, label, value);
     }
 }
