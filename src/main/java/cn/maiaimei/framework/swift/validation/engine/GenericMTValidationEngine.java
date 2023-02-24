@@ -51,6 +51,13 @@ public class GenericMTValidationEngine {
     @Autowired(required = false)
     private Map<String, MTValidation> mtValidationMap;
 
+    public ValidationResult validate(String message) {
+        SwiftMessage swiftMessage = SwiftUtils.parseToSwiftMessage(message);
+        String messageType = swiftMessage.getType();
+        AbstractMT mt = SwiftUtils.parseToAbstractMT(swiftMessage, messageType);
+        return validate(mt, messageType);
+    }
+
     public ValidationResult validate(String message, String messageType) {
         AbstractMT mt = SwiftUtils.parseToAbstractMT(message, messageType);
         return validate(mt, messageType);
@@ -59,6 +66,12 @@ public class GenericMTValidationEngine {
     public ValidationResult validate(String message, String messageType, MessageConfig messageConfig) {
         AbstractMT mt = SwiftUtils.parseToAbstractMT(message, messageType);
         return validate(mt, messageType, messageConfig);
+    }
+
+    public ValidationResult validate(SwiftMessage swiftMessage) {
+        String messageType = swiftMessage.getType();
+        AbstractMT mt = SwiftUtils.parseToAbstractMT(swiftMessage, messageType);
+        return validate(mt, messageType);
     }
 
     public ValidationResult validate(SwiftMessage swiftMessage, String messageType) {

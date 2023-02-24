@@ -24,7 +24,7 @@ public class EnumFieldValidator implements FieldValidator, FieldValidatorHandler
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         List<String> options = fieldComponentInfo.getOptions();
         if (!CollectionUtils.isEmpty(options) && !options.contains(value)) {
-            return ValidationError.mustIn(label, value, options);
+            return ValidationError.mustInOptions(label, value, options);
         }
         return null;
     }

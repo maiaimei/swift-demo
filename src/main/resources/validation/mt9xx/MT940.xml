@@ -47,14 +47,14 @@
             <field tag="65" field-name="Forward Available Balance" format="1!a6!n3!a15d" status="O" />
             <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O" />
         </fields>
-        <sequences>
+        <!--<sequences>
             <sequence name="A" status="O">
                 <fields>
                     <field tag="61" field-name="Statement Line" format="" status="O" />
                     <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O" />
                 </fields>
             </sequence>
-        </sequences>
+        </sequences>-->
         <rules>
             <rule expression-string="#block.getTagByName('60F') == null and #block.getTagByName('60M') == null"
                   error-message="60F or 60M must be present"/>

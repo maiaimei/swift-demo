@@ -22,7 +22,7 @@ public final class ValidationError {
     private static final String MUST_BE_VARIABLE_LENGTH_CHARACTER_STARTS_WITH_SLASH = "%s length must be less than or equal to %s, %s, %s, invalid value is %s";
     private static final String MUST_BE_MULTILINE_SWIFT_SET = "%s up to %s lines, with a maximum of %s characters per line, contain SWIFT %s set only, invalid value is %s";
     private static final String MUST_MATCH_FORMAT = "%s must match %s, invalid value is %s";
-    private static final String MUST_IN = "%s must in \"%s\", invalid value is %s";
+    private static final String MUST_IN_OPTIONS = "%s must in \"%s\", invalid value is %s";
 
     private ValidationError() {
         throw new UnsupportedOperationException();
@@ -60,8 +60,8 @@ public final class ValidationError {
         return String.format(MUST_MATCH_FORMAT, label, format, value);
     }
 
-    public static String mustIn(String label, String value, List<String> options) {
-        return String.format(MUST_IN, label, String.join(",", options), value);
+    public static String mustInOptions(String label, String value, List<String> options) {
+        return String.format(MUST_IN_OPTIONS, label, String.join(",", options), value);
     }
 
     private static String getCharacterErrorMessage(String type) {
