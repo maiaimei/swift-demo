@@ -46,7 +46,7 @@ public class ComponentValidator implements FieldValidatorHandler {
                     mandatoryFieldValidator.handleValidation(res, componentInfo, field, componentLabel, componentValue);
                 }
             } else {
-                result.addErrorMessage(label + " component config error, please check each component index");
+                result.addErrorMessage(label + " component config error, either index or start-index and end-index must be present");
             }
         }
         if (!CollectionUtils.isEmpty(res.getErrorMessages())) {

@@ -4,11 +4,8 @@ import java.util.regex.Pattern;
 
 public final class ValidationConstants {
 
-    public static final String EXCLAMATORY_MARK = "!";
     public static final String SLASH = "/";
-    public static final String LEFT_SQUARE_BRACKET = "[";
-    public static final String RIGHT_SQUARE_BRACKET = "]";
-    public static final String STATUS_MANDATORY = "M";
+    public static final String MANDATORY = "M";
 
     /**
      * a, alphabetic, capital letters (A through Z), upper case only
@@ -87,8 +84,6 @@ public final class ValidationConstants {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','
     };
 
-    public static final String NUMBER_REGEX = "\\d+";
-
     /**
      * a: alphabetic
      */
@@ -129,6 +124,8 @@ public final class ValidationConstants {
      * <p>d: decimals</p>
      */
     public static final String FORMAT_REGEX = "[acnxzd]";
+
+    public static final String NUMBER_REGEX = "\\d+";
 
     /**
      * fixed length of alphabetic, alpha-numeric, numeric, SWIFT X set, SWIFT Z set or decimals, e.g.

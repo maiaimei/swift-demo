@@ -113,7 +113,7 @@ public final class ValidatorUtils {
     }
 
     public static boolean isMandatory(String status) {
-        return ValidationConstants.STATUS_MANDATORY.equals(status);
+        return ValidationConstants.MANDATORY.equals(status);
     }
 
     public static List<Integer> getNumbers(String format) {
@@ -135,7 +135,7 @@ public final class ValidatorUtils {
         if (matcher.find()) {
             return matcher.group(0);
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     public static String trimStartSlash(String format, String value) {

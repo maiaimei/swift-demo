@@ -21,7 +21,7 @@ public class MandatoryFieldValidator implements FieldValidator, FieldValidatorHa
     @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (ValidatorUtils.isMandatory(fieldComponentInfo.getStatus()) && StringUtils.isBlank(value)) {
-            return ValidationError.mustNotBeBlank(label);
+            return ValidationError.mustNotBlank(label);
         }
         return null;
     }

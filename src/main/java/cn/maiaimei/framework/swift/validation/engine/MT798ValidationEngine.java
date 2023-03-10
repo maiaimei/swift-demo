@@ -1,5 +1,6 @@
 package cn.maiaimei.framework.swift.validation.engine;
 
+import cn.maiaimei.framework.swift.config.MT7xxValidationConfig;
 import cn.maiaimei.framework.swift.exception.ValidationException;
 import cn.maiaimei.framework.swift.model.mt.config.MT798Config;
 import cn.maiaimei.framework.swift.validation.ValidationError;
@@ -9,6 +10,7 @@ import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.field.Field77E;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -19,9 +21,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-/**
- * TODO: refactor: MT798ValidationEngine
- */
+@ConditionalOnBean(MT7xxValidationConfig.class)
 @Component
 public class MT798ValidationEngine {
 
@@ -51,7 +51,7 @@ public class MT798ValidationEngine {
      * validate message by Sub-Message Type
      *
      * @param mt798
-     * @param indexMessageType Index Message Sub-Message Type
+     * @param indexMessageType Sub-Message Type for Index Message
      * @param subMessageType   Sub-Message Type
      * @return
      */
@@ -89,15 +89,17 @@ public class MT798ValidationEngine {
         return result;
     }
 
-    private MT798Config getMT798Config(Predicate<MT798Config> predicate, String validationConfigNotFound, String multipleValidationConfig) {
+    private MT798Config getMT798Config(Predicate<MT798Config> predicate,
+                                       String validationConfigNotFoundError,
+                                       String multipleValidationConfigError) {
         List<MT798Config> mt798Configs = mt798ConfigSet.stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(mt798Configs)) {
-            throw new ValidationException(validationConfigNotFound);
+            throw new ValidationException(validationConfigNotFoundError);
         }
         if (mt798Configs.size() > 1) {
-            throw new ValidationException(multipleValidationConfig);
+            throw new ValidationException(multipleValidationConfigError);
         }
         return mt798Configs.get(0);
     }

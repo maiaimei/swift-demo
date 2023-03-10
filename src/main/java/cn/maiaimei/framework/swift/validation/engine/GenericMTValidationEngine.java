@@ -20,6 +20,7 @@ import com.prowidesoftware.swift.model.field.Field;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -33,13 +34,18 @@ import java.util.stream.Collectors;
 @Component
 public class GenericMTValidationEngine {
 
-    private static final String LABEL_FORMAT_NO_SEQUENCE = "Field %s %s";
-    private static final String LABEL_FORMAT_IN_SEQUENCE = "In sequence %s, field %s %s";
-    
+    private static final String SIMPLE_LABEL_NOT_IN_SEQUENCE = "%s";
+    private static final String SIMPLE_LABEL_IN_SEQUENCE = "In sequence %s, %s";
+    private static final String LABEL_NOT_IN_SEQUENCE = "Field %s%s";
+    private static final String LABEL_IN_SEQUENCE = "In sequence %s, field %s%s";
+
+    @Value("${swift.mt.validation.is-simple-label:false}")
+    private boolean isSimpleLabel;
+
     @Autowired
     private MandatoryFieldValidator mandatoryFieldValidator;
 
-    @Autowired
+    @Autowired(required = false)
     private Set<GenericMTConfig> genericMTConfigSet;
 
     @Autowired
@@ -99,6 +105,13 @@ public class GenericMTValidationEngine {
     }
 
     public void validate(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, String messageType) {
+        if (StringUtils.isBlank(messageType)) {
+            result.addErrorMessage(ValidationError.mustNotBlank("messageType"));
+            return;
+        }
+        if (CollectionUtils.isEmpty(genericMTConfigSet)) {
+            throw new ValidationException("Can't found validation config for MT" + messageType + ", please check whether the configuration file exists, or check whether validation is enabled");
+        }
         List<MessageConfig> messageConfigs = genericMTConfigSet.stream()
                 .filter(w -> w.getMessageType().equals(messageType))
                 .collect(Collectors.toList());
@@ -129,23 +142,28 @@ public class GenericMTValidationEngine {
         MTSequenceProcessor sequenceProcessor = getMTSequenceProcessor(messageType);
         Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
         if (CollectionUtils.isEmpty(sequenceMap)) {
+            result.addErrorMessage("Can't found sequence block for MT" + messageType + ", please configure bean which must implements MTSequenceProcessor");
             return;
         }
         for (SequenceInfo sequenceInfo : messageConfig.getSequences()) {
             String sequenceName = sequenceInfo.getName();
             List<SwiftTagListBlock> sequenceList = sequenceMap.get(sequenceName);
-            if (!CollectionUtils.isEmpty(sequenceList)) {
-                for (SwiftTagListBlock sequenceBlock : sequenceList) {
-                    List<Tag> tags = sequenceBlock.getTags();
-                    if (CollectionUtils.isEmpty(tags)) {
-                        if (ValidatorUtils.isMandatory(sequenceInfo.getStatus())) {
-                            result.addErrorMessage(ValidationError.mustBePresent("Sequence ".concat(sequenceName)));
-                        }
-                        continue;
+            if (CollectionUtils.isEmpty(sequenceList)) {
+                continue;
+            }
+            for (SwiftTagListBlock sequenceBlock : sequenceList) {
+                List<Tag> tags = sequenceBlock.getTags();
+                if (CollectionUtils.isEmpty(tags)) {
+                    if (ValidatorUtils.isMandatory(sequenceInfo.getStatus())) {
+                        result.addErrorMessage(ValidationError.mustBePresent("Sequence ".concat(sequenceName)));
                     }
-                    List<FieldInfo> fieldInfos = sequenceInfo.getFields();
-                    validateMandatoryFields(result, fieldInfos, tags, sequenceName);
-                    validateFields(result, mt, sequenceBlock, tags, fieldInfos, sequenceName);
+                    continue;
+                }
+                List<FieldInfo> fieldInfos = sequenceInfo.getFields();
+                validateMandatoryFields(result, fieldInfos, tags, sequenceName);
+                validateFields(result, mt, sequenceBlock, tags, fieldInfos, sequenceName);
+                int errorMessageCount = result.getErrorMessages().size();
+                if (errorMessageCount == result.getErrorMessages().size()) {
                     validateByRules(result, newStandardEvaluationContext(sequenceBlock), mt, sequenceInfo.getRules());
                 }
             }
@@ -156,7 +174,11 @@ public class GenericMTValidationEngine {
         List<FieldInfo> fieldInfos = messageConfig.getFields();
         List<Tag> tags = block.getTags();
         validateMandatoryFields(result, fieldInfos, tags, StringUtils.EMPTY);
+        int errorMessageCount = result.getErrorMessages().size();
         validateFields(result, mt, block, tags, fieldInfos, StringUtils.EMPTY);
+        if (errorMessageCount != result.getErrorMessages().size()) {
+            return;
+        }
         validateByRules(result, newStandardEvaluationContext(block), mt, messageConfig.getRules());
     }
 
@@ -182,12 +204,17 @@ public class GenericMTValidationEngine {
             Field field = block.getFieldByName(tagName);
             Optional<FieldInfo> fieldInfoOptional = fieldInfos.stream().filter(w -> w.getTag().equals(tagName)).findAny();
             if (!fieldInfoOptional.isPresent()) {
+                String label = getLabel(sequenceName, tagName, StringUtils.EMPTY);
+                result.addErrorMessage(label + " not config");
                 continue;
             }
             FieldInfo fieldInfo = fieldInfoOptional.get();
             String label = getLabel(sequenceName, tagName, fieldInfo.getFieldName());
+            int errorMessageCount = result.getErrorMessages().size();
             mandatoryFieldValidator.handleValidation(result, fieldInfo, field, label, tagValue);
-            validateByRules(result, context, mt, fieldInfo.getRules());
+            if (errorMessageCount == result.getErrorMessages().size()) {
+                validateByRules(result, context, mt, fieldInfo.getRules());
+            }
         }
     }
 
@@ -214,10 +241,19 @@ public class GenericMTValidationEngine {
     }
 
     private String getLabel(String sequenceName, String tagName, String fieldName) {
-        if (StringUtils.isBlank(sequenceName)) {
-            return String.format(LABEL_FORMAT_NO_SEQUENCE, tagName, fieldName);
+        if (isSimpleLabel) {
+            if (StringUtils.isBlank(sequenceName)) {
+                return String.format(SIMPLE_LABEL_NOT_IN_SEQUENCE, tagName);
+            }
+            return String.format(SIMPLE_LABEL_IN_SEQUENCE, sequenceName, tagName);
         }
-        return String.format(LABEL_FORMAT_IN_SEQUENCE, sequenceName, tagName, fieldName);
+        if (StringUtils.isNotBlank(fieldName)) {
+            fieldName = StringUtils.SPACE.concat(fieldName);
+        }
+        if (StringUtils.isBlank(sequenceName)) {
+            return String.format(LABEL_NOT_IN_SEQUENCE, tagName, fieldName);
+        }
+        return String.format(LABEL_IN_SEQUENCE, sequenceName, tagName, fieldName);
     }
 
     private MTSequenceProcessor getMTSequenceProcessor(String messageType) {
