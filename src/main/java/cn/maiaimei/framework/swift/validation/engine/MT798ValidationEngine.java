@@ -7,15 +7,17 @@ import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
+import com.prowidesoftware.swift.model.field.Field12;
 import com.prowidesoftware.swift.model.field.Field77E;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -38,7 +40,12 @@ public class MT798ValidationEngine {
      * validate message for the corporate-to-bank flows
      */
     public ValidationResult validate(MT798 mt798) {
-        String subMessageType = mt798.getField12().getValue();
+        String subMessageType = Optional.ofNullable(mt798.getField12()).orElseGet(Field12::new).getValue();
+        if (StringUtils.isBlank(subMessageType)) {
+            ValidationResult result = ValidationResult.newInstance();
+            result.addErrorMessage(ValidationError.mustNotBlank(Field12.NAME));
+            return result;
+        }
         Supplier<MT798Config> mt798ConfigSupplier = () -> getMT798Config(
                 w -> w.getSubMessageType().equals(subMessageType) && Boolean.TRUE.equals(w.getCorporateToBank()),
                 "Can't found validation config for MT 798<" + subMessageType + ">",
@@ -65,17 +72,10 @@ public class MT798ValidationEngine {
     }
 
     private ValidationResult doValidate(MT798 mt798, Supplier<MT798Config> mt798ConfigSupplier) {
-        ValidationResult result = new ValidationResult();
-        result.setErrorMessages(new ArrayList<>());
-        // Validate Field77E
-        Field77E field77E = mt798.getField77E();
-        if (field77E == null) {
-            result.addErrorMessage(ValidationError.mustBePresent(Field77E.NAME));
-            return result;
-        }
+        ValidationResult result = ValidationResult.newInstance();
         SwiftBlock4 block4 = mt798.getSwiftMessage().getBlock4();
         // Validate Section 1
-        SwiftTagListBlock blockBeforeFirst77E = block4.getSubBlockBeforeFirst(Field77E.NAME, Boolean.FALSE);
+        SwiftTagListBlock blockBeforeFirst77E = block4.getSubBlockBeforeFirst(Field77E.NAME, Boolean.TRUE);
         int errorMessageCount = result.getErrorMessages().size();
         genericMTValidationEngine.validate(result, mt798, blockBeforeFirst77E, mt798Section1Config);
         if (errorMessageCount != result.getErrorMessages().size()) {

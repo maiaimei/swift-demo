@@ -4,9 +4,6 @@ import cn.maiaimei.framework.swift.annotation.Sequence;
 import cn.maiaimei.framework.swift.annotation.Tag;
 import cn.maiaimei.framework.swift.model.BaseMessage;
 import cn.maiaimei.framework.swift.model.BaseSequence;
-import com.prowidesoftware.swift.io.parser.SwiftParser;
-import com.prowidesoftware.swift.model.SwiftBlock4;
-import com.prowidesoftware.swift.model.SwiftMessage;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import lombok.SneakyThrows;
@@ -18,9 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SwiftUtils {
-
-    private static final String GET_SEQUENCE_METHOD_NAME = "getSequence";
-
+    
     @SneakyThrows
     public static void populateMessage(SwiftTagListBlock block, BaseMessage message) {
         Class<? extends BaseMessage> clazz = message.getClass();
@@ -84,35 +79,11 @@ public class SwiftUtils {
     }
 
     @SneakyThrows
-    public static SwiftMessage parseToSwiftMessage(String message) {
-        SwiftParser parser = new SwiftParser(message);
-        return parser.message();
+    public static AbstractMT parseToAbstractMT(String message) {
+        // Parse unknown MT message into generic swift model
+        return AbstractMT.parse(message);
     }
 
-    public static AbstractMT parseToAbstractMT(String message, String messageType) {
-        SwiftMessage swiftMessage = parseToSwiftMessage(message);
-        return new AbstractMT(swiftMessage) {
-            @Override
-            public String getMessageType() {
-                return messageType;
-            }
-        };
-    }
-
-    public static AbstractMT parseToAbstractMT(SwiftMessage swiftMessage, String messageType) {
-        return new AbstractMT(swiftMessage) {
-            @Override
-            public String getMessageType() {
-                return messageType;
-            }
-        };
-    }
-
-    public static SwiftBlock4 getBlock4(String message) {
-        SwiftMessage swiftMessage = parseToSwiftMessage(message);
-        return swiftMessage.getBlock4();
-    }
-    
     private SwiftUtils() {
         throw new UnsupportedOperationException();
     }

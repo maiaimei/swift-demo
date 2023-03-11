@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+    
+	<mt798 id="mt726Config" index-message-type="726" sub-message-type="726">
+        <fields>
+            <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
+            <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
+            <field no="2.3" tag="21T" field-name="Customer Business Reference" format="16x" status="M" />
+            <field no="2.4" tag="21P" field-name="Bank Reference Number" format="16x" status="O" />
+            <field no="2.5" tag="21S" field-name="Bank Business Reference" format="16x" status="O" />
+            <field no="2.6" tag="13E" field-name="Message Creation Date Time" format="8!n4!n" pattern="YYYYMMDDHHMM" status="M" />
+        </fields>
+    </mt798>
+    
+</mts>

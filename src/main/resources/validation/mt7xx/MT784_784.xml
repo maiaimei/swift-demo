@@ -45,8 +45,8 @@
             </field>
             <field no="2.17" tag="31R" field-name="Reference Date" format="6!n[/6!n]" status="O">
                 <components>
-                    <component index="1" label="Date 1" format="6!n" status="M"/>
-                    <component index="2" label="Date 2" format="6!n" status="O"/>
+                    <component index="1" label="Date 1" format="6!n" pattern="YYMMDD" status="M"/>
+                    <component index="2" label="Date 2" format="6!n" pattern="YYMMDD" status="O"/>
                 </components>
             </field>
             <field no="2.18" tag="71F" field-name="Total Order/Contract Amount" format="3!a15d" status="O" />

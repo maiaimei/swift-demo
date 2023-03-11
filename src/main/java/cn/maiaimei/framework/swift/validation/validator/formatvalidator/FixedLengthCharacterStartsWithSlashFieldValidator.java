@@ -1,6 +1,7 @@
 package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 
 import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
+import cn.maiaimei.framework.swift.model.mt.config.FieldInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import cn.maiaimei.framework.swift.validation.validator.FormatFieldValidator;
@@ -22,7 +23,14 @@ public class FixedLengthCharacterStartsWithSlashFieldValidator implements Format
         String format = fieldComponentInfo.getFormat();
         int length = ValidatorUtils.getNumber(format);
         String type = ValidatorUtils.getType(format);
-        String valueToValidate = ValidatorUtils.trimStartSlash(format, value);
+        String valueToValidate = value;
+        if (!ValidatorUtils.isStartsWithSlash(value)) {
+            if (FieldInfo.class.isAssignableFrom(fieldComponentInfo.getClass())) {
+                return ValidationError.mustBeFixedLengthCharacterStartsWithSlash(label, length, type, value);
+            }
+        } else {
+            valueToValidate = ValidatorUtils.trimStartSlash(format, value);
+        }
         if (ValidatorUtils.ne(valueToValidate, length) || ValidatorUtils.containsOther(valueToValidate, type)) {
             return ValidationError.mustBeFixedLengthCharacterStartsWithSlash(label, length, type, value);
         }

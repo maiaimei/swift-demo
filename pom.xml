@@ -12,7 +12,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <spring-boot.version>2.7.3</spring-boot.version>
-        <pw-swift-core.version>SRU2021-9.2.11</pw-swift-core.version>
+        <pw-swift-core.version>SRU2022-9.3.12</pw-swift-core.version>
     </properties>
 
     <dependencyManagement>

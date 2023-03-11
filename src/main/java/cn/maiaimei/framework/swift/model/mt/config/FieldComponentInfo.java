@@ -11,4 +11,5 @@ public class FieldComponentInfo {
     private String pattern;
     private String status;
     private List<String> options;
+    private Boolean allowEmpty;
 }

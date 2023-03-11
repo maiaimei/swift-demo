@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
-public class IndexTotalFieldValidator implements FormatFieldValidator {
+public class NumberTotalFieldValidator implements FormatFieldValidator {
 
     private static final String FORMAT = "1!n/1!n";
     private static final String REGEX = "^[1-9]{1}/[1-9]{1}$";

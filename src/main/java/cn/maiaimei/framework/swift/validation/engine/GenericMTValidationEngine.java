@@ -13,7 +13,6 @@ import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import cn.maiaimei.framework.swift.validation.mt.MTValidation;
 import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
-import com.prowidesoftware.swift.model.SwiftMessage;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.Tag;
 import com.prowidesoftware.swift.model.field.Field;
@@ -27,7 +26,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,35 +56,17 @@ public class GenericMTValidationEngine {
     private Map<String, MTValidation> mtValidationMap;
 
     public ValidationResult validate(String message) {
-        SwiftMessage swiftMessage = SwiftUtils.parseToSwiftMessage(message);
-        String messageType = swiftMessage.getType();
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(swiftMessage, messageType);
-        return validate(mt, messageType);
+        AbstractMT mt = SwiftUtils.parseToAbstractMT(message);
+        return validate(mt, mt.getMessageType());
     }
 
     public ValidationResult validate(String message, String messageType) {
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(message, messageType);
+        AbstractMT mt = SwiftUtils.parseToAbstractMT(message);
         return validate(mt, messageType);
     }
 
     public ValidationResult validate(String message, String messageType, MessageConfig messageConfig) {
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(message, messageType);
-        return validate(mt, messageType, messageConfig);
-    }
-
-    public ValidationResult validate(SwiftMessage swiftMessage) {
-        String messageType = swiftMessage.getType();
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(swiftMessage, messageType);
-        return validate(mt, messageType);
-    }
-
-    public ValidationResult validate(SwiftMessage swiftMessage, String messageType) {
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(swiftMessage, messageType);
-        return validate(mt, messageType);
-    }
-
-    public ValidationResult validate(SwiftMessage swiftMessage, String messageType, MessageConfig messageConfig) {
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(swiftMessage, messageType);
+        AbstractMT mt = SwiftUtils.parseToAbstractMT(message);
         return validate(mt, messageType, messageConfig);
     }
 
@@ -162,11 +142,10 @@ public class GenericMTValidationEngine {
                     continue;
                 }
                 List<FieldInfo> fieldInfos = sequenceInfo.getFields();
-                validateMandatoryFields(result, fieldInfos, tags, sequenceName);
                 validateFields(result, mt, sequenceBlock, tags, fieldInfos, sequenceName);
                 int errorMessageCount = result.getErrorMessages().size();
                 if (errorMessageCount == result.getErrorMessages().size()) {
-                    validateByRules(result, newStandardEvaluationContext(sequenceBlock), mt, sequenceInfo.getRules());
+                    validateFieldsByRule(result, newStandardEvaluationContext(sequenceBlock), mt, sequenceInfo.getRules());
                 }
             }
         }
@@ -175,53 +154,30 @@ public class GenericMTValidationEngine {
     private void validateMessage(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig) {
         List<FieldInfo> fieldInfos = messageConfig.getFields();
         List<Tag> tags = block.getTags();
-        validateMandatoryFields(result, fieldInfos, tags, StringUtils.EMPTY);
         int errorMessageCount = result.getErrorMessages().size();
         validateFields(result, mt, block, tags, fieldInfos, StringUtils.EMPTY);
         if (errorMessageCount != result.getErrorMessages().size()) {
             return;
         }
-        validateByRules(result, newStandardEvaluationContext(block), mt, messageConfig.getRules());
-    }
-
-    // TODO: refactor: validateMandatoryFields and validateFields
-    private void validateMandatoryFields(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, String sequenceName) {
-        List<String> tagNames = tags.stream().map(Tag::getName).collect(Collectors.toList());
-        for (FieldInfo fieldInfo : fieldInfos) {
-            if (!ValidatorUtils.isMandatory(fieldInfo.getStatus())) {
-                continue;
-            }
-            String tag = fieldInfo.getTag();
-            if (!tagNames.contains(tag)) {
-                String label = getLabel(sequenceName, tag, fieldInfo.getFieldName());
-                result.addErrorMessage(ValidationError.mustBePresent(label));
-            }
-        }
+        validateFieldsByRule(result, newStandardEvaluationContext(block), mt, messageConfig.getRules());
     }
 
     private void validateFields(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, List<Tag> tags, List<FieldInfo> fieldInfos, String sequenceName) {
         StandardEvaluationContext context = newStandardEvaluationContext(block);
-        for (Tag tag : tags) {
-            String tagName = tag.getName();
-            String tagValue = tag.getValue();
-            Field field = block.getFieldByName(tagName);
-            Optional<FieldInfo> fieldInfoOptional = fieldInfos.stream().filter(w -> w.getTag().equals(tagName)).findAny();
-            if (!fieldInfoOptional.isPresent()) {
-                String label = getLabel(sequenceName, tagName, StringUtils.EMPTY);
-                result.addErrorMessage(label + " not config");
-                continue;
-            }
-            FieldInfo fieldInfo = fieldInfoOptional.get();
+        for (FieldInfo fieldInfo : fieldInfos) {
+            String tagName = fieldInfo.getTag();
+            String tagValue = block.getTagValue(tagName);
             String label = getLabel(sequenceName, tagName, fieldInfo.getFieldName());
+            Field field = block.getFieldByName(tagName);
             int errorMessageCount = result.getErrorMessages().size();
             fieldValidatorChain.handleValidation(result, fieldInfo, field, label, tagValue);
             if (errorMessageCount == result.getErrorMessages().size()) {
-                validateByRules(result, context, mt, fieldInfo.getRules());
+                validateFieldsByRule(result, context, mt, fieldInfo.getRules());
             }
         }
     }
 
-    private void validateByRules(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, List<RuleInfo> ruleInfos) {
+    private void validateFieldsByRule(ValidationResult result, StandardEvaluationContext context, AbstractMT mt, List<RuleInfo> ruleInfos) {
         if (CollectionUtils.isEmpty(ruleInfos)) {
             return;
         }

@@ -17,10 +17,10 @@ public class VariableLengthCharacterFieldValidator implements FormatFieldValidat
     @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         String format = fieldComponentInfo.getFormat();
-        int length = ValidatorUtils.getNumber(format);
+        int maxlength = ValidatorUtils.getNumber(format);
         String type = ValidatorUtils.getType(format);
-        if (ValidatorUtils.gt(value, length) || ValidatorUtils.containsOther(value, type)) {
-            return ValidationError.mustBeVariableLengthCharacter(label, length, type, value);
+        if (ValidatorUtils.gt(value, maxlength) || ValidatorUtils.containsOther(value, type)) {
+            return ValidationError.mustBeVariableLengthCharacter(label, maxlength, type, value);
         }
         return null;
     }

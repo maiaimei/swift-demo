@@ -2,7 +2,6 @@ package cn.maiaimei.framework.swift.validation.engine;
 
 import cn.maiaimei.framework.swift.model.mt.config.MessageConfig;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
-import com.prowidesoftware.swift.model.SwiftMessage;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +25,6 @@ public class ValidationEngine {
 
     public ValidationResult validate(String message, String messageType, MessageConfig messageConfig) {
         return genericMTValidationEngine.validate(message, messageType, messageConfig);
-    }
-
-    public ValidationResult validate(SwiftMessage swiftMessage) {
-        return genericMTValidationEngine.validate(swiftMessage);
-    }
-
-    public ValidationResult validate(SwiftMessage swiftMessage, String messageType) {
-        return genericMTValidationEngine.validate(swiftMessage, messageType);
-    }
-
-    public ValidationResult validate(SwiftMessage swiftMessage, String messageType, MessageConfig messageConfig) {
-        return genericMTValidationEngine.validate(swiftMessage, messageType, messageConfig);
     }
 
     public ValidationResult validate(AbstractMT mt, String messageType) {

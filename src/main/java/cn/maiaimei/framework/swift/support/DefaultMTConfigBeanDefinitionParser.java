@@ -56,6 +56,8 @@ public class DefaultMTConfigBeanDefinitionParser implements BeanDefinitionParser
     private static final String BEAN_NAME_PROPERTY = "beanName";
     private static final String ERROR_MESSAGE_ATTRIBUTE = "error-message";
     private static final String ERROR_MESSAGE_PROPERTY = "errorMessage";
+    private static final String ALLOW_EMPTY_ATTRIBUTE = "allow-empty";
+    private static final String ALLOW_EMPTY_PROPERTY = "allowEmpty";
     private static final String VERTICAL_LINE = "\\|";
 
     @Override
@@ -168,6 +170,7 @@ public class DefaultMTConfigBeanDefinitionParser implements BeanDefinitionParser
             String options = element.getAttribute(OPTIONS_ATTRIBUTE);
             builder.addPropertyValue(OPTIONS_ATTRIBUTE, options.split(VERTICAL_LINE));
         }
+        builder.addPropertyValue(ALLOW_EMPTY_PROPERTY, element.getAttribute(ALLOW_EMPTY_ATTRIBUTE));
     }
 
     private BeanDefinition parseRuleInfo(Element element) {

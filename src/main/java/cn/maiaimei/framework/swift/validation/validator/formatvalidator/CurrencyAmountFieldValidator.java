@@ -38,7 +38,7 @@ public class CurrencyAmountFieldValidator implements FormatFieldValidator {
         if (StringUtils.isNotBlank(errorMessage)) {
             return errorMessage;
         }
-        if (ValidatorUtils.gt(amount, 15)) {
+        if (ValidatorUtils.gt(amount, 15) && ValidatorUtils.containsOther(amount, "d")) {
             return ValidationError.mustBeVariableLengthCharacter(label, 15, "d", value);
         }
         // TODO: validate amount by currency
