@@ -5,6 +5,7 @@ import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -14,7 +15,10 @@ import java.util.List;
  * Validate field by enum
  */
 @Component
-public class EnumFieldValidator extends AbstractFieldValidatorHandler implements FieldValidator {
+public class EnumFieldValidator implements FieldValidator, FieldValidatorHandler {
+
+    @Autowired
+    private ComponentValidator componentValidator;
 
     @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
@@ -33,5 +37,10 @@ public class EnumFieldValidator extends AbstractFieldValidatorHandler implements
             return;
         }
         handleNextValidation(result, fieldComponentInfo, field, label, value);
+    }
+
+    @Override
+    public FieldValidatorHandler getNextValidationHandler() {
+        return componentValidator;
     }
 }

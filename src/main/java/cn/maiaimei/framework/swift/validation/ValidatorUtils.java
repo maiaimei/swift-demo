@@ -116,6 +116,10 @@ public final class ValidatorUtils {
         return ValidationConstants.MANDATORY.equals(status);
     }
 
+    public static boolean isRequired(String status) {
+        return ValidationConstants.REQUIRED_FLAG.contains(status);
+    }
+
     public static List<Integer> getNumbers(String format) {
         List<Integer> numbers = new ArrayList<>();
         Matcher matcher = ValidationConstants.NUMBER_PATTERN.matcher(format);

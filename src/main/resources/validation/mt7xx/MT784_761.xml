@@ -11,14 +11,14 @@
             <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
             <field no="2.3" tag="27" field-name="Sequence of Total" format="1!n/1!n" status="M" />
             <field no="2.4" tag="20" field-name="Undertaking Number" format="16x" status="M" />
-            <field no="2.5" tag="52A" field-name="Issuer" format="[[/1!a][/34x]$]4!a2!a2!c[3!c]" status="O">
+            <field no="2.5" tag="52A" field-name="Issuer" format="[/1!a][/34x]4!a2!a2!c[3!c]" status="O">
                 <components>
                     <component index="1" format="1!a" status="O"/>
                     <component index="2" format="34x" status="O"/>
                     <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
                 </components>
             </field>
-            <field no="2.5" tag="52D" field-name="Issuer" format="[[/1!a][/34x]$]4*35x" status="O">
+            <field no="2.5" tag="52D" field-name="Issuer" format="[/1!a][/34x]4*35x" status="O">
                 <components>
                     <component index="1" format="1!a" status="O"/>
                     <component index="2" format="34x" status="O"/>

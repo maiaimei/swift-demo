@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class TypeFieldValidatorComposite extends AbstractFieldValidatorHandler {
+public class TypeFieldValidatorComposite implements FieldValidatorHandler {
+    @Autowired
+    private EnumFieldValidator enumFieldValidator;
+
     @Autowired
     private Set<TypeFieldValidator> typeValidatorSet;
 
@@ -27,5 +30,10 @@ public class TypeFieldValidatorComposite extends AbstractFieldValidatorHandler {
             }
         }
         handleNextValidation(result, fieldComponentInfo, field, label, value);
+    }
+
+    @Override
+    public FieldValidatorHandler getNextValidationHandler() {
+        return enumFieldValidator;
     }
 }

@@ -13,7 +13,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 @Component
-public class ComponentValidator extends AbstractFieldValidatorHandler {
+public class ComponentValidator implements FieldValidatorHandler {
+
     @Autowired
     private FieldValidatorChain fieldValidatorChain;
 
@@ -54,5 +55,10 @@ public class ComponentValidator extends AbstractFieldValidatorHandler {
             String errorMessage = String.join(", ", res.getErrorMessages());
             result.addErrorMessage(label + StringUtils.SPACE + errorMessage + ", field value is " + value);
         }
+    }
+
+    @Override
+    public FieldValidatorHandler getNextValidationHandler() {
+        return null;
     }
 }

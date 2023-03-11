@@ -137,13 +137,15 @@
     Field Status
 
     "M" indicates a field is mandatory;
-    "O" indicates a field is optional.
+    "O" indicates a field is optional;
+    "E" indicates a field is Empty field.
                 ]]></xsd:documentation>
             </xsd:annotation>
             <xsd:simpleType>
                 <xsd:restriction base="xsd:string">
                     <xsd:enumeration value="M"/>
                     <xsd:enumeration value="O"/>
+                    <xsd:enumeration value="E"/>
                 </xsd:restriction>
             </xsd:simpleType>
         </xsd:attribute>
@@ -153,13 +155,6 @@
     Field Options
     
     Multiple option split by "|"
-                ]]></xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
-        <xsd:attribute name="allow-empty" type="xsd:boolean" default="false">
-            <xsd:annotation>
-                <xsd:documentation><![CDATA[
-                Mark whether a field is allowed to be an empty string
                 ]]></xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
@@ -243,13 +238,6 @@
     Component Options
     
     Multiple option split by "|"
-                ]]></xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
-        <xsd:attribute name="allow-empty" type="xsd:boolean" default="false">
-            <xsd:annotation>
-                <xsd:documentation><![CDATA[
-                Mark whether a field is allowed to be an empty string
                 ]]></xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
