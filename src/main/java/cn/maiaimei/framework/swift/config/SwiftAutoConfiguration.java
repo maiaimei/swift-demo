@@ -7,6 +7,5 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan({
         "cn.maiaimei.framework.swift"
 })
-//@ImportResource("classpath*:validation/**/*.xml")
 public class SwiftAutoConfiguration {
 }

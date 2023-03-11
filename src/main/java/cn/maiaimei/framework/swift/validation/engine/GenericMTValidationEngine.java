@@ -184,6 +184,7 @@ public class GenericMTValidationEngine {
         validateByRules(result, newStandardEvaluationContext(block), mt, messageConfig.getRules());
     }
 
+    // TODO: refactor: validateMandatoryFields and validateFields
     private void validateMandatoryFields(ValidationResult result, List<FieldInfo> fieldInfos, List<Tag> tags, String sequenceName) {
         List<String> tagNames = tags.stream().map(Tag::getName).collect(Collectors.toList());
         for (FieldInfo fieldInfo : fieldInfos) {
