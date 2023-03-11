@@ -11,7 +11,7 @@ import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import cn.maiaimei.framework.swift.validation.mt.MTValidation;
-import cn.maiaimei.framework.swift.validation.validator.MandatoryFieldValidator;
+import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftMessage;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
@@ -43,7 +43,7 @@ public class GenericMTValidationEngine {
     private boolean isSimpleLabel;
 
     @Autowired
-    private MandatoryFieldValidator mandatoryFieldValidator;
+    private FieldValidatorChain fieldValidatorChain;
 
     @Autowired(required = false)
     private Set<GenericMTConfig> genericMTConfigSet;
@@ -110,13 +110,15 @@ public class GenericMTValidationEngine {
             return;
         }
         if (CollectionUtils.isEmpty(genericMTConfigSet)) {
-            throw new ValidationException("Can't found validation config for MT" + messageType + ", please check whether the configuration file exists, or check whether validation is enabled");
+            throwValidationConfigNotFoundException(messageType);
+            return;
         }
         List<MessageConfig> messageConfigs = genericMTConfigSet.stream()
                 .filter(w -> w.getMessageType().equals(messageType))
                 .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(messageConfigs)) {
-            throw new ValidationException("Can't found validation config for MT" + messageType);
+            throwValidationConfigNotFoundException(messageType);
+            return;
         }
         if (messageConfigs.size() > 1) {
             throw new ValidationException("Can't determine which validation config to use for MT" + messageType);
@@ -211,7 +213,7 @@ public class GenericMTValidationEngine {
             FieldInfo fieldInfo = fieldInfoOptional.get();
             String label = getLabel(sequenceName, tagName, fieldInfo.getFieldName());
             int errorMessageCount = result.getErrorMessages().size();
-            mandatoryFieldValidator.handleValidation(result, fieldInfo, field, label, tagValue);
+            fieldValidatorChain.handleValidation(result, fieldInfo, field, label, tagValue);
             if (errorMessageCount == result.getErrorMessages().size()) {
                 validateByRules(result, context, mt, fieldInfo.getRules());
             }
@@ -270,6 +272,10 @@ public class GenericMTValidationEngine {
 
     private StandardEvaluationContext newStandardEvaluationContext(SwiftTagListBlock block) {
         return SpelUtils.newStandardEvaluationContext("block", block);
+    }
+
+    private void throwValidationConfigNotFoundException(String messageType) {
+        throw new ValidationException("Can't found validation config for MT" + messageType + ", please check whether the configuration file exists, or check whether validation is enabled");
     }
 
 }

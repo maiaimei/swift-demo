@@ -6,17 +6,13 @@ import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
 import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  * Validate mandatory field
  */
 @Component
-public class MandatoryFieldValidator implements FieldValidator, FieldValidatorHandler {
-
-    @Autowired
-    private FormatFieldValidatorComposite formatFieldValidatorComposite;
+public class MandatoryFieldValidator extends AbstractFieldValidatorHandler implements FieldValidator {
 
     @Override
     public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
@@ -37,10 +33,5 @@ public class MandatoryFieldValidator implements FieldValidator, FieldValidatorHa
             return;
         }
         handleNextValidation(result, fieldComponentInfo, field, label, value);
-    }
-
-    @Override
-    public FieldValidatorHandler getNextValidationHandler() {
-        return formatFieldValidatorComposite;
     }
 }

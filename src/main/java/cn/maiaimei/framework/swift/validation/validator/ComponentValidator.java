@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ComponentValidator implements FieldValidatorHandler {
+public class ComponentValidator extends AbstractFieldValidatorHandler {
     @Autowired
-    private MandatoryFieldValidator mandatoryFieldValidator;
+    private FieldValidatorChain fieldValidatorChain;
 
     @Override
     public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
@@ -28,22 +27,24 @@ public class ComponentValidator implements FieldValidatorHandler {
         if (StringUtils.isBlank(value) || CollectionUtils.isEmpty(componentInfos)) {
             return;
         }
-        ValidationResult res = new ValidationResult();
-        res.setErrorMessages(new ArrayList<>());
+        ValidationResult res = ValidationResult.newInstance();
         List<String> components = field.getComponents();
         List<String> componentLabels = field.getComponentLabels();
         for (ComponentInfo componentInfo : componentInfos) {
+            if (!CollectionUtils.isEmpty(res.getErrorMessages())) {
+                break;
+            }
             if (componentInfo.getIndex() != null) {
                 int index = componentInfo.getIndex() - 1;
                 String componentLabel = StringUtils.isNotBlank(componentInfo.getLabel()) ? componentInfo.getLabel() : componentLabels.get(index);
                 String componentValue = components.get(index);
-                mandatoryFieldValidator.handleValidation(res, componentInfo, field, componentLabel, componentValue);
+                fieldValidatorChain.handleValidation(res, componentInfo, field, componentLabel, componentValue);
             } else if (componentInfo.getStartIndex() != null && componentInfo.getEndIndex() != null) {
                 for (int i = componentInfo.getStartIndex(); i <= componentInfo.getEndIndex(); i++) {
                     int index = i - 1;
                     String componentLabel = componentLabels.get(index);
                     String componentValue = components.get(index);
-                    mandatoryFieldValidator.handleValidation(res, componentInfo, field, componentLabel, componentValue);
+                    fieldValidatorChain.handleValidation(res, componentInfo, field, componentLabel, componentValue);
                 }
             } else {
                 result.addErrorMessage(label + " component config error, either index or start-index and end-index must be present");
@@ -51,12 +52,7 @@ public class ComponentValidator implements FieldValidatorHandler {
         }
         if (!CollectionUtils.isEmpty(res.getErrorMessages())) {
             String errorMessage = String.join(", ", res.getErrorMessages());
-            result.addErrorMessage(label + " validate error, " + errorMessage + ", field value is " + value);
+            result.addErrorMessage(label + StringUtils.SPACE + errorMessage + ", field value is " + value);
         }
-    }
-
-    @Override
-    public FieldValidatorHandler getNextValidationHandler() {
-        return null;
     }
 }
