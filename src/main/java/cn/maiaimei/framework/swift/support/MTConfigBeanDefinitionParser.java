@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
 import java.util.List;
 import java.util.function.Function;
 
-public class DefaultMTConfigBeanDefinitionParser implements BeanDefinitionParser {
+public class MTConfigBeanDefinitionParser implements BeanDefinitionParser {
 
     private static final String ID_ATTRIBUTE = "id";
     private static final String MESSAGE_TYPE_ATTRIBUTE = "message-type";

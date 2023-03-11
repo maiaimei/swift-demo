@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -25,6 +26,9 @@ public class DateTimeFieldValidator implements PatternFieldValidator {
     private static final String VALIDATOR_PATTERN_01_FORMAT = "6!n[/6!n]";
     private static final String VALIDATOR_PATTERN_01_REGEX = "^[0-9]{6}(/[0-9]{6})?$";
     private static final Pattern VALIDATOR_PATTERN_01_PATTERN = Pattern.compile(VALIDATOR_PATTERN_01_REGEX);
+    private static final List<String> VALIDATOR_PATTERN_LIST = Collections.singletonList(
+            VALIDATOR_PATTERN_01
+    );
 
     private static final String PATTERN_YYYYMMDDHHMM = "yyyyMMddHHmm";
     private static final String PATTERN_YYYYMMDD = "yyyyMMdd";
@@ -46,10 +50,7 @@ public class DateTimeFieldValidator implements PatternFieldValidator {
                 }
             }
         }
-        if (VALIDATOR_PATTERN_01.equals(field.validatorPattern())) {
-            return true;
-        }
-        return false;
+        return VALIDATOR_PATTERN_LIST.contains(field.validatorPattern());
     }
 
     @Override

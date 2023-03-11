@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<currencies xmlns="https://maiamy.cn/schema/currencies"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/currencies 
+                         https://maiamy.cn/schema/currencies/currencies.xsd">
+    
+    <currency currency="CNY" fraction-digits="2" country-short-name="CN" country="China" />
+    <currency currency="USD" fraction-digits="2" country-short-name="US" />
+    <currency currency="GBP" fraction-digits="2" country-short-name="UK" />
+    <currency currency="CAD" fraction-digits="2" country-short-name="CA" country="Canada" />
+    
+</currencies>
