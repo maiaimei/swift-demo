@@ -57,6 +57,9 @@ public class MTConfigBeanDefinitionParser implements BeanDefinitionParser {
     private static final String ERROR_MESSAGE_ATTRIBUTE = "error-message";
     private static final String ERROR_MESSAGE_PROPERTY = "errorMessage";
     private static final String VERTICAL_LINE = "\\|";
+    private static final String CATALOGUE = "catalogue";
+    private static final String TRANSACTION = "transaction";
+    private static final String DESCRIPTION = "description";
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
@@ -78,14 +81,17 @@ public class MTConfigBeanDefinitionParser implements BeanDefinitionParser {
         String messageType = element.getAttribute(MESSAGE_TYPE_ATTRIBUTE);
         String indexMessageType = element.getAttribute(INDEX_MESSAGE_TYPE_ATTRIBUTE);
         String subMessageType = element.getAttribute(SUB_MESSAGE_TYPE_ATTRIBUTE);
-
+        
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
         if (GenericMTConfig.class.isAssignableFrom(beanClass)) {
             builder.addPropertyValue(MESSAGE_TYPE_PROPERTY, messageType);
         } else {
             builder.addPropertyValue(INDEX_MESSAGE_TYPE_PROPERTY, indexMessageType);
             builder.addPropertyValue(SUB_MESSAGE_TYPE_PROPERTY, subMessageType);
+            builder.addPropertyValue(CATALOGUE, DomUtils.getChildElementValueByTagName(element, CATALOGUE));
+            builder.addPropertyValue(TRANSACTION, DomUtils.getChildElementValueByTagName(element, TRANSACTION));
         }
+        builder.addPropertyValue(DESCRIPTION, DomUtils.getChildElementValueByTagName(element, DESCRIPTION));
         builder.addPropertyValue(BANK_TO_CORPORATE_PROPERTY, bankToCorporate);
         builder.addPropertyValue(CORPORATE_TO_BANK_PROPERTY, corporateToBank);
         parseFields(element, builder);

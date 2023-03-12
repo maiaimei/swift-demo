@@ -35,6 +35,8 @@
     <xsd:element name="mt798">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="catalogue" type="xsd:string" nillable="true" minOccurs="0"/>
+                <xsd:element name="transaction" type="xsd:string" nillable="true" minOccurs="0"/>
                 <xsd:element name="description" type="xsd:string" nillable="true" minOccurs="0"/>
                 <xsd:element name="fields" type="fields"/>
                 <xsd:element name="sequences" type="sequences" nillable="true" minOccurs="0"/>

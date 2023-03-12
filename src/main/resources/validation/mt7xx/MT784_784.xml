@@ -5,6 +5,8 @@
                          https://maiamy.cn/schema/swift/swift-mts.xsd">
     
     <mt798 id="mt784Config" index-message-type="784" sub-message-type="784" corporate-to-bank="true">
+        <catalogue>Guarantee / Standby Letter of Credit</catalogue>
+        <transaction>Application for Guarantee / Standby Letter of Credit – C2B</transaction>
         <description>Application for issuance of Guarantee / Standby / Undertaking Index</description>
         <fields>
             <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />

@@ -11,4 +11,5 @@ public class MessageConfig {
     private List<FieldInfo> fields;
     private List<SequenceInfo> sequences;
     private List<RuleInfo> rules;
+    private String description;
 }

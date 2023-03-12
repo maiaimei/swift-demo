@@ -20,9 +20,4 @@ public @interface Tag {
      * tags
      */
     String[] tags() default {};
-
-    /**
-     * component index
-     */
-    int index() default -1;
 }

@@ -30,9 +30,6 @@ public class MT798ToTransactionConverter implements Converter<MT798Messages, MT7
         List<MT798> extensionMessages = mt798Messages.getExtensionMessages();
         String subMessageType = getSubMessageType(indexMessage);
         MT798ToTransactionConverterStrategy strategy = getMT798ToTransactionConverterStrategy(subMessageType);
-        if (strategy == null) {
-            throw new MT798ToTransactionConvertException("Can't found MT798ToTransactionConverterStrategy for MT" + subMessageType);
-        }
         return strategy.convert(indexMessage, detailMessages, extensionMessages);
     }
 
@@ -44,7 +41,7 @@ public class MT798ToTransactionConverter implements Converter<MT798Messages, MT7
                 }
             }
         }
-        return null;
+        throw new MT798ToTransactionConvertException("Can't found MT798ToTransactionConverterStrategy for MT" + subMessageType);
     }
 
     private String getSubMessageType(MT798 indexMessage) {

@@ -14,12 +14,9 @@ public class MT798Message extends BaseMessage {
     @Tag("12")
     private String subMessageType;
 
+    @Tag("77E")
+    private String field77E;
+
     @Tag("27A")
     private String messageIndexTotal;
-
-    @Tag(value = "27A", index = 1)
-    private String messageIndex;
-
-    @Tag(value = "27A", index = 2)
-    private String messageTotal;
 }

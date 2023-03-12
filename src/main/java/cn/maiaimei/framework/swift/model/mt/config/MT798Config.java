@@ -8,4 +8,6 @@ import lombok.EqualsAndHashCode;
 public class MT798Config extends MessageConfig {
     private String indexMessageType;
     private String subMessageType;
+    private String catalogue;
+    private String transaction;
 }
