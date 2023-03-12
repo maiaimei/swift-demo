@@ -5,8 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Currencies {
-    private List<CurrencyInfo> currencies;
+public class CurrencyList {
+    private List<CurrencyInfo> items;
 
     @Data
     public static class CurrencyInfo {

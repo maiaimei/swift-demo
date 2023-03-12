@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.validation.validator.formatvalidator;
 
-import cn.maiaimei.framework.swift.model.Currencies;
+import cn.maiaimei.framework.swift.model.CurrencyList;
 import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
@@ -19,7 +19,7 @@ public class CurrencyAmountFieldValidator implements FormatFieldValidator {
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
     @Autowired
-    private Currencies currencies;
+    private CurrencyList currencyList;
 
     @Override
     public boolean supportsFormat(Field field, String format) {

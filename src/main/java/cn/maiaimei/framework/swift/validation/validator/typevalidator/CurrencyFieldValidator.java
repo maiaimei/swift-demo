@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.validation.validator.typevalidator;
 
-import cn.maiaimei.framework.swift.model.Currencies;
+import cn.maiaimei.framework.swift.model.CurrencyList;
 import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.validator.TypeFieldValidator;
 import com.prowidesoftware.swift.model.field.Field;
@@ -13,7 +13,7 @@ public class CurrencyFieldValidator implements TypeFieldValidator {
     private static final String TYPE = "Currency";
 
     @Autowired
-    private Currencies currencies;
+    private CurrencyList currencyList;
 
     @Override
     public boolean supportsType(Field field, String type) {

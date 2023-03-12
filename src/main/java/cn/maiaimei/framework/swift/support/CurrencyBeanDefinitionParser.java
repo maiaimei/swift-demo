@@ -1,6 +1,6 @@
 package cn.maiaimei.framework.swift.support;
 
-import cn.maiaimei.framework.swift.model.Currencies;
+import cn.maiaimei.framework.swift.model.CurrencyList;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedList;
@@ -27,7 +27,7 @@ public class CurrencyBeanDefinitionParser implements BeanDefinitionParser {
     public BeanDefinition parse(Element element, ParserContext parserContext) {
         List<Element> childElements = DomUtils.getChildElements(element);
         if (!CollectionUtils.isEmpty(childElements)) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(Currencies.class);
+            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(CurrencyList.class);
             ManagedList<BeanDefinition> beanDefinitions = new ManagedList<>(childElements.size());
             for (Element childElement : childElements) {
                 String country = childElement.getAttribute(COUNTRY_ATTRIBUTE);
@@ -35,15 +35,15 @@ public class CurrencyBeanDefinitionParser implements BeanDefinitionParser {
                 String currency = childElement.getAttribute(CURRENCY_ATTRIBUTE);
                 String fractionDigits = childElement.getAttribute(FRACTION_DIGITS_ATTRIBUTE);
 
-                BeanDefinitionBuilder b = BeanDefinitionBuilder.genericBeanDefinition(Currencies.CurrencyInfo.class);
+                BeanDefinitionBuilder b = BeanDefinitionBuilder.genericBeanDefinition(CurrencyList.CurrencyInfo.class);
                 b.addPropertyValue(COUNTRY_PROPERTY, country);
                 b.addPropertyValue(COUNTRY_SHORT_NAME_PROPERTY, countryShortName);
                 b.addPropertyValue(CURRENCY_PROPERTY, currency);
                 b.addPropertyValue(FRACTION_DIGITS_PROPERTY, fractionDigits);
                 beanDefinitions.add(b.getBeanDefinition());
             }
-            builder.addPropertyValue("currencies", beanDefinitions);
-            parserContext.getRegistry().registerBeanDefinition("currencies", builder.getBeanDefinition());
+            builder.addPropertyValue("items", beanDefinitions);
+            parserContext.getRegistry().registerBeanDefinition("currencyList", builder.getBeanDefinition());
         }
 
         return null;
