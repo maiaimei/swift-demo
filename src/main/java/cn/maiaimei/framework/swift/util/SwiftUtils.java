@@ -11,8 +11,6 @@ import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +19,7 @@ public class SwiftUtils {
     @SneakyThrows
     public static void populateMessage(SwiftTagListBlock block, BaseMessage message) {
         Class<? extends BaseMessage> clazz = message.getClass();
-        List<Field> declaredFields = getDeclaredFields(clazz);
+        List<Field> declaredFields = ReflectionUtils.getDeclaredFields(clazz);
         for (Field declaredField : declaredFields) {
             populateField(block, message, declaredField);
         }
@@ -30,14 +28,14 @@ public class SwiftUtils {
     @SneakyThrows
     public static void populateMessage(SwiftTagListBlock block, Map<String, List<SwiftTagListBlock>> sequenceMap, BaseMessage message) {
         Class<? extends BaseMessage> clazz = message.getClass();
-        List<Field> declaredFields = getDeclaredFields(clazz);
+        List<Field> declaredFields = ReflectionUtils.getDeclaredFields(clazz);
         for (Field declaredField : declaredFields) {
             if (BaseSequence.class.isAssignableFrom(declaredField.getType())) {
                 Sequence sequenceAnnotation = declaredField.getAnnotation(Sequence.class);
                 List<SwiftTagListBlock> blocks = sequenceMap.get(sequenceAnnotation.value());
                 declaredField.setAccessible(Boolean.TRUE);
                 Object seqObj = declaredField.get(message);
-                List<Field> sequenceDeclaredFields = getDeclaredFields(declaredField.getType());
+                List<Field> sequenceDeclaredFields = ReflectionUtils.getDeclaredFields(declaredField.getType());
                 for (Field sequenceDeclaredField : sequenceDeclaredFields) {
                     populateField(blocks.get(sequenceAnnotation.index()), seqObj, sequenceDeclaredField);
                 }
@@ -73,7 +71,7 @@ public class SwiftUtils {
             declaredField.set(target, field.getValue());
         } else {
             Object property = declaredField.get(target) != null ? declaredField.get(target) : declaredField.getType().newInstance();
-            List<Field> propertyDeclaredFields = getDeclaredFields(declaredField.getType());
+            List<Field> propertyDeclaredFields = ReflectionUtils.getDeclaredFields(declaredField.getType());
             for (Field propertyDeclaredField : propertyDeclaredFields) {
                 Tag tagAnnotation = propertyDeclaredField.getAnnotation(Tag.class);
                 if ((tagAnnotation != null && tagAnnotation.value().equals(field.getName()))) {
@@ -88,16 +86,6 @@ public class SwiftUtils {
             declaredField.set(target, property);
         }
         declaredField.setAccessible(Boolean.FALSE);
-    }
-
-    public static List<Field> getDeclaredFields(Class<?> clazz) {
-        List<Field> fields = new ArrayList<>();
-        while (clazz != null) {
-            Field[] declaredFields = clazz.getDeclaredFields();
-            fields.addAll(Arrays.asList(declaredFields));
-            clazz = clazz.getSuperclass();
-        }
-        return fields;
     }
 
     @SneakyThrows

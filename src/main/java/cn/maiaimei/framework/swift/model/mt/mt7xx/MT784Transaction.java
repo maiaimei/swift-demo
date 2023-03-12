@@ -8,6 +8,9 @@ import cn.maiaimei.framework.swift.model.mt.field.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Application for Issuance of Guarantee / Standby Letter of Credit / Undertaking
+ */
 public class MT784Transaction extends MT798Transaction {
 
     @Data

@@ -1,9 +1,14 @@
 package cn.maiaimei.framework.swift.model.mt.mt7xx;
 
 import cn.maiaimei.framework.swift.annotation.Tag;
+import cn.maiaimei.framework.swift.model.mt.field.Field23X;
+import cn.maiaimei.framework.swift.model.mt.field.Field29S;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Notification of Draft or Issue of Guarantee / Standby Letter of Credit / Undertaking
+ */
 public class MT762Transaction extends MT798Transaction {
     @Data
     @EqualsAndHashCode(callSuper = true)
@@ -31,9 +36,9 @@ public class MT762Transaction extends MT798Transaction {
         @Tag("72Z")
         private String corporateToBankInformation;
         @Tag("23X")
-        private String fileIdentification;
+        private Field23X fileIdentification;
         @Tag("29S")
-        private String customerIdentifier;
+        private Field29S customerIdentifier;
         @Tag("29P")
         private String processingBankIdentifier;
         @Tag("29U")
