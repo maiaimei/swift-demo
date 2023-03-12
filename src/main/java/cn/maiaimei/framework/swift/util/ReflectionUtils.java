@@ -23,10 +23,10 @@ public class ReflectionUtils {
     /**
      * get declared fields for super class
      */
-    public static List<Field> getSuperclassDeclaredFields(Class<?> clazz, String superclassName) {
+    public static List<Field> getSuperclassDeclaredFields(Class<?> clazz, Class<?> superclass) {
         List<Field> fields = new ArrayList<>();
         while (clazz != null) {
-            if (clazz.getSimpleName().equals(superclassName)) {
+            if (superclass == clazz) {
                 Field[] declaredFields = clazz.getDeclaredFields();
                 fields.addAll(Arrays.asList(declaredFields));
                 break;

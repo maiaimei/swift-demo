@@ -8,8 +8,6 @@ import cn.maiaimei.framework.swift.processor.mt.mt7xx.AbstractMT798SequenceProce
 import cn.maiaimei.framework.swift.util.SwiftUtils;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
-import com.prowidesoftware.swift.model.field.Field12;
-import com.prowidesoftware.swift.model.field.Field20;
 import com.prowidesoftware.swift.model.field.Field77E;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import lombok.SneakyThrows;
@@ -77,18 +75,17 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
     @SneakyThrows
     private void mt798ToBaseMessage(MT798 mt, MT798BaseMessage message) {
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
-        SwiftTagListBlock subBlockBeforeFirst77E = block4.getSubBlockBeforeFirst(Field77E.NAME, Boolean.FALSE);
-        SwiftTagListBlock subBlockAfterFirst77E = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
-        String transactionReferenceNumber = subBlockBeforeFirst77E.getTagByName(Field20.NAME).getValue();
-        String subMessageType = subBlockBeforeFirst77E.getTagByName(Field12.NAME).getValue();
+        SwiftTagListBlock block = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
+        String transactionReferenceNumber = mt.getField20().getValue();
+        String subMessageType = mt.getField12().getValue();
         message.setTransactionReferenceNumber(transactionReferenceNumber);
         message.setSubMessageType(subMessageType);
         if (message.getClass().isAnnotationPresent(WithSequence.class)) {
             AbstractMT798SequenceProcessor sequenceProcessor = getMT798SequenceProcessor(subMessageType);
             Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
-            SwiftUtils.populateMessage(subBlockAfterFirst77E, sequenceMap, message);
+            SwiftUtils.populateMessage(block, sequenceMap, message);
         } else {
-            SwiftUtils.populateMessage(subBlockAfterFirst77E, message);
+            SwiftUtils.populateMessage(block, message);
         }
     }
 

@@ -19,11 +19,11 @@ public class MT784Transaction extends MT798Transaction {
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784IndexMessage extends MT798IndexMessage {
-        @Tag("27A")
-        private String customerReferenceNumber;
         @Tag("21A")
-        private String customerBusinessReference;
+        private String customerReferenceNumber;
         @Tag("21T")
+        private String customerBusinessReference;
+        @Tag("25F")
         private String textPurpose;
         @Tag("21P")
         private String bankReferenceNumber;
@@ -79,7 +79,7 @@ public class MT784Transaction extends MT798Transaction {
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784DetailMessage extends MT798DetailMessage {
-        @Tag("27A")
+        @Tag("21A")
         private String customerReferenceNumber;
         @Sequence("A")
         private MT784DetailSequenceA sequenceA;

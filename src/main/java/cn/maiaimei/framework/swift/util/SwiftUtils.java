@@ -18,7 +18,7 @@ public class SwiftUtils {
     @SneakyThrows
     public static void populateMessage(SwiftTagListBlock block, BaseMessage message) {
         Class<? extends BaseMessage> clazz = message.getClass();
-        List<Field> declaredFields = ReflectionUtils.getAllDeclaredFields(clazz);
+        List<Field> declaredFields = ReflectionUtils.getSelfDeclaredFields(clazz);
         for (Field declaredField : declaredFields) {
             populateField(block, message, declaredField);
         }
@@ -27,14 +27,14 @@ public class SwiftUtils {
     @SneakyThrows
     public static void populateMessage(SwiftTagListBlock block, Map<String, List<SwiftTagListBlock>> sequenceMap, BaseMessage message) {
         Class<? extends BaseMessage> clazz = message.getClass();
-        List<Field> declaredFields = ReflectionUtils.getAllDeclaredFields(clazz);
+        List<Field> declaredFields = ReflectionUtils.getSelfDeclaredFields(clazz);
         for (Field declaredField : declaredFields) {
             if (BaseSequence.class.isAssignableFrom(declaredField.getType())) {
                 Sequence sequenceAnnotation = declaredField.getAnnotation(Sequence.class);
                 List<SwiftTagListBlock> blocks = sequenceMap.get(sequenceAnnotation.value());
                 declaredField.setAccessible(Boolean.TRUE);
                 Object seqObj = declaredField.get(message);
-                List<Field> sequenceDeclaredFields = ReflectionUtils.getAllDeclaredFields(declaredField.getType());
+                List<Field> sequenceDeclaredFields = ReflectionUtils.getSelfDeclaredFields(declaredField.getType());
                 for (Field sequenceDeclaredField : sequenceDeclaredFields) {
                     populateField(blocks.get(sequenceAnnotation.index()), seqObj, sequenceDeclaredField);
                 }
