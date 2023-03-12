@@ -1,10 +1,13 @@
-package cn.maiaimei.framework.swift.model.mt.mt7xx;
+package cn.maiaimei.framework.swift.model.mt.mt7xx.transaction;
 
 import cn.maiaimei.framework.swift.annotation.Sequence;
-import cn.maiaimei.framework.swift.annotation.SequenceMessage;
 import cn.maiaimei.framework.swift.annotation.Tag;
+import cn.maiaimei.framework.swift.annotation.WithSequence;
 import cn.maiaimei.framework.swift.model.BaseSequence;
-import cn.maiaimei.framework.swift.model.mt.field.*;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798DetailMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798ExtensionMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798IndexMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Transaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,11 +32,11 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("13E")
         private String messageCreationDateTime;
         @Tag("23E")
-        private Field23E methodOfTransmission;
+        private String methodOfTransmission;
         @Tag("22K")
-        private Field22K typeOfUndertaking;
+        private String typeOfUndertaking;
         @Tag("12H")
-        private Field12H wordingOfUndertaking;
+        private String wordingOfUndertaking;
         @Tag("22B")
         private String specialTerms;
         @Tag("12L")
@@ -45,11 +48,11 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("25A")
         private String chargesAccount;
         @Tag("20E")
-        private Field20E reference;
+        private String reference;
         @Tag("31R")
-        private Field31R referenceDate;
+        private String referenceDate;
         @Tag("71F")
-        private CurrencyAmount totalOrderContractAmount;
+        private String totalOrderContractAmount;
         @Tag("37J")
         private String undertakingValueInPercent;
         @Tag("49Z")
@@ -63,16 +66,16 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("72Z")
         private String corporateToBankInformation;
         @Tag("23X")
-        private Field23X fileIdentification;
+        private String fileIdentification;
         @Tag("29S")
-        private Field29S customerIdentifier;
+        private String customerIdentifier;
         @Tag("29P")
         private String processingBankIdentifier;
         @Tag("29U")
         private String leadBankIdentifier;
     }
 
-    @SequenceMessage
+    @WithSequence
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784DetailMessage extends MT798DetailMessage {
@@ -90,7 +93,7 @@ public class MT784Transaction extends MT798Transaction {
     @EqualsAndHashCode(callSuper = true)
     public static class MT784DetailSequenceA extends BaseSequence {
         @Tag("15A")
-        private String field15A;
+        private String field15A = "";
         @Tag("27")
         private String sequenceOfTotal;
         @Tag("22A")
@@ -98,14 +101,14 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("72Z")
         private String senderToReceiverInformation;
         @Tag("23X")
-        private Field23X fileIdentification;
+        private String fileIdentification;
     }
 
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784DetailSequenceB extends BaseSequence {
         @Tag("15B")
-        private String field15B;
+        private String field15B = "";
         @Tag("20")
         private String undertakingNumber;
         @Tag("30")
@@ -113,7 +116,7 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("22D")
         private String formOfUndertaking;
         @Tag("40C")
-        private Field40C applicableRules;
+        private String applicableRules;
         @Tag("23B")
         private String expiryType;
         @Tag("31E")
@@ -124,22 +127,32 @@ public class MT784Transaction extends MT798Transaction {
         private String applicant;
         @Tag("51")
         private String obligorInstructingParty;
-        @Tag(value = "52a", tags = {"52A", "52D"})
-        private Issuer issuer;
-        @Tag(value = "59a", tags = {"59", "59A"})
-        private Beneficiary beneficiary;
-        @Tag(value = "56a", tags = {"56A", "56D"})
-        private AdvisingBank advisingBank;
+        @Tag("52A")
+        private String issuer4Field52A;
+        @Tag("52D")
+        private String issuer4Field52D;
+        @Tag("59")
+        private String beneficiary4Field59;
+        @Tag("59A")
+        private String beneficiary4Field59A;
+        @Tag("56A")
+        private String advisingBank4Field56A;
+        @Tag("56D")
+        private String advisingBank4Field56D;
         @Tag("23")
         private String advisingBankReference;
-        @Tag(value = "57a", tags = {"57A", "57D"})
-        private AdviseThroughBank adviseThroughBank;
+        @Tag("57A")
+        private String adviseThroughBank4Field57A;
+        @Tag("57D")
+        private String adviseThroughBank4Field57D;
         @Tag("32B")
-        private CurrencyAmount undertakingAmount;
+        private String undertakingAmount;
         @Tag("39D")
         private String additionalAmountInformation;
-        @Tag(value = "41a", tags = {"41F", "41G"})
-        private AvailableWith availableWith;
+        @Tag("41F")
+        private String availableWith4Field41F;
+        @Tag("41G")
+        private String availableWith4Field41G;
         @Tag("71D")
         private String charges;
         @Tag("45C")
@@ -148,12 +161,14 @@ public class MT784Transaction extends MT798Transaction {
         private String undertakingTermsAndConditions;
         @Tag("49")
         private String confirmationInstructions;
-        @Tag(value = "58a", tags = {"58A", "58D"})
-        private RequestedConfirmationParty requestedConfirmationParty;
+        @Tag("58A")
+        private String requestedConfirmationParty4Field58A;
+        @Tag("58D")
+        private String requestedConfirmationParty4Field58D;
         @Tag("44H")
-        private Field44H governingLawAndOrPlaceOfJurisdiction;
+        private String governingLawAndOrPlaceOfJurisdiction;
         @Tag("23F")
-        private Field23F automaticExtensionPeriod;
+        private String automaticExtensionPeriod;
         @Tag("78")
         private String automaticExtensionNonExtensionNotification;
         @Tag("26E")
@@ -169,24 +184,24 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("45L")
         private String underlyingTransactionDetails;
         @Tag("24E")
-        private Field24E deliveryOfOriginalUndertaking;
+        private String deliveryOfOriginalUndertaking;
         @Tag("24G")
-        private Field24G deliveryToCollectionBy;
+        private String deliveryToCollectionBy;
     }
 
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784DetailSequenceC extends BaseSequence {
         @Tag("15C")
-        private String field15C;
+        private String field15C = "";
         @Tag("31C")
         private String requestedDateOfIssue;
         @Tag("22D")
         private String formOfUndertaking;
         @Tag("40C")
-        private Field40C applicableRules;
+        private String applicableRules;
         @Tag("22K")
-        private Field22K typeOfUndertaking;
+        private String typeOfUndertaking;
         @Tag("23B")
         private String expiryType;
         @Tag("31E")
@@ -197,18 +212,22 @@ public class MT784Transaction extends MT798Transaction {
         private String applicant;
         @Tag("51")
         private String obligorInstructingParty;
-        @Tag(value = "52a", tags = {"52A", "52D"})
-        private Issuer issuer;
+        @Tag("52A")
+        private String issuer4Field52A;
+        @Tag("52D")
+        private String issuer4Field52D;
         @Tag("59")
-        private Field59 beneficiary;
+        private String beneficiary;
         @Tag("32B")
-        private CurrencyAmount undertakingAmount;
+        private String undertakingAmount;
         @Tag("39D")
         private String additionalAmountInformation;
         @Tag("71D")
         private String charges;
-        @Tag(value = "41a", tags = {"41F", "41G"})
-        private AvailableWith availableWith;
+        @Tag("41F")
+        private String availableWith4Field41F;
+        @Tag("41G")
+        private String availableWith4Field41G;
         @Tag("45C")
         private String presentationInstructions;
         @Tag("77L")
@@ -218,9 +237,9 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("40D")
         private String standardWordingRequestedLanguage;
         @Tag("44H")
-        private Field44H governingLawAndOrPlaceOfJurisdiction;
+        private String governingLawAndOrPlaceOfJurisdiction;
         @Tag("23F")
-        private Field23F automaticExtensionPeriod;
+        private String automaticExtensionPeriod;
         @Tag("78")
         private String automaticExtensionNonExtensionNotification;
         @Tag("26E")
@@ -236,9 +255,9 @@ public class MT784Transaction extends MT798Transaction {
         @Tag("45L")
         private String underlyingTransactionDetails;
         @Tag("24E")
-        private Field24E deliveryOfOriginalUndertaking;
+        private String deliveryOfOriginalUndertaking;
         @Tag("24G")
-        private Field24G deliveryToCollectionBy;
+        private String deliveryToCollectionBy;
     }
 
     @Data
@@ -250,8 +269,10 @@ public class MT784Transaction extends MT798Transaction {
         private String sequenceOfTotal;
         @Tag("20")
         private String undertakingNumber;
-        @Tag(value = "52a", tags = {"52A", "52D"})
-        private Issuer issuer;
+        @Tag("52A")
+        private String issuer4Field52A;
+        @Tag("52D")
+        private String issuer4Field52D;
         @Tag("77U")
         private String undertakingTermsAndConditions;
         @Tag("77L")

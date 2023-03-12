@@ -1,8 +1,9 @@
 package cn.maiaimei.framework.swift.converter.mt.mt7xx;
 
-import cn.maiaimei.framework.swift.annotation.SequenceMessage;
+import cn.maiaimei.framework.swift.annotation.WithSequence;
 import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.transaction.MT784Transaction;
 import cn.maiaimei.framework.swift.processor.mt.mt7xx.AbstractMT798SequenceProcessor;
 import cn.maiaimei.framework.swift.util.SwiftUtils;
 import com.prowidesoftware.swift.model.SwiftBlock4;
@@ -74,7 +75,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
     }
 
     @SneakyThrows
-    private void mt798ToBaseMessage(MT798 mt, MT798Message message) {
+    private void mt798ToBaseMessage(MT798 mt, MT798BaseMessage message) {
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
         SwiftTagListBlock subBlockBeforeFirst77E = block4.getSubBlockBeforeFirst(Field77E.NAME, Boolean.FALSE);
         SwiftTagListBlock subBlockAfterFirst77E = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
@@ -82,7 +83,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         String subMessageType = subBlockBeforeFirst77E.getTagByName(Field12.NAME).getValue();
         message.setTransactionReferenceNumber(transactionReferenceNumber);
         message.setSubMessageType(subMessageType);
-        if (message.getClass().isAnnotationPresent(SequenceMessage.class)) {
+        if (message.getClass().isAnnotationPresent(WithSequence.class)) {
             AbstractMT798SequenceProcessor sequenceProcessor = getMT798SequenceProcessor(subMessageType);
             Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
             SwiftUtils.populateMessage(subBlockAfterFirst77E, sequenceMap, message);

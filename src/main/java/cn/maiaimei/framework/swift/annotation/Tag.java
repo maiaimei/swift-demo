@@ -3,7 +3,7 @@ package cn.maiaimei.framework.swift.annotation;
 import java.lang.annotation.*;
 
 /**
- * SWIFT MT Tag
+ * SWIFT MT Field Tag
  *
  * @author maiaimei
  */
@@ -15,9 +15,4 @@ public @interface Tag {
      * tag
      */
     String value();
-
-    /**
-     * tags
-     */
-    String[] tags() default {};
 }

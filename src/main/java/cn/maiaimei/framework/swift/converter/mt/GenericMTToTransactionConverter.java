@@ -1,4 +1,4 @@
-package cn.maiaimei.framework.swift.converter;
+package cn.maiaimei.framework.swift.converter.mt;
 
 import cn.maiaimei.framework.swift.model.BaseTransaction;
 import com.prowidesoftware.swift.model.mt.AbstractMT;

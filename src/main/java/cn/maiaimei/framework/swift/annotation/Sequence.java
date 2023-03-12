@@ -16,5 +16,8 @@ public @interface Sequence {
      */
     String value();
 
+    /**
+     * sequence index
+     */
     int index() default 0;
 }

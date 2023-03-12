@@ -1,8 +1,10 @@
-package cn.maiaimei.framework.swift.model.mt.mt7xx;
+package cn.maiaimei.framework.swift.model.mt.mt7xx.transaction;
 
 import cn.maiaimei.framework.swift.annotation.Tag;
-import cn.maiaimei.framework.swift.model.mt.field.Field23X;
-import cn.maiaimei.framework.swift.model.mt.field.Field29S;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798DetailMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798ExtensionMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798IndexMessage;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Transaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,9 +38,9 @@ public class MT762Transaction extends MT798Transaction {
         @Tag("72Z")
         private String corporateToBankInformation;
         @Tag("23X")
-        private Field23X fileIdentification;
+        private String fileIdentification;
         @Tag("29S")
-        private Field29S customerIdentifier;
+        private String customerIdentifier;
         @Tag("29P")
         private String processingBankIdentifier;
         @Tag("29U")

@@ -7,7 +7,10 @@ import java.util.List;
 
 public class ReflectionUtils {
 
-    public static List<Field> getDeclaredFields(Class<?> clazz) {
+    /**
+     * get declared fields for current class and super class
+     */
+    public static List<Field> getAllDeclaredFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         while (clazz != null) {
             Field[] declaredFields = clazz.getDeclaredFields();
@@ -15,6 +18,29 @@ public class ReflectionUtils {
             clazz = clazz.getSuperclass();
         }
         return fields;
+    }
+
+    /**
+     * get declared fields for super class
+     */
+    public static List<Field> getSuperclassDeclaredFields(Class<?> clazz, String superclassName) {
+        List<Field> fields = new ArrayList<>();
+        while (clazz != null) {
+            if (clazz.getSimpleName().equals(superclassName)) {
+                Field[] declaredFields = clazz.getDeclaredFields();
+                fields.addAll(Arrays.asList(declaredFields));
+                break;
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
+    }
+
+    /**
+     * get declared fields for current class
+     */
+    public static List<Field> getSelfDeclaredFields(Class<?> clazz) {
+        return Arrays.asList(clazz.getDeclaredFields());
     }
 
     public ReflectionUtils() {
