@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * Application for Issuance of Guarantee / Standby Letter of Credit / Undertaking
  */
 public class MT784Transaction extends MT798Transaction {
-
+    
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784IndexMessage extends MT798IndexMessage {

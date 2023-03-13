@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
 import java.util.List;
 import java.util.function.Function;
 
-public class MTConfigBeanDefinitionParser implements BeanDefinitionParser {
+public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
 
     private static final String ID_ATTRIBUTE = "id";
     private static final String MESSAGE_TYPE_ATTRIBUTE = "message-type";
@@ -81,7 +81,7 @@ public class MTConfigBeanDefinitionParser implements BeanDefinitionParser {
         String messageType = element.getAttribute(MESSAGE_TYPE_ATTRIBUTE);
         String indexMessageType = element.getAttribute(INDEX_MESSAGE_TYPE_ATTRIBUTE);
         String subMessageType = element.getAttribute(SUB_MESSAGE_TYPE_ATTRIBUTE);
-        
+
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
         if (GenericMTConfig.class.isAssignableFrom(beanClass)) {
             builder.addPropertyValue(MESSAGE_TYPE_PROPERTY, messageType);

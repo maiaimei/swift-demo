@@ -1,22 +1,22 @@
 package cn.maiaimei.framework.swift.validation.engine;
 
-import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
+import cn.maiaimei.framework.swift.exception.ProcessorNotFoundException;
 import cn.maiaimei.framework.swift.exception.ValidationException;
 import cn.maiaimei.framework.swift.model.mt.config.*;
-import cn.maiaimei.framework.swift.processor.DefaultMTSequenceProcessor;
-import cn.maiaimei.framework.swift.processor.MTSequenceProcessor;
+import cn.maiaimei.framework.swift.processor.DefaultMessageSequenceProcessor;
+import cn.maiaimei.framework.swift.processor.MessageSequenceProcessor;
 import cn.maiaimei.framework.swift.util.SpelUtils;
-import cn.maiaimei.framework.swift.util.SwiftUtils;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
-import cn.maiaimei.framework.swift.validation.mt.MTValidation;
+import cn.maiaimei.framework.swift.validation.mt.MessageValidation;
 import cn.maiaimei.framework.swift.validation.validator.FieldValidatorChain;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.Tag;
 import com.prowidesoftware.swift.model.field.Field;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,26 +47,29 @@ public class GenericMTValidationEngine {
     private Set<GenericMTConfig> genericMTConfigSet;
 
     @Autowired
-    private Set<MTSequenceProcessor> mtSequenceProcessorSet;
+    private Set<MessageSequenceProcessor> messageSequenceProcessorSet;
 
     @Autowired
-    private DefaultMTSequenceProcessor defaultMTSequenceProcessor;
+    private DefaultMessageSequenceProcessor defaultMTSequenceProcessor;
 
     @Autowired(required = false)
-    private Map<String, MTValidation> mtValidationMap;
+    private Map<String, MessageValidation> messageValidationMap;
 
+    @SneakyThrows
     public ValidationResult validate(String message) {
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(message);
+        AbstractMT mt = AbstractMT.parse(message);
         return validate(mt, mt.getMessageType());
     }
 
+    @SneakyThrows
     public ValidationResult validate(String message, String messageType) {
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(message);
+        AbstractMT mt = AbstractMT.parse(message);
         return validate(mt, messageType);
     }
 
+    @SneakyThrows
     public ValidationResult validate(String message, String messageType, MessageConfig messageConfig) {
-        AbstractMT mt = SwiftUtils.parseToAbstractMT(message);
+        AbstractMT mt = AbstractMT.parse(message);
         return validate(mt, messageType, messageConfig);
     }
 
@@ -121,7 +124,7 @@ public class GenericMTValidationEngine {
 
     private void validateSequenceMessage(ValidationResult result, AbstractMT mt, SwiftTagListBlock block, MessageConfig messageConfig, String messageType) {
         validateMessage(result, mt, block, messageConfig);
-        MTSequenceProcessor sequenceProcessor = getMTSequenceProcessor(messageType);
+        MessageSequenceProcessor sequenceProcessor = getMessageSequenceProcessor(messageType);
         Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
         if (CollectionUtils.isEmpty(sequenceMap)) {
             result.addErrorMessage("Can't found sequence block for MT" + messageType + ", please configure bean which must implements MTSequenceProcessor");
@@ -188,12 +191,12 @@ public class GenericMTValidationEngine {
                 break;
             }
             if (StringUtils.isNotBlank(ruleInfo.getBeanName())) {
-                MTValidation mtValidation = null;
-                if (mtValidationMap != null) {
-                    mtValidation = mtValidationMap.get(ruleInfo.getBeanName());
+                MessageValidation messageValidation = null;
+                if (messageValidationMap != null) {
+                    messageValidation = messageValidationMap.get(ruleInfo.getBeanName());
                 }
-                if (mtValidation != null) {
-                    mtValidation.validate(result, mt);
+                if (messageValidation != null) {
+                    messageValidation.validate(result, mt);
                 }
             }
         }
@@ -215,16 +218,16 @@ public class GenericMTValidationEngine {
         return String.format(LABEL_IN_SEQUENCE, sequenceName, tagName, fieldName);
     }
 
-    private MTSequenceProcessor getMTSequenceProcessor(String messageType) {
+    private MessageSequenceProcessor getMessageSequenceProcessor(String messageType) {
         if (StringUtils.isBlank(messageType)) {
             return defaultMTSequenceProcessor;
         }
-        for (MTSequenceProcessor processor : mtSequenceProcessorSet) {
+        for (MessageSequenceProcessor processor : messageSequenceProcessorSet) {
             if (processor.supportsMessageType(messageType)) {
                 return processor;
             }
         }
-        throw new MTSequenceProcessorNotFoundException(messageType);
+        throw new ProcessorNotFoundException("Can't found MTSequenceProcessor for MT" + messageType);
     }
 
     private StandardEvaluationContext newStandardEvaluationContext(SwiftTagListBlock block) {

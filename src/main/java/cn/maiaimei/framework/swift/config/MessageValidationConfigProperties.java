@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "swift.mt.validation")
-public class MTNxxValidationConfigProperties {
+public class MessageValidationConfigProperties {
     /**
      * Whether to set simple error message
      */

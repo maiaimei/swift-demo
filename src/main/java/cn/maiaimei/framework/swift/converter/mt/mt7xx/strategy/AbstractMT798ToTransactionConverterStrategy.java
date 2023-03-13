@@ -1,7 +1,7 @@
-package cn.maiaimei.framework.swift.converter.mt.mt7xx;
+package cn.maiaimei.framework.swift.converter.mt.mt7xx.strategy;
 
 import cn.maiaimei.framework.swift.annotation.WithSequence;
-import cn.maiaimei.framework.swift.exception.MTSequenceProcessorNotFoundException;
+import cn.maiaimei.framework.swift.exception.ProcessorNotFoundException;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.transaction.MT784Transaction;
 import cn.maiaimei.framework.swift.processor.mt.mt7xx.AbstractMT798SequenceProcessor;
@@ -23,21 +23,24 @@ import java.util.function.Supplier;
 public abstract class AbstractMT798ToTransactionConverterStrategy implements MT798ToTransactionConverterStrategy {
 
     @Autowired
+    private SwiftUtils swiftUtils;
+
+    @Autowired
     private Set<AbstractMT798SequenceProcessor> mt798SequenceProcessorSet;
 
     @Override
     public MT798Transaction convert(MT798 indexMessage, List<MT798> detailMessages, List<MT798> extensionMessages) {
-        Supplier<MT798IndexMessage> indexSupplier = this::getMT798IndexMessage;
-        Supplier<MT798DetailMessage> detailSupplier = this::getMT798DetailMessage;
-        Supplier<MT798ExtensionMessage> extensionSupplier = this::getMT798ExtensionMessage;
+        Supplier<MT798IndexMessage> indexSupplier = this::getIndexMessage;
+        Supplier<MT798DetailMessage> detailSupplier = this::getDetailMessage;
+        Supplier<MT798ExtensionMessage> extensionSupplier = this::getExtensionMessage;
         return doConvert(indexMessage, detailMessages, extensionMessages, indexSupplier, detailSupplier, extensionSupplier);
     }
 
-    protected abstract MT798IndexMessage getMT798IndexMessage();
+    protected abstract MT798IndexMessage getIndexMessage();
 
-    protected abstract MT798DetailMessage getMT798DetailMessage();
+    protected abstract MT798DetailMessage getDetailMessage();
 
-    protected abstract MT798ExtensionMessage getMT798ExtensionMessage();
+    protected abstract MT798ExtensionMessage getExtensionMessage();
 
     private MT798Transaction doConvert(MT798 indexMessage,
                                        List<MT798> detailMessages,
@@ -47,6 +50,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
                                        Supplier<MT798ExtensionMessage> extensionSupplier) {
         MT798IndexMessage indexMsg = indexSupplier.get();
         mt798ToBaseMessage(indexMessage, indexMsg);
+
         List<MT798DetailMessage> detailMsgs = null;
         if (!CollectionUtils.isEmpty(detailMessages)) {
             detailMsgs = new ArrayList<>();
@@ -56,6 +60,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
                 detailMsgs.add(detailMsg);
             }
         }
+
         List<MT798ExtensionMessage> extensionMsgs = null;
         if (!CollectionUtils.isEmpty(extensionMessages)) {
             extensionMsgs = new ArrayList<>();
@@ -65,6 +70,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
                 extensionMsgs.add(extensionMsg);
             }
         }
+
         MT798Transaction transaction = new MT784Transaction();
         transaction.setIndexMessage(indexMsg);
         transaction.setDetailMessages(detailMsgs);
@@ -81,21 +87,21 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         message.setTransactionReferenceNumber(transactionReferenceNumber);
         message.setSubMessageType(subMessageType);
         if (message.getClass().isAnnotationPresent(WithSequence.class)) {
-            AbstractMT798SequenceProcessor sequenceProcessor = getMT798SequenceProcessor(subMessageType);
+            AbstractMT798SequenceProcessor sequenceProcessor = getSequenceProcessor(subMessageType);
             Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
-            SwiftUtils.populateMessage(block, sequenceMap, message);
+            swiftUtils.populateMessage(message, block, sequenceMap);
         } else {
-            SwiftUtils.populateMessage(block, message);
+            swiftUtils.populateMessage(message, block);
         }
     }
 
-    private AbstractMT798SequenceProcessor getMT798SequenceProcessor(String subMessageType) {
+    private AbstractMT798SequenceProcessor getSequenceProcessor(String subMessageType) {
         for (AbstractMT798SequenceProcessor processor : mt798SequenceProcessorSet) {
             if (processor.supportsMessageType(subMessageType)) {
                 return processor;
             }
         }
-        throw new MTSequenceProcessorNotFoundException(subMessageType);
+        throw new ProcessorNotFoundException("Can't found MessageSequenceProcessor for MT" + subMessageType);
     }
 
 }

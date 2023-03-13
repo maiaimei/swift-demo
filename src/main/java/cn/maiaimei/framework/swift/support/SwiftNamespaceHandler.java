@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class SwiftNamespaceHandler extends NamespaceHandlerSupport {
     @Override
     public void init() {
-        this.registerBeanDefinitionParser("mts", new MTConfigBeanDefinitionParser());
+        this.registerBeanDefinitionParser("mts", new MessageConfigBeanDefinitionParser());
         this.registerBeanDefinitionParser("currencies", new CurrencyBeanDefinitionParser());
     }
 }

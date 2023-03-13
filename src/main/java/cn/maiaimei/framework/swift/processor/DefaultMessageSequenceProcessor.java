@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class DefaultMTSequenceProcessor implements MTSequenceProcessor {
+public class DefaultMessageSequenceProcessor implements MessageSequenceProcessor {
     @Override
     public boolean supportsMessageType(String subMessageType) {
         return false;
