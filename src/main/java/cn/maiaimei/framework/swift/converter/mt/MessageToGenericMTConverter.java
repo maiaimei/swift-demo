@@ -1,17 +1,18 @@
 package cn.maiaimei.framework.swift.converter.mt;
 
+import cn.maiaimei.framework.swift.converter.MsToMtConverter;
 import cn.maiaimei.framework.swift.model.BaseMessage;
-import cn.maiaimei.framework.swift.util.SwiftUtils;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+// TODO: MessageToGenericMTConverter
 @Component
 public class MessageToGenericMTConverter implements Converter<BaseMessage, AbstractMT> {
 
     @Autowired
-    private SwiftUtils swiftUtils;
+    private MsToMtConverter msToMtConverter;
 
     @Override
     public AbstractMT convert(BaseMessage message) {
@@ -21,7 +22,7 @@ public class MessageToGenericMTConverter implements Converter<BaseMessage, Abstr
                 return null;
             }
         };
-        swiftUtils.convert(message, mt);
+        msToMtConverter.convert(message, mt);
         return mt;
     }
 }

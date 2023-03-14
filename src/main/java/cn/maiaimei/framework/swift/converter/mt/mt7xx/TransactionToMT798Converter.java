@@ -1,8 +1,8 @@
 package cn.maiaimei.framework.swift.converter.mt.mt7xx;
 
+import cn.maiaimei.framework.swift.converter.MsToMtConverter;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
 import cn.maiaimei.framework.swift.util.ReflectionUtils;
-import cn.maiaimei.framework.swift.util.SwiftUtils;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 public class TransactionToMT798Converter {
 
     @Autowired
-    private SwiftUtils swiftUtils;
+    private MsToMtConverter msToMtConverter;
 
     @SneakyThrows
     public <T extends MT798Transaction> MT798Message convert(T transaction, Class<T> transactionType) {
@@ -32,7 +32,7 @@ public class TransactionToMT798Converter {
         if (getIndexMessage != null) {
             MT798IndexMessage indexMessage = (MT798IndexMessage) getIndexMessage.invoke(transaction);
             MT798 mt798 = new MT798();
-            swiftUtils.convert(indexMessage, mt798);
+            msToMtConverter.convert(indexMessage, mt798);
             mt798Message.setIndexMessage(mt798);
         }
 
@@ -45,7 +45,7 @@ public class TransactionToMT798Converter {
                         continue;
                     }
                     MT798 mt798 = new MT798();
-                    swiftUtils.convert(detailMessage, mt798);
+                    msToMtConverter.convert(detailMessage, mt798);
                     mt798Message.getDetailMessages().add(mt798);
                 }
             }
@@ -60,7 +60,7 @@ public class TransactionToMT798Converter {
                         continue;
                     }
                     MT798 mt798 = new MT798();
-                    swiftUtils.convert(extensionMessage, mt798);
+                    msToMtConverter.convert(extensionMessage, mt798);
                     mt798Message.getExtensionMessages().add(mt798);
                 }
             }

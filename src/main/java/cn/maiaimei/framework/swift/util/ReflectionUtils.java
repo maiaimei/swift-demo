@@ -15,12 +15,12 @@ import java.util.List;
 
 public class ReflectionUtils {
 
-    private static final String GET_INDEX_MESSAGE_METHOD_NAME = "getIndexMessage";
-    private static final String GET_DETAIL_MESSAGES_METHOD_NAME = "getDetailMessages";
-    private static final String GET_EXTENSION_MESSAGES_METHOD_NAME = "getExtensionMessages";
-    private static final String SET_INDEX_MESSAGE_METHOD_NAME = "setIndexMessage";
-    private static final String SET_DETAIL_MESSAGES_METHOD_NAME = "setDetailMessages";
-    private static final String SET_EXTENSION_MESSAGES_METHOD_NAME = "setExtensionMessages";
+    public static final String GET_INDEX_MESSAGE_METHOD_NAME = "getIndexMessage";
+    public static final String GET_DETAIL_MESSAGES_METHOD_NAME = "getDetailMessages";
+    public static final String GET_EXTENSION_MESSAGES_METHOD_NAME = "getExtensionMessages";
+    public static final String SET_INDEX_MESSAGE_METHOD_NAME = "setIndexMessage";
+    public static final String SET_DETAIL_MESSAGES_METHOD_NAME = "setDetailMessages";
+    public static final String SET_EXTENSION_MESSAGES_METHOD_NAME = "setExtensionMessages";
 
     /**
      * get declared fields for current class and super class
@@ -59,33 +59,15 @@ public class ReflectionUtils {
     }
 
     public static Method obtainGetIndexMessageMethod(Method[] declaredMethods) {
-        for (Method declaredMethod : declaredMethods) {
-            if (GET_INDEX_MESSAGE_METHOD_NAME.equals(declaredMethod.getName())
-                    && declaredMethod.getParameterTypes().length == 0) {
-                return declaredMethod;
-            }
-        }
-        return null;
+        return obtainNoArgsMethod(declaredMethods, GET_INDEX_MESSAGE_METHOD_NAME);
     }
 
     public static Method obtainGetDetailMessagesMethod(Method[] declaredMethods) {
-        for (Method declaredMethod : declaredMethods) {
-            if (GET_DETAIL_MESSAGES_METHOD_NAME.equals(declaredMethod.getName())
-                    && declaredMethod.getParameterTypes().length == 0) {
-                return declaredMethod;
-            }
-        }
-        return null;
+        return obtainNoArgsMethod(declaredMethods, GET_DETAIL_MESSAGES_METHOD_NAME);
     }
 
     public static Method obtainGetExtensionMessagesMethod(Method[] declaredMethods) {
-        for (Method declaredMethod : declaredMethods) {
-            if (GET_EXTENSION_MESSAGES_METHOD_NAME.equals(declaredMethod.getName())
-                    && declaredMethod.getParameterTypes().length == 0) {
-                return declaredMethod;
-            }
-        }
-        return null;
+        return obtainNoArgsMethod(declaredMethods, GET_EXTENSION_MESSAGES_METHOD_NAME);
     }
 
     public static Method obtainSetIndexMessageMethod(Method[] declaredMethods) {
@@ -99,35 +81,39 @@ public class ReflectionUtils {
     }
 
     public static Method obtainSetDetailMessagesMethod(Method[] declaredMethods) {
-        for (Method declaredMethod : declaredMethods) {
-            if (checkMethod(declaredMethod, SET_DETAIL_MESSAGES_METHOD_NAME, MT798DetailMessage.class)) {
-                return declaredMethod;
-            }
-        }
-        return null;
+        return obtainMethod(declaredMethods, SET_DETAIL_MESSAGES_METHOD_NAME, MT798DetailMessage.class);
     }
 
     public static Method obtainSetExtensionMessagesMethod(Method[] declaredMethods) {
+        return obtainMethod(declaredMethods, SET_EXTENSION_MESSAGES_METHOD_NAME, MT798ExtensionMessage.class);
+    }
+
+    private static Method obtainNoArgsMethod(Method[] declaredMethods, String methodName) {
         for (Method declaredMethod : declaredMethods) {
-            if (checkMethod(declaredMethod, SET_EXTENSION_MESSAGES_METHOD_NAME, MT798ExtensionMessage.class)) {
+            if (methodName.equals(declaredMethod.getName())
+                    && declaredMethod.getParameterTypes().length == 0) {
                 return declaredMethod;
             }
         }
         return null;
     }
 
-    private static <T extends MT798BaseMessage> boolean checkMethod(Method method, String methodName, Class<T> actualType) {
-        if (!methodName.equals(method.getName())) {
-            return false;
+    private static <T extends MT798BaseMessage> Method obtainMethod(Method[] declaredMethods, String methodName, Class<T> actualType) {
+        for (Method declaredMethod : declaredMethods) {
+            if (!methodName.equals(declaredMethod.getName())) {
+                continue;
+            }
+            Type[] genericParameterTypes = declaredMethod.getGenericParameterTypes();
+            Type genericParameterType = genericParameterTypes[0];
+            if (genericParameterType instanceof ParameterizedTypeImpl) {
+                ParameterizedTypeImpl type = (ParameterizedTypeImpl) genericParameterType;
+                if (List.class.isAssignableFrom(type.getRawType())
+                        && actualType.isAssignableFrom((Class<?>) type.getActualTypeArguments()[0])) {
+                    return declaredMethod;
+                }
+            }
         }
-        Type[] genericParameterTypes = method.getGenericParameterTypes();
-        Type genericParameterType = genericParameterTypes[0];
-        if (genericParameterType instanceof ParameterizedTypeImpl) {
-            ParameterizedTypeImpl type = (ParameterizedTypeImpl) genericParameterType;
-            return List.class.isAssignableFrom(type.getRawType())
-                    && actualType.isAssignableFrom((Class<?>) type.getActualTypeArguments()[0]);
-        }
-        return false;
+        return null;
     }
 
     public ReflectionUtils() {

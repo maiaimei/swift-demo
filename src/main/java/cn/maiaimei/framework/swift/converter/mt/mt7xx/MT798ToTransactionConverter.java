@@ -22,10 +22,6 @@ public class MT798ToTransactionConverter implements Converter<MT798Message, MT79
 
     @Override
     public MT798Transaction convert(MT798Message mt798Message) {
-        return doConvert(mt798Message);
-    }
-
-    private MT798Transaction doConvert(MT798Message mt798Message) {
         MT798 indexMessage = mt798Message.getIndexMessage();
         List<MT798> detailMessages = mt798Message.getDetailMessages();
         List<MT798> extensionMessages = mt798Message.getExtensionMessages();
