@@ -8,10 +8,19 @@ import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Transaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * Notification of Draft or Issue of Guarantee / Standby Letter of Credit / Undertaking
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class MT762Transaction extends MT798Transaction {
+    
+    private MT762IndexMessage indexMessage;
+    private List<MT762DetailMessage> detailMessages;
+    private List<MT762ExtensionMessage> extensionMessages;
+
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT762IndexMessage extends MT798IndexMessage {

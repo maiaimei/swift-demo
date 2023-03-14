@@ -8,5 +8,7 @@ import java.util.List;
 public interface MT798ToTransactionConverterStrategy {
     boolean supportsMessageType(String subMessageType);
 
-    MT798Transaction convert(MT798 indexMessage, List<MT798> detailMessages, List<MT798> extensionMessages);
+    <T extends MT798Transaction> Class<T> getTransactionType();
+
+    <T extends MT798Transaction> T convert(MT798 indexMessage, List<MT798> detailMessages, List<MT798> extensionMessages, Class<T> transactionType);
 }

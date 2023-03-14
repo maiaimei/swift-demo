@@ -3,8 +3,8 @@ package cn.maiaimei.framework.swift.converter.mt.mt7xx.strategy;
 import cn.maiaimei.framework.swift.annotation.WithSequence;
 import cn.maiaimei.framework.swift.exception.ProcessorNotFoundException;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
-import cn.maiaimei.framework.swift.model.mt.mt7xx.transaction.MT784Transaction;
 import cn.maiaimei.framework.swift.processor.mt.mt7xx.AbstractMT798SequenceProcessor;
+import cn.maiaimei.framework.swift.util.ReflectionUtils;
 import cn.maiaimei.framework.swift.util.SwiftUtils;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
@@ -14,6 +14,8 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +30,30 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
     @Autowired
     private Set<AbstractMT798SequenceProcessor> mt798SequenceProcessorSet;
 
+    @SneakyThrows
     @Override
-    public MT798Transaction convert(MT798 indexMessage, List<MT798> detailMessages, List<MT798> extensionMessages) {
-        Supplier<MT798IndexMessage> indexSupplier = this::getIndexMessage;
-        Supplier<MT798DetailMessage> detailSupplier = this::getDetailMessage;
-        Supplier<MT798ExtensionMessage> extensionSupplier = this::getExtensionMessage;
-        return doConvert(indexMessage, detailMessages, extensionMessages, indexSupplier, detailSupplier, extensionSupplier);
+    public <T extends MT798Transaction> T convert(MT798 indexMessage, List<MT798> detailMessages, List<MT798> extensionMessages, Class<T> transactionType) {
+        Method[] declaredMethods = transactionType.getDeclaredMethods();
+        Method setIndexMessage = ReflectionUtils.obtainSetIndexMessageMethod(declaredMethods);
+        Method setDetailMessages = ReflectionUtils.obtainSetDetailMessagesMethod(declaredMethods);
+        Method setExtensionMessages = ReflectionUtils.obtainSetExtensionMessagesMethod(declaredMethods);
+
+        Constructor<T> constructor = transactionType.getConstructor();
+        T instance = constructor.newInstance();
+        if (setIndexMessage != null) {
+            MT798IndexMessage indexMsg = mt798ToMessage(indexMessage, this::getIndexMessage);
+            setIndexMessage.invoke(instance, indexMsg);
+        }
+        if (setDetailMessages != null) {
+            List<MT798DetailMessage> detailMsgs = mt798ToMessage(detailMessages, this::getDetailMessage);
+            setDetailMessages.invoke(instance, detailMsgs);
+        }
+        if (setExtensionMessages != null) {
+            List<MT798ExtensionMessage> extensionMsgs = mt798ToMessage(extensionMessages, this::getExtensionMessage);
+            setExtensionMessages.invoke(instance, extensionMsgs);
+        }
+        // TODO: LinkedMessages
+        return instance;
     }
 
     protected abstract MT798IndexMessage getIndexMessage();
@@ -42,44 +62,21 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
 
     protected abstract MT798ExtensionMessage getExtensionMessage();
 
-    private MT798Transaction doConvert(MT798 indexMessage,
-                                       List<MT798> detailMessages,
-                                       List<MT798> extensionMessages,
-                                       Supplier<MT798IndexMessage> indexSupplier,
-                                       Supplier<MT798DetailMessage> detailSupplier,
-                                       Supplier<MT798ExtensionMessage> extensionSupplier) {
-        MT798IndexMessage indexMsg = indexSupplier.get();
-        mt798ToBaseMessage(indexMessage, indexMsg);
-
-        List<MT798DetailMessage> detailMsgs = null;
-        if (!CollectionUtils.isEmpty(detailMessages)) {
-            detailMsgs = new ArrayList<>();
-            for (MT798 detailMessage : detailMessages) {
-                MT798DetailMessage detailMsg = detailSupplier.get();
-                mt798ToBaseMessage(detailMessage, detailMsg);
-                detailMsgs.add(detailMsg);
+    private <T extends MT798BaseMessage> List<T> mt798ToMessage(List<MT798> mts, Supplier<T> spplier) {
+        List<T> msgs = null;
+        if (!CollectionUtils.isEmpty(mts)) {
+            msgs = new ArrayList<>();
+            for (MT798 mt798 : mts) {
+                T msg = mt798ToMessage(mt798, spplier);
+                msgs.add(msg);
             }
         }
-
-        List<MT798ExtensionMessage> extensionMsgs = null;
-        if (!CollectionUtils.isEmpty(extensionMessages)) {
-            extensionMsgs = new ArrayList<>();
-            for (MT798 extensionMessage : extensionMessages) {
-                MT798ExtensionMessage extensionMsg = extensionSupplier.get();
-                mt798ToBaseMessage(extensionMessage, extensionMsg);
-                extensionMsgs.add(extensionMsg);
-            }
-        }
-
-        MT798Transaction transaction = new MT784Transaction();
-        transaction.setIndexMessage(indexMsg);
-        transaction.setDetailMessages(detailMsgs);
-        transaction.setExtensionMessages(extensionMsgs);
-        return transaction;
+        return msgs;
     }
 
     @SneakyThrows
-    private void mt798ToBaseMessage(MT798 mt, MT798BaseMessage message) {
+    private <T extends MT798BaseMessage> T mt798ToMessage(MT798 mt, Supplier<T> spplier) {
+        T message = spplier.get();
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
         SwiftTagListBlock block = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
         String transactionReferenceNumber = mt.getField20().getValue();
@@ -93,6 +90,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         } else {
             swiftUtils.populateMessage(message, block);
         }
+        return message;
     }
 
     private AbstractMT798SequenceProcessor getSequenceProcessor(String subMessageType) {
@@ -103,5 +101,4 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         }
         throw new ProcessorNotFoundException("Can't found MessageSequenceProcessor for MT" + subMessageType);
     }
-
 }

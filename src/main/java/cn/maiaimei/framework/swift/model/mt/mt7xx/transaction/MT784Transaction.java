@@ -11,11 +11,19 @@ import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Transaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * Application for Issuance of Guarantee / Standby Letter of Credit / Undertaking
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class MT784Transaction extends MT798Transaction {
-    
+
+    private MT784IndexMessage indexMessage;
+    private List<MT784DetailMessage> detailMessages;
+    private List<MT784ExtensionMessage> extensionMessages;
+
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class MT784IndexMessage extends MT798IndexMessage {

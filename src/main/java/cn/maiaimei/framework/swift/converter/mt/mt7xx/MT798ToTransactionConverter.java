@@ -31,18 +31,7 @@ public class MT798ToTransactionConverter implements Converter<MT798Message, MT79
         List<MT798> extensionMessages = mt798Message.getExtensionMessages();
         String subMessageType = getSubMessageType(indexMessage);
         MT798ToTransactionConverterStrategy strategy = getMT798ToTransactionConverterStrategy(subMessageType);
-        return strategy.convert(indexMessage, detailMessages, extensionMessages);
-    }
-
-    private MT798ToTransactionConverterStrategy getMT798ToTransactionConverterStrategy(String subMessageType) {
-        if (StringUtils.isNotBlank(subMessageType)) {
-            for (MT798ToTransactionConverterStrategy strategy : converterStrategySet) {
-                if (strategy.supportsMessageType(subMessageType)) {
-                    return strategy;
-                }
-            }
-        }
-        throw new ConverterNotFoundException("Can't found MT798ToTransactionConverterStrategy for MT" + subMessageType);
+        return strategy.convert(indexMessage, detailMessages, extensionMessages, strategy.getTransactionType());
     }
 
     private String getSubMessageType(MT798 indexMessage) {
@@ -56,4 +45,16 @@ public class MT798ToTransactionConverter implements Converter<MT798Message, MT79
         }
         return subMessageType;
     }
+
+    private MT798ToTransactionConverterStrategy getMT798ToTransactionConverterStrategy(String subMessageType) {
+        if (StringUtils.isNotBlank(subMessageType)) {
+            for (MT798ToTransactionConverterStrategy strategy : converterStrategySet) {
+                if (strategy.supportsMessageType(subMessageType)) {
+                    return strategy;
+                }
+            }
+        }
+        throw new ConverterNotFoundException("Can't found MT798ToTransactionConverterStrategy for MT" + subMessageType);
+    }
+
 }
