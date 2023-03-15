@@ -1,5 +1,6 @@
 package cn.maiaimei.framework.swift.processor.mt.mt7xx;
 
+import cn.maiaimei.framework.swift.processor.MessageSequenceProcessor;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT760;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class MT760SequenceProcessor extends AbstractMT798SequenceProcessor {
+public class MT760SequenceProcessor implements MessageSequenceProcessor {
     @Override
     public boolean supportsMessageType(String subMessageType) {
         return "760".equals(subMessageType);

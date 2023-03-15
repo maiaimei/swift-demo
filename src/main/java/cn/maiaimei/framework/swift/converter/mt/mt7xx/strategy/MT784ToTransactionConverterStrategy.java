@@ -7,6 +7,7 @@ import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Transaction;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.transaction.MT784Transaction;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("unchecked")
 @Component
 public class MT784ToTransactionConverterStrategy extends AbstractMT798ToTransactionConverterStrategy {
     @Override
@@ -26,11 +27,7 @@ public class MT784ToTransactionConverterStrategy extends AbstractMT798ToTransact
 
     @Override
     protected MT798DetailMessage getDetailMessage() {
-        MT784Transaction.MT784DetailMessage message = new MT784Transaction.MT784DetailMessage();
-        message.setSequenceA(new MT784Transaction.MT784DetailSequenceA());
-        message.setSequenceB(new MT784Transaction.MT784DetailSequenceB());
-        message.setSequenceC(new MT784Transaction.MT784DetailSequenceC());
-        return message;
+        return new MT784Transaction.MT784DetailMessage();
     }
 
     @Override

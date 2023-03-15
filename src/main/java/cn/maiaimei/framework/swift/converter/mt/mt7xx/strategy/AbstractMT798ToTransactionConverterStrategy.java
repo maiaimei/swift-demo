@@ -1,9 +1,7 @@
 package cn.maiaimei.framework.swift.converter.mt.mt7xx.strategy;
 
-import cn.maiaimei.framework.swift.annotation.WithSequence;
 import cn.maiaimei.framework.swift.converter.MtToMsConverter;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
-import cn.maiaimei.framework.swift.processor.MessageSequenceProcessor;
 import cn.maiaimei.framework.swift.util.ReflectionUtils;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
@@ -19,7 +17,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -90,13 +87,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         String subMessageType = mt.getField12().getValue();
         message.setTransactionReferenceNumber(transactionReferenceNumber);
         message.setSubMessageType(subMessageType);
-        if (message.getClass().isAnnotationPresent(WithSequence.class)) {
-            MessageSequenceProcessor sequenceProcessor = mtToMsConverter.getSequenceProcessor(subMessageType);
-            Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
-            mtToMsConverter.populateMessage(message, block, sequenceMap);
-        } else {
-            mtToMsConverter.populateMessage(message, block);
-        }
+        mtToMsConverter.convert(message, mt, block, subMessageType);
         return message;
     }
 

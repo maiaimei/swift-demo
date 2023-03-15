@@ -15,7 +15,9 @@ import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +31,11 @@ public class MtToMsConverter {
 
     public void convert(AbstractMT mt, BaseMessage ms) {
         SwiftBlock4 block = mt.getSwiftMessage().getBlock4();
+        convert(ms, mt, block, mt.getMessageType());
+    }
+
+    public void convert(BaseMessage ms, AbstractMT mt, SwiftTagListBlock block, String messageType) {
         if (ms.getClass().isAnnotationPresent(WithSequence.class)) {
-            String messageType = mt.getMessageType();
             MessageSequenceProcessor sequenceProcessor = getSequenceProcessor(messageType);
             Map<String, List<SwiftTagListBlock>> sequenceMap = sequenceProcessor.getSequenceMap(mt);
             populateMessage(ms, block, sequenceMap);
@@ -71,12 +76,17 @@ public class MtToMsConverter {
             if (BaseSequence.class.isAssignableFrom(declaredField.getType())) {
                 Sequence sequenceAnnotation = declaredField.getAnnotation(Sequence.class);
                 List<SwiftTagListBlock> blocks = sequenceMap.get(sequenceAnnotation.value());
+                if (CollectionUtils.isEmpty(blocks) || CollectionUtils.isEmpty(blocks.get(0).getTags())) {
+                    continue;
+                }
+                final Constructor<?> constructor = declaredField.getType().getConstructor();
+                final Object instance = constructor.newInstance();
                 declaredField.setAccessible(Boolean.TRUE);
-                Object seqObj = declaredField.get(message);
                 List<Field> sequenceDeclaredFields = ReflectionUtils.getSelfDeclaredFields(declaredField.getType());
                 for (Field sequenceDeclaredField : sequenceDeclaredFields) {
-                    populateField(blocks.get(sequenceAnnotation.index()), seqObj, sequenceDeclaredField);
+                    populateField(blocks.get(sequenceAnnotation.index()), instance, sequenceDeclaredField);
                 }
+                declaredField.set(message, instance);
                 declaredField.setAccessible(Boolean.FALSE);
             } else {
                 populateField(block, message, declaredField);
