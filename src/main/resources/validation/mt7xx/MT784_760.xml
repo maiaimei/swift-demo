@@ -172,9 +172,9 @@
                 </fields>
                 <rules>
                     <rule expression-string="#block.getTagByName('52A') == null and #block.getTagByName('52D') == null"
-                          error-message="In sequence B, field 52A or 52D must be present" />
+                          error-message="In sequence B, 52A or 52D must be present" />
                     <rule expression-string="#block.getTagByName('59') == null and #block.getTagByName('59A') == null"
-                          error-message="In sequence B, field 59 or 59A must be present" />
+                          error-message="In sequence B, 59 or 59A must be present" />
                 </rules>
             </sequence>
             <sequence name="C" status="O">

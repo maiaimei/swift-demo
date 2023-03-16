@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "swift.mt.validation")
 public class MessageValidationConfigProperties {
     /**
-     * Whether to set simple error message
-     */
-    private boolean isSimpleLabel;
-    /**
      * Enables all mts validation capability
      */
     private boolean enabled;

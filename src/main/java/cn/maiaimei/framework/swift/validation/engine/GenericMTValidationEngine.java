@@ -19,7 +19,6 @@ import com.prowidesoftware.swift.model.mt.AbstractMT;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -31,14 +30,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class GenericMTValidationEngine {
-
-    private static final String SIMPLE_LABEL_NOT_IN_SEQUENCE = "%s";
-    private static final String SIMPLE_LABEL_IN_SEQUENCE = "In sequence %s, %s";
-    private static final String LABEL_NOT_IN_SEQUENCE = "Field %s%s";
-    private static final String LABEL_IN_SEQUENCE = "In sequence %s, field %s%s";
-
-    @Value("${swift.mt.validation.is-simple-label:false}")
-    private boolean isSimpleLabel;
 
     @Autowired
     private FieldValidatorChain fieldValidatorChain;
@@ -170,7 +161,7 @@ public class GenericMTValidationEngine {
         for (FieldInfo fieldInfo : fieldInfos) {
             String tagName = fieldInfo.getTag();
             String tagValue = block.getTagValue(tagName);
-            String label = getLabel(sequenceName, tagName, fieldInfo.getFieldName());
+            String label = getLabel(sequenceName, tagName);
             Field field = block.getFieldByName(tagName);
             int errorMessageCount = result.getErrorMessages().size();
             fieldValidatorChain.handleValidation(result, fieldInfo, field, label, tagValue);
@@ -202,20 +193,11 @@ public class GenericMTValidationEngine {
         }
     }
 
-    private String getLabel(String sequenceName, String tagName, String fieldName) {
-        if (isSimpleLabel) {
-            if (StringUtils.isBlank(sequenceName)) {
-                return String.format(SIMPLE_LABEL_NOT_IN_SEQUENCE, tagName);
-            }
-            return String.format(SIMPLE_LABEL_IN_SEQUENCE, sequenceName, tagName);
-        }
-        if (StringUtils.isNotBlank(fieldName)) {
-            fieldName = StringUtils.SPACE.concat(fieldName);
-        }
+    private String getLabel(String sequenceName, String tagName) {
         if (StringUtils.isBlank(sequenceName)) {
-            return String.format(LABEL_NOT_IN_SEQUENCE, tagName, fieldName);
+            return tagName;
         }
-        return String.format(LABEL_IN_SEQUENCE, sequenceName, tagName, fieldName);
+        return String.format("In sequence %s, %s", sequenceName, tagName);
     }
 
     private MessageSequenceProcessor getMessageSequenceProcessor(String messageType) {

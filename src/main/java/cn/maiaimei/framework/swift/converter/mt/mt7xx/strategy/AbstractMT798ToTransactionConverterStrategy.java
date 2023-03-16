@@ -82,6 +82,9 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
 
     private <T extends MT798BaseMessage> T mt798ToMessage(MT798 mt, Supplier<T> spplier) {
         T message = spplier.get();
+        if (message == null) {
+            return message;
+        }
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
         SwiftTagListBlock block = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
         String transactionReferenceNumber = mt.getField20().getValue();
