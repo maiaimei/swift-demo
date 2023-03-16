@@ -2,8 +2,10 @@ package cn.maiaimei.framework.swift.converter.mt.mt7xx.strategy;
 
 import cn.maiaimei.framework.swift.converter.MtToMsConverter;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
+import cn.maiaimei.framework.swift.util.ReflectionUtils;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
+import com.prowidesoftware.swift.model.field.Field27A;
 import com.prowidesoftware.swift.model.field.Field77E;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import lombok.SneakyThrows;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,7 +79,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         return msgs;
     }
 
-    @SneakyThrows
+
     private <T extends MT798BaseMessage> T mt798ToMessage(MT798 mt, Supplier<T> spplier) {
         T message = spplier.get();
         SwiftBlock4 block4 = mt.getSwiftMessage().getBlock4();
@@ -85,8 +88,19 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         String subMessageType = mt.getField12().getValue();
         message.setTransactionReferenceNumber(transactionReferenceNumber);
         message.setSubMessageType(subMessageType);
+        pupulateMessageIndexTotal(message, block);
         mtToMsConverter.convert(message, mt, block, subMessageType);
         return message;
+    }
+
+    @SneakyThrows
+    private <T extends MT798BaseMessage> void pupulateMessageIndexTotal(T message, SwiftTagListBlock block) {
+        final Field messageIndexTotalField = ReflectionUtils.getDeclaredField(MT798BaseMessage.class, "messageIndexTotal");
+        if (messageIndexTotalField != null) {
+            messageIndexTotalField.setAccessible(Boolean.TRUE);
+            messageIndexTotalField.set(message, block.getTagValue(Field27A.NAME));
+            messageIndexTotalField.setAccessible(Boolean.FALSE);
+        }
     }
 
     private Method findDeclaredMethod(Class<?> clazz, String methodName) {
