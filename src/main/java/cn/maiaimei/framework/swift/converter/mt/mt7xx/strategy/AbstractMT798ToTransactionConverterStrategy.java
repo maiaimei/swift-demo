@@ -2,7 +2,6 @@ package cn.maiaimei.framework.swift.converter.mt.mt7xx.strategy;
 
 import cn.maiaimei.framework.swift.converter.MtToMsConverter;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
-import cn.maiaimei.framework.swift.util.ReflectionUtils;
 import com.prowidesoftware.swift.model.SwiftBlock4;
 import com.prowidesoftware.swift.model.SwiftTagListBlock;
 import com.prowidesoftware.swift.model.field.Field77E;
@@ -28,10 +27,9 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
     @SneakyThrows
     @Override
     public <T extends MT798Transaction> T convert(MT798 indexMessage, List<MT798> detailMessages, List<MT798> extensionMessages, Class<T> transactionType) {
-        Method[] declaredMethods = transactionType.getDeclaredMethods();
-        Method setIndexMessageMethod = ReflectionUtils.obtainSetIndexMessageMethod(declaredMethods);
-        Method setDetailMessagesMethod = ReflectionUtils.obtainSetDetailMessagesMethod(declaredMethods);
-        Method setExtensionMessagesMethod = ReflectionUtils.obtainSetExtensionMessagesMethod(declaredMethods);
+        Method setIndexMessageMethod = findDeclaredMethod(transactionType, "setIndexMessage");
+        Method setDetailMessagesMethod = findDeclaredMethod(transactionType, "setDetailMessages");
+        Method setExtensionMessagesMethod = findDeclaredMethod(transactionType, "setExtensionMessages");
 
         Constructor<T> constructor = transactionType.getConstructor();
         T instance = constructor.newInstance();
@@ -56,7 +54,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
             return;
         }
         try {
-            if (ReflectionUtils.SET_INDEX_MESSAGE_METHOD_NAME.equals(method.getName())) {
+            if ("setIndexMessage".equals(method.getName())) {
                 method.invoke(instance, ms.get(0));
             } else {
                 method.invoke(instance, ms);
@@ -89,6 +87,16 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         message.setSubMessageType(subMessageType);
         mtToMsConverter.convert(message, mt, block, subMessageType);
         return message;
+    }
+
+    private Method findDeclaredMethod(Class<?> clazz, String methodName) {
+        final Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method declaredMethod : declaredMethods) {
+            if (methodName.equals(declaredMethod.getName())) {
+                return declaredMethod;
+            }
+        }
+        return null;
     }
 
 }

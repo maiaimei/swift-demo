@@ -1,10 +1,10 @@
 package cn.maiaimei.framework.swift.converter.mt.mt7xx;
 
 import cn.maiaimei.framework.swift.model.mt.mt7xx.*;
-import cn.maiaimei.framework.swift.util.ReflectionUtils;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import lombok.SneakyThrows;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -25,10 +25,9 @@ public class TransactionToMT798Converter {
 
     @SneakyThrows
     public <T extends MT798Transaction> MT798Message convert(T transaction, Class<T> transactionType) {
-        Method[] declaredMethods = transactionType.getDeclaredMethods();
-        Method getIndexMessage = ReflectionUtils.obtainGetIndexMessageMethod(declaredMethods);
-        Method getDetailMessages = ReflectionUtils.obtainGetDetailMessagesMethod(declaredMethods);
-        Method getExtensionMessages = ReflectionUtils.obtainGetExtensionMessagesMethod(declaredMethods);
+        Method getIndexMessage = BeanUtils.findDeclaredMethod(transactionType, "getIndexMessage");
+        Method getDetailMessages = BeanUtils.findDeclaredMethod(transactionType, "getDetailMessages");
+        Method getExtensionMessages = BeanUtils.findDeclaredMethod(transactionType, "getExtensionMessages");
 
         MT798Message mt798Message = new MT798Message();
 

@@ -69,7 +69,7 @@ public class MsToMtConverter implements Converter<BaseMessage, AbstractMT> {
 
     private List<Field> getAllDeclaredFields(BaseMessage ms) {
         List<Field> selfFields = ReflectionUtils.getSelfDeclaredFields(ms.getClass());
-        List<Field> superclassDeclaredFields = ReflectionUtils.getSuperclassDeclaredFields(ms.getClass(), MT798BaseMessage.class);
+        List<Field> superclassDeclaredFields = ReflectionUtils.getSelfDeclaredFields(MT798BaseMessage.class);
         List<Field> allFields = new ArrayList<>();
         allFields.addAll(superclassDeclaredFields);
         allFields.addAll(selfFields);
