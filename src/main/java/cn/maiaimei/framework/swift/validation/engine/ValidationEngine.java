@@ -53,4 +53,15 @@ public class ValidationEngine {
     public ValidationResult validate(MT798 mt798, String indexMessageType, String subMessageType) {
         return mt798ValidationEngine.validate(mt798, indexMessageType, subMessageType);
     }
+
+    /**
+     * validate message by Sub-Message Type
+     *
+     * @param mt798
+     * @param indexMessageType
+     * @return
+     */
+    public ValidationResult validate(MT798 mt798, String indexMessageType) {
+        return mt798ValidationEngine.validate(mt798, indexMessageType, indexMessageType);
+    }
 }

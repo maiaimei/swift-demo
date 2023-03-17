@@ -91,13 +91,6 @@
             <xsd:element name="components" type="components" nillable="true" minOccurs="0"/>
             <xsd:element name="rules" type="rules" nillable="true" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute name="no" type="xsd:string">
-            <xsd:annotation>
-                <xsd:documentation><![CDATA[
-    Field No.
-                ]]></xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
         <xsd:attribute name="tag" use="required" type="xsd:string">
             <xsd:annotation>
                 <xsd:documentation><![CDATA[

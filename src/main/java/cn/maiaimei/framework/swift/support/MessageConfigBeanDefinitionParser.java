@@ -34,7 +34,6 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
     private static final String SEQUENCE = "sequence";
     private static final String RULES = "rules";
     private static final String RULE = "rule";
-    private static final String NO_ATTRIBUTE = "no";
     private static final String TAG_ATTRIBUTE = "tag";
     private static final String FIELD_NAME_ATTRIBUTE = "field-name";
     private static final String FIELD_NAME_PROPERTY = "fieldName";
@@ -146,7 +145,6 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
 
     private BeanDefinition parseFieldInfo(Element element) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(FieldInfo.class);
-        addPropertyValue(element, builder, NO_ATTRIBUTE, NO_ATTRIBUTE);
         builder.addPropertyValue(TAG_ATTRIBUTE, element.getAttribute(TAG_ATTRIBUTE));
         builder.addPropertyValue(FIELD_NAME_PROPERTY, element.getAttribute(FIELD_NAME_ATTRIBUTE));
         parseFieldComponentInfo(element, builder);

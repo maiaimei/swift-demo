@@ -24,33 +24,33 @@ public class TransactionToMT798Converter {
     private MsToMT798Converter msToMT798Converter;
 
     @SneakyThrows
-    public <T extends MT798Transaction> MT798Message convert(T transaction, Class<T> transactionType) {
+    public <T extends MT798Transaction> MT798Packets convert(T transaction, Class<T> transactionType) {
         Method getIndexMessage = BeanUtils.findDeclaredMethod(transactionType, "getIndexMessage");
         Method getDetailMessages = BeanUtils.findDeclaredMethod(transactionType, "getDetailMessages");
         Method getExtensionMessages = BeanUtils.findDeclaredMethod(transactionType, "getExtensionMessages");
 
-        MT798Message mt798Message = new MT798Message();
+        MT798Packets mt798Packets = new MT798Packets();
 
         if (getIndexMessage != null) {
             MT798IndexMessage message = (MT798IndexMessage) getIndexMessage.invoke(transaction);
-            mt798Message.setIndexMessage(doConvert(message));
+            mt798Packets.setIndexMessage(doConvert(message));
         }
 
         if (getDetailMessages != null) {
             List<MT798DetailMessage> messages = (List<MT798DetailMessage>) getDetailMessages.invoke(transaction);
             if (!CollectionUtils.isEmpty(messages)) {
-                mt798Message.setDetailMessages(doConvert(messages));
+                mt798Packets.setDetailMessages(doConvert(messages));
             }
         }
 
         if (getExtensionMessages != null) {
             List<MT798ExtensionMessage> messages = (List<MT798ExtensionMessage>) getExtensionMessages.invoke(transaction);
             if (!CollectionUtils.isEmpty(messages)) {
-                mt798Message.setExtensionMessages(doConvert(messages));
+                mt798Packets.setExtensionMessages(doConvert(messages));
             }
         }
 
-        return mt798Message;
+        return mt798Packets;
     }
 
     private <T extends MT798BaseMessage> List<MT798> doConvert(List<T> messages) {

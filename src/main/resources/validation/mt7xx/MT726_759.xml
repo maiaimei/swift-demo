@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+
+    <mt798 id="mt726759Config" index-message-type="726" sub-message-type="759">
+        <catalogue>Common Group Messages</catalogue>
+        <transaction>Ancillary Message – Corporate-to-Bank</transaction>
+        <description>Ancillary Message – Corporate-to-bank Details</description>
+        <fields>
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21A" field-name="Customer Reference Number" format="16x" status="M"/>
+            <field tag="27" field-name="Sequence of Total" format="1!n/1!n" status="M"/>
+            <field tag="20" field-name="Transaction Reference Number" format="16x" status="M"/>
+            <field tag="21" field-name="Related Reference Number" format="16x" status="O"/>
+            <field tag="22D" field-name="Form of Undertaking" format="4!c" status="M" options="DGAR|DOCR|STBY|UNDK"/>
+            <field tag="23" field-name="Undertaking Number" format="16x" status="O"/>
+            <!-- 52a start  -->
+            <field tag="52A" field-name="Issuer" format="[/1!a][/34x]4!a2!a2!c[3!c]" status="O">
+                <components>
+                    <component index="1" format="1!a" status="O"/>
+                    <component index="2" format="34x" status="O"/>
+                    <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                </components>
+            </field>
+            <field tag="52D" field-name="Issuer" format="[/1!a][/34x]4*35x" status="O">
+                <components>
+                    <component index="1" format="1!a" status="O"/>
+                    <component index="2" format="34x" status="O"/>
+                    <component index="3" format="35x" status="M"/>
+                    <component start-index="4" end-index="6" format="35x" status="O"/>
+                </components>
+            </field>
+            <!-- 52a end  -->
+            <field tag="23H" field-name="Function of Message" format="8!c" status="M"
+                   options="CLSVOPEN|CLSVCLOS|FRAUDMSG|GENINFAD|ISSAMEND|ISSUANCE|OTHERFNC|PREDENOT|REIMBURS|REQAMEND|REQFINAN|REQISSUE|TRANSFER"/>
+            <field tag="45D" field-name="Narrative" format="150*65z" status="M"/>
+            <field tag="23X" field-name="File Identification" format="4!c/65x" status="O">
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M"
+                               options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
+                    <component index="2" label="File Name or Reference" format="65x" status="M"/>
+                </components>
+            </field>
+        </fields>
+    </mt798>
+
+</mts>

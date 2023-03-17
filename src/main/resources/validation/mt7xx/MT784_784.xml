@@ -6,72 +6,72 @@
     
     <mt798 id="mt784Config" index-message-type="784" sub-message-type="784" corporate-to-bank="true">
         <catalogue>Guarantee / Standby Letter of Credit</catalogue>
-        <transaction>Application for Guarantee / Standby Letter of Credit – C2B</transaction>
+        <transaction>Application for issuance of Guarantee /Standby Letter of Credit – Corporate-to-Bank</transaction>
         <description>Application for issuance of Guarantee / Standby / Undertaking Index</description>
         <fields>
-            <field no="2.1" tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
-            <field no="2.2" tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
-            <field no="2.3" tag="21T" field-name="Customer Business Reference" format="16x" status="M" />
-            <field no="2.4" tag="25F" field-name="Text Purpose" format="5!c" status="M" options="DRAFT|FINAL" />
-            <field no="2.5" tag="21P" field-name="Bank Reference Number" format="16x" status="O" />
-            <field no="2.6" tag="21S" field-name="Bank Business Reference" format="16x" status="O" />
-            <field no="2.7" tag="13E" field-name="Message Creation Date Time" format="8!n4!n" pattern="YYYYMMDDHHMM" status="M" />
-            <field no="2.8" tag="23E" field-name="Method of Transmission" format="4!c[/30x]" status="O">
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
+            <field tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
+            <field tag="21T" field-name="Customer Business Reference" format="16x" status="M" />
+            <field tag="25F" field-name="Text Purpose" format="5!c" status="M" options="DRAFT|FINAL" />
+            <field tag="21P" field-name="Bank Reference Number" format="16x" status="O" />
+            <field tag="21S" field-name="Bank Business Reference" format="16x" status="O" />
+            <field tag="13E" field-name="Message Creation Date Time" format="8!n4!n" pattern="YYYYMMDDHHMM" status="M" />
+            <field tag="23E" field-name="Method of Transmission" format="4!c[/30x]" status="O">
                 <components>
                     <component index="1" label="Method" format="4!c" status="M" options="TELE|COUR"/>
                     <component index="2" label="Additional Information" format="30x" status="O"/>
                 </components>
             </field>
-            <field no="2.9" tag="22K" field-name="Type of Undertaking" format="4!c[/35x]" status="M">
+            <field tag="22K" field-name="Type of Undertaking" format="4!c[/35x]" status="M">
                 <components>
                     <component index="1" label="Code" format="4!c" status="M" options="APAY|BILL|CUST|DPAY|INSU|JUDI|LEAS|OTHR|PAYM|PERF|RETN|SHIP|TEND|WARR"/>
                     <component index="2" label="Narrative" format="35x" status="O"/>
                 </components>
             </field>
-            <field no="2.10" tag="12H" field-name="Wording of Undertaking" format="4!c[/35x]" status="M">
+            <field tag="12H" field-name="Wording of Undertaking" format="4!c[/35x]" status="M">
                 <components>
                     <component index="1" label="Code" format="4!c" status="M" options="STND|WDAP|WDBF|OTHR"/>
                     <component index="2" label="Narrative" format="35x" status="O"/>
                 </components>
             </field>
-            <field no="2.11" tag="22B" field-name="Special Terms" format="4!c" status="O" options="EFCT|REDC|EFRE" />
-            <field no="2.12" tag="12L" field-name="Language of Standard Wording" format="2!c" status="O" />
-            <field no="2.13" tag="31S" field-name="Approximate Expiry Date" format="6!n" pattern="YYMMDD" status="O" />
-            <field no="2.14" tag="53C" field-name="Liability Account" format="/34x" status="O" />
-            <field no="2.15" tag="25A" field-name="Charges Account" format="/34x" status="O" />
-            <field no="2.16" tag="20E" field-name="Reference" format="4!c/35x" status="O">
+            <field tag="22B" field-name="Special Terms" format="4!c" status="O" options="EFCT|REDC|EFRE" />
+            <field tag="12L" field-name="Language of Standard Wording" format="2!c" status="O" />
+            <field tag="31S" field-name="Approximate Expiry Date" format="6!n" pattern="YYMMDD" status="O" />
+            <field tag="53C" field-name="Liability Account" format="/34x" status="O" />
+            <field tag="25A" field-name="Charges Account" format="/34x" status="O" />
+            <field tag="20E" field-name="Reference" format="4!c/35x" status="O">
                 <components>
                     <component index="1" label="Code" format="4!c" status="M" options="TEND|ORDR|CONT|OFFR|DELV|PINV|PROJ"/>
                     <component index="2" label="Reference" format="35x" status="M"/>
                 </components>
             </field>
-            <field no="2.17" tag="31R" field-name="Reference Date" format="6!n[/6!n]" status="O">
+            <field tag="31R" field-name="Reference Date" format="6!n[/6!n]" status="O">
                 <components>
                     <component index="1" label="Date 1" format="6!n" pattern="YYMMDD" status="M"/>
                     <component index="2" label="Date 2" format="6!n" pattern="YYMMDD" status="O"/>
                 </components>
             </field>
-            <field no="2.18" tag="71F" field-name="Total Order/Contract Amount" format="3!a15d" status="O" />
-            <field no="2.19" tag="37J" field-name="Undertaking Value in Percent" format="12d" status="O" />
-            <field no="2.20" tag="49Z" field-name="Special Agreements" format="50*65z" status="O" />
-            <field no="2.21" tag="29A" field-name="Customer Contact" format="4*35x" status="O" />
-            <field no="2.22" tag="29D" field-name="Beneficiary Contact" format="4*35x" status="O" />
-            <field no="2.23" tag="29F" field-name="Local Undertaking Beneficiary Contact" format="4*35x" status="O" />
-            <field no="2.24" tag="72Z" field-name="Corporate to Bank Information" format="6*35z" status="O" />
-            <field no="2.25" tag="23X" field-name="File Identification" format="4!c/65x" status="O">
+            <field tag="71F" field-name="Total Order/Contract Amount" format="3!a15d" status="O" />
+            <field tag="37J" field-name="Undertaking Value in Percent" format="12d" status="O" />
+            <field tag="49Z" field-name="Special Agreements" format="50*65z" status="O" />
+            <field tag="29A" field-name="Customer Contact" format="4*35x" status="O" />
+            <field tag="29D" field-name="Beneficiary Contact" format="4*35x" status="O" />
+            <field tag="29F" field-name="Local Undertaking Beneficiary Contact" format="4*35x" status="O" />
+            <field tag="72Z" field-name="Corporate to Bank Information" format="6*35z" status="O" />
+            <field tag="23X" field-name="File Identification" format="4!c/65x" status="O">
                 <components>
                     <component index="1" label="Code" format="4!c" status="M" options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
                     <component index="2" label="File Name or Reference" format="65x" status="M"/>
                 </components>
             </field>
-            <field no="2.26" tag="29S" field-name="Customer Identifier" format="4!c/35x" status="O">
+            <field tag="29S" field-name="Customer Identifier" format="4!c/35x" status="O">
                 <components>
                     <component index="1" label="Code" format="4!c" status="M" options="BICC|OTHR"/>
                     <component index="2" label="Party Identifier" format="35x" status="M"/>
                 </components>
             </field>
-            <field no="2.27" tag="29P" field-name="Processing Bank Identifier" format="4!a2!a2!c[3!c]" status="O" />
-            <field no="2.28" tag="29U" field-name="Lead Bank Identifier" format="4!a2!a2!c[3!c]" status="O" />
+            <field tag="29P" field-name="Processing Bank Identifier" format="4!a2!a2!c[3!c]" status="O" />
+            <field tag="29U" field-name="Lead Bank Identifier" format="4!a2!a2!c[3!c]" status="O" />
         </fields>
     </mt798>
     

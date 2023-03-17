@@ -2,7 +2,7 @@ package cn.maiaimei.framework.swift.converter.mt.mt7xx;
 
 import cn.maiaimei.framework.swift.converter.mt.mt7xx.strategy.MT798ToTransactionConverterStrategy;
 import cn.maiaimei.framework.swift.exception.ConverterNotFoundException;
-import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Message;
+import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Packets;
 import cn.maiaimei.framework.swift.model.mt.mt7xx.MT798Transaction;
 import com.prowidesoftware.swift.model.field.Field12;
 import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
@@ -15,16 +15,16 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class MT798ToTransactionConverter implements Converter<MT798Message, MT798Transaction> {
+public class MT798ToTransactionConverter implements Converter<MT798Packets, MT798Transaction> {
 
     @Autowired
     private Set<MT798ToTransactionConverterStrategy> converterStrategySet;
 
     @Override
-    public MT798Transaction convert(MT798Message mt798Message) {
-        MT798 indexMessage = mt798Message.getIndexMessage();
-        List<MT798> detailMessages = mt798Message.getDetailMessages();
-        List<MT798> extensionMessages = mt798Message.getExtensionMessages();
+    public MT798Transaction convert(MT798Packets mt798Packets) {
+        MT798 indexMessage = mt798Packets.getIndexMessage();
+        List<MT798> detailMessages = mt798Packets.getDetailMessages();
+        List<MT798> extensionMessages = mt798Packets.getExtensionMessages();
         String subMessageType = getSubMessageType(indexMessage);
         MT798ToTransactionConverterStrategy strategy = getMT798ToTransactionConverterStrategy(subMessageType);
         return strategy.convert(indexMessage, detailMessages, extensionMessages, strategy.getTransactionType());
