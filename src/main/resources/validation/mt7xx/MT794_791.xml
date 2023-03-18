@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+
+    <mt798 id="mt794791Config" index-message-type="794" sub-message-type="791">
+        <catalogue>Common Group Messages</catalogue>
+        <transaction>Request for Settlement of Charges – Bank-to-Corporate</transaction>
+        <description>Request for Settlement of Charges – Bank-to-Corporate Details</description>
+        <fields>
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>
+        </fields>
+    </mt798>
+
+</mts>

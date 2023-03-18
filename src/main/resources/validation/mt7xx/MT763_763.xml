@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+
+    <mt798 id="mt763Config" index-message-type="763" sub-message-type="763" corporate-to-bank="true"
+           bank-to-corporate="false">
+        <catalogue>Guarantee / Standby Letter of Credit</catalogue>
+        <transaction>Request for Amendment of Guarantee /Standby Letter of Credit – Corporate-to-Bank</transaction>
+        <description>Request for Amendment of Guarantee /Standby Letter of Credit – Corporate-to-Bank Index
+        </description>
+        <fields>
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21A" field-name="Customer Reference Number" format="16x" status="M"/>
+            <field tag="21T" field-name="Customer Business Reference" format="16x" status="M"/>
+            <field tag="20" field-name="Undertaking Number" format="16x" status="M"/>
+            <field tag="13E" field-name="Message Creation Date Time" format="8!n4!n" pattern="YYYYMMDDHHMM" status="M"/>
+            <field tag="23E" field-name="Method of Transmission" format="4!c[/30x]" status="O">
+                <components>
+                    <component index="1" label="Method" format="4!c" status="M" options="TELE|COUR"/>
+                    <component index="2" label="Additional Information" format="30x" status="O"/>
+                </components>
+            </field>
+            <field tag="49Z" field-name="Special Agreements" format="50*65z" status="O"/>
+            <field tag="29A" field-name="Customer Contact" format="4*35x" status="O"/>
+            <field tag="72Z" field-name="Corporate to Bank Information" format="6*35z" status="O"/>
+            <field tag="23X" field-name="File Identification" format="4!c/65x" status="O">
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M"
+                               options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
+                    <component index="2" label="File Name or Reference" format="65x" status="M"/>
+                </components>
+            </field>
+            <field tag="26E" field-name="Number of Amendment" format="3n" status="M"/>
+            <field tag="29S" field-name="Customer Identifier" format="4!c/35x" status="O">
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M" options="BICC|OTHR"/>
+                    <component index="2" label="Party Identifier" format="35x" status="M"/>
+                </components>
+            </field>
+            <field tag="29P" field-name="Processing Bank Identifier" format="4!a2!a2!c[3!c]" status="O"/>
+            <field tag="29U" field-name="Lead Bank Identifier" format="4!a2!a2!c[3!c]" status="O"/>
+        </fields>
+    </mt798>
+
+</mts>

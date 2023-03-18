@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+
+    <mt798 id="mt764775Config" index-message-type="764" sub-message-type="775">
+        <catalogue>Guarantee / Standby Letter of Credit</catalogue>
+        <transaction>Notification of amendment of Guarantee / Standby Letter of Credit – B2C</transaction>
+        <description>Guarantee / Standby Amendment Notification Extension</description>
+        <fields>
+            <field tag="" field-name="" format="" status=""></field>
+        </fields>
+    </mt798>
+
+</mts>

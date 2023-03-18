@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mts xmlns="https://maiamy.cn/schema/swift" 
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="https://maiamy.cn/schema/swift 
      https://maiamy.cn/schema/swift/swift-mts.xsd">
 
     <mt798 id="mt762760Config" index-message-type="762" sub-message-type="760" bank-to-corporate="true">
         <catalogue>Guarantee / Standby Letter of Credit</catalogue>
-        <transaction>Notification of Draft or Issuance of a Guarantee / Standby Letter of Credit – Bank-to-Corporate</transaction>
+        <transaction>Notification of Draft or Issuance of a Guarantee / Standby Letter of Credit – Bank-to-Corporate
+        </transaction>
         <description>Notification of Guarantee / Standby LC / Undertaking Details</description>
         <fields>
-            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
-            <field tag="21P" field-name="Bank Reference Number" format="16x" status="M" />
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>
         </fields>
         <sequences>
             <sequence name="A" status="M">
                 <fields>
-                    <field tag="15A" field-name="New Sequence" format="Empty field" status="E" />
-                    <field tag="27" field-name="Sequence of Total" format="1!n/1!n" status="M" />
-                    <field tag="22A" field-name="Purpose of Message" format="4!c" status="M" options="ACNF|ADVI|ICCO|ISCO|ISSU" />
-                    <field tag="72Z" field-name="Sender to Receiver Information" format="6*35z" status="O" />
+                    <field tag="15A" field-name="New Sequence" format="Empty field" status="M"/>
+                    <field tag="27" field-name="Sequence of Total" format="1!n/1!n" status="M"/>
+                    <field tag="22A" field-name="Purpose of Message" format="4!c" status="M"
+                           options="ACNF|ADVI|ICCO|ISCO|ISSU"/>
+                    <field tag="72Z" field-name="Sender to Receiver Information" format="6*35z" status="O"/>
                     <field tag="23X" field-name="File Identification" format="4!c/65x" status="O">
                         <components>
-                            <component index="1" label="Code" format="4!c" status="M" options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
+                            <component index="1" label="Code" format="4!c" status="M"
+                                       options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
                             <component index="2" label="File Name or Reference" format="65x" status="M"/>
                         </components>
                     </field>
@@ -29,21 +32,22 @@
             </sequence>
             <sequence name="B" status="M">
                 <fields>
-                    <field tag="15B" field-name="New Sequence" format="Empty field" status="E" />
-                    <field tag="20" field-name="Undertaking Number" format="16x" status="M" />
-                    <field tag="30" field-name="Date of Issue" format="6!n" pattern="YYMMDD" status="M" />
-                    <field tag="22D" field-name="Form of Undertaking" format="4!c" status="M" options="DGAR|STBY|DEPU" />
+                    <field tag="15B" field-name="New Sequence" format="Empty field" status="M"/>
+                    <field tag="20" field-name="Undertaking Number" format="16x" status="M"/>
+                    <field tag="30" field-name="Date of Issue" format="6!n" pattern="YYMMDD" status="M"/>
+                    <field tag="22D" field-name="Form of Undertaking" format="4!c" status="M" options="DGAR|STBY|DEPU"/>
                     <field tag="40C" field-name="Applicable Rules" format="4!a[/35x]" status="M">
                         <components>
-                            <component index="1" label="Type" format="4!a" status="M" options="ISPR|NONE|OTHR|UCPR|URDG"/>
+                            <component index="1" label="Type" format="4!a" status="M"
+                                       options="ISPR|NONE|OTHR|UCPR|URDG"/>
                             <component index="2" label="Narrative" format="35x" status="O"/>
                         </components>
                     </field>
-                    <field tag="23B" field-name="Expiry Type" format="4!c" status="M" options="COND|FIXD|OPEN" />
-                    <field tag="31E" field-name="Date of Expiry" format="6!n" pattern="YYMMDD" status="O" />
-                    <field tag="35G" field-name="Expiry Condition/Event" format="12*65x" status="O" />
-                    <field tag="50" field-name="Applicant" format="4*35x" status="O" />
-                    <field tag="51" field-name="Obligor/Instructing Party" format="4*35x" status="O" />
+                    <field tag="23B" field-name="Expiry Type" format="4!c" status="M" options="COND|FIXD|OPEN"/>
+                    <field tag="31E" field-name="Date of Expiry" format="6!n" pattern="YYMMDD" status="O"/>
+                    <field tag="35G" field-name="Expiry Condition/Event" format="12*65x" status="O"/>
+                    <field tag="50" field-name="Applicant" format="4*35x" status="O"/>
+                    <field tag="51" field-name="Obligor/Instructing Party" format="4*35x" status="O"/>
                     <!-- 52a start  -->
                     <field tag="52A" field-name="Issuer" format="[/1!a][/34x]4!a2!a2!c[3!c]" status="O">
                         <components>
@@ -93,7 +97,7 @@
                         </components>
                     </field>
                     <!-- 56a end  -->
-                    <field tag="23" field-name="Advising Bank Reference" format="16x" status="O" />
+                    <field tag="23" field-name="Advising Bank Reference" format="16x" status="O"/>
                     <!-- 57a start  -->
                     <field tag="57A" field-name="‘Advise Through’Bank" format="[/1!a][/34x]4!a2!a2!c[3!c]" status="O">
                         <components>
@@ -111,18 +115,20 @@
                         </components>
                     </field>
                     <!-- 57a end  -->
-                    <field tag="32B" field-name="Undertaking Amount" format="3!a15d" status="M" />
-                    <field tag="39D" field-name="Additional Amount Information" format="12*65z" status="O" />
+                    <field tag="32B" field-name="Undertaking Amount" format="3!a15d" status="M"/>
+                    <field tag="39D" field-name="Additional Amount Information" format="12*65z" status="O"/>
                     <!-- 41a start -->
-                    <field tag="41F" field-name="Available With ..." format="4!a2!a2!c[3!c]" status="O" />
-                    <field tag="41G" field-name="Available With ..." format="4*35x" status="O" />
+                    <field tag="41F" field-name="Available With ..." format="4!a2!a2!c[3!c]" status="O"/>
+                    <field tag="41G" field-name="Available With ..." format="4*35x" status="O"/>
                     <!-- 41a end -->
-                    <field tag="71D" field-name="Charges" format="6*35z" status="O" />
-                    <field tag="45C" field-name="Presentation Instructions" format="100*65z" status="O" />
-                    <field tag="77U" field-name="Undertaking Terms and Conditions" format="150*65z" status="O" />
-                    <field tag="49" field-name="Confirmation Instructions" format="7!x" status="O" options="CONFIRM|MAY ADD|WITHOUT" />
+                    <field tag="71D" field-name="Charges" format="6*35z" status="O"/>
+                    <field tag="45C" field-name="Presentation Instructions" format="100*65z" status="O"/>
+                    <field tag="77U" field-name="Undertaking Terms and Conditions" format="150*65z" status="O"/>
+                    <field tag="49" field-name="Confirmation Instructions" format="7!x" status="O"
+                           options="CONFIRM|MAY ADD|WITHOUT"/>
                     <!-- 58a start -->
-                    <field tag="58A" field-name="Requested Confirmation Party" format="[/1!a][/34x]4!a2!a2!c[3!c]" status="O">
+                    <field tag="58A" field-name="Requested Confirmation Party" format="[/1!a][/34x]4!a2!a2!c[3!c]"
+                           status="O">
                         <components>
                             <component index="1" format="1!a" status="O"/>
                             <component index="2" format="34x" status="O"/>
@@ -138,7 +144,8 @@
                         </components>
                     </field>
                     <!-- 58a end -->
-                    <field tag="44H" field-name="Governing Law and/or Place of Jurisdiction" format="2!a[/65x]" status="O">
+                    <field tag="44H" field-name="Governing Law and/or Place of Jurisdiction" format="2!a[/65x]"
+                           status="O">
                         <components>
                             <component index="1" label="Country Code" format="2!a" status="M"/>
                             <component index="2" label="Narrative" format="65x" status="O"/>
@@ -150,16 +157,19 @@
                             <component index="2" format="35x" status="O"/>
                         </components>
                     </field>
-                    <field tag="78" field-name="Automatic Extension Non-Extension Notification" format="12*65x" status="O" />
-                    <field tag="26E" field-name="Automatic Extension Notification Period" format="3n" status="O" />
-                    <field tag="31S" field-name="Automatic Extension Final Expiry Date" format="6!n" pattern="YYMMDD" status="O" />
-                    <field tag="48B" field-name="Demand Indicator" format="4!c" status="O" options="NMLT|NMPT|NPRT" />
-                    <field tag="48D" field-name="Transfer Indicator" format="4!c" status="O" options="TRAN" />
-                    <field tag="39E" field-name="Transfer Conditions" format="12*65z" status="O" />
-                    <field tag="45L" field-name="Underlying Transaction Details" format="50*65z" status="M" />
+                    <field tag="78" field-name="Automatic Extension Non-Extension Notification" format="12*65x"
+                           status="O"/>
+                    <field tag="26E" field-name="Automatic Extension Notification Period" format="3n" status="O"/>
+                    <field tag="31S" field-name="Automatic Extension Final Expiry Date" format="6!n" pattern="YYMMDD"
+                           status="O"/>
+                    <field tag="48B" field-name="Demand Indicator" format="4!c" status="O" options="NMLT|NMPT|NPRT"/>
+                    <field tag="48D" field-name="Transfer Indicator" format="4!c" status="O" options="TRAN"/>
+                    <field tag="39E" field-name="Transfer Conditions" format="12*65z" status="O"/>
+                    <field tag="45L" field-name="Underlying Transaction Details" format="50*65z" status="M"/>
                     <field tag="24E" field-name="Delivery of Original Undertaking" format="4!c[/35x]" status="O">
                         <components>
-                            <component index="1" label="Code" format="4!c" status="M" options="COLL|COUR|MAILMESS|OTHR|REGM"/>
+                            <component index="1" label="Code" format="4!c" status="M"
+                                       options="COLL|COUR|MAILMESS|OTHR|REGM"/>
                             <component index="2" label="Additional Information" format="35x" status="O"/>
                         </components>
                     </field>
@@ -172,33 +182,35 @@
                 </fields>
                 <rules>
                     <rule expression-string="#block.getTagByName('52A') == null and #block.getTagByName('52D') == null"
-                          error-message="In sequence B, 52A or 52D must be present" />
+                          error-message="In sequence B, 52A or 52D must be present"/>
                     <rule expression-string="#block.getTagByName('59') == null and #block.getTagByName('59A') == null"
-                          error-message="In sequence B, 59 or 59A must be present" />
+                          error-message="In sequence B, 59 or 59A must be present"/>
                 </rules>
             </sequence>
             <sequence name="C" status="O">
                 <fields>
-                    <field tag="15C" field-name="New Sequence" format="Empty field" status="E" />
-                    <field tag="31C" field-name="Requested Date of Issue" format="6!n" pattern="YYMMDD" status="O" />
-                    <field tag="22D" field-name="Form of Undertaking" format="4!c" status="M" options="DGAR|STBY|DEPU" />
+                    <field tag="15C" field-name="New Sequence" format="Empty field" status="M"/>
+                    <field tag="31C" field-name="Requested Date of Issue" format="6!n" pattern="YYMMDD" status="O"/>
+                    <field tag="22D" field-name="Form of Undertaking" format="4!c" status="M" options="DGAR|STBY|DEPU"/>
                     <field tag="40C" field-name="Applicable Rules" format="4!a[/35x]" status="M">
                         <components>
-                            <component index="1" label="Type" format="4!a" status="M" options="ISPR|NONE|OTHR|UCPR|URDG"/>
+                            <component index="1" label="Type" format="4!a" status="M"
+                                       options="ISPR|NONE|OTHR|UCPR|URDG"/>
                             <component index="2" label="Narrative" format="35x" status="O"/>
                         </components>
                     </field>
                     <field tag="22K" field-name="Type of Undertaking" format="4!c[/35x]" status="O">
                         <components>
-                            <component index="1" label="Type" format="4!c" status="M" options="APAY|BILL|CUST|DPAY|INSU|JUDI|LEAS|OTHR|PAYM|PERF|RETN|SHIP|TEND|WARR"/>
+                            <component index="1" label="Type" format="4!c" status="M"
+                                       options="APAY|BILL|CUST|DPAY|INSU|JUDI|LEAS|OTHR|PAYM|PERF|RETN|SHIP|TEND|WARR"/>
                             <component index="2" label="Narrative" format="35x" status="O"/>
                         </components>
                     </field>
-                    <field tag="23B" field-name="Expiry Type" format="4!c" status="M" options="COND|FIXD|OPEN" />
-                    <field tag="31E" field-name="Date of Expiry" format="6!n" pattern="YYMMDD" status="O" />
-                    <field tag="35G" field-name="Expiry Condition/Event" format="12*65x" status="O" />
-                    <field tag="50" field-name="Applicant" format="4*35x" status="M" />
-                    <field tag="51" field-name="Obligor/Instructing Party" format="4*35x" status="O" />
+                    <field tag="23B" field-name="Expiry Type" format="4!c" status="M" options="COND|FIXD|OPEN"/>
+                    <field tag="31E" field-name="Date of Expiry" format="6!n" pattern="YYMMDD" status="O"/>
+                    <field tag="35G" field-name="Expiry Condition/Event" format="12*65x" status="O"/>
+                    <field tag="50" field-name="Applicant" format="4*35x" status="M"/>
+                    <field tag="51" field-name="Obligor/Instructing Party" format="4*35x" status="O"/>
                     <!-- 52a start  -->
                     <field tag="52A" field-name="Issuer" format="[/1!a][/34x]4!a2!a2!c[3!c]" status="O">
                         <components>
@@ -223,18 +235,20 @@
                             <component start-index="3" end-index="5" format="35x" status="O"/>
                         </components>
                     </field>
-                    <field tag="32B" field-name="Undertaking Amount" format="3!a15d" status="M" />
-                    <field tag="39D" field-name="Additional Amount Information" format="12*65z" status="O" />
-                    <field tag="71D" field-name="Charges" format="6*35z" status="O" />
+                    <field tag="32B" field-name="Undertaking Amount" format="3!a15d" status="M"/>
+                    <field tag="39D" field-name="Additional Amount Information" format="12*65z" status="O"/>
+                    <field tag="71D" field-name="Charges" format="6*35z" status="O"/>
                     <!-- 41a start -->
                     <field tag="41F" field-name="Available With ..." format="4!a2!a2!c[3!c]" status="O"/>
                     <field tag="41G" field-name="Available With ..." format="4*35x" status="O"/>
                     <!-- 41a end -->
-                    <field tag="45C" field-name="Presentation Instructions" format="100*65z" status="O" />
-                    <field tag="77L" field-name="Requested Local Undertaking Terms and Conditions" format="150*65z" status="O" />
-                    <field tag="22Y" field-name="Standard Wording Required" format="4!c" status="O" options="STND" />
-                    <field tag="40D" field-name="Standard Wording Requested Language" format="2!a" status="O" />
-                    <field tag="44H" field-name="Governing Law and/or Place of Jurisdiction" format="2!a[/65x]" status="O">
+                    <field tag="45C" field-name="Presentation Instructions" format="100*65z" status="O"/>
+                    <field tag="77L" field-name="Requested Local Undertaking Terms and Conditions" format="150*65z"
+                           status="O"/>
+                    <field tag="22Y" field-name="Standard Wording Required" format="4!c" status="O" options="STND"/>
+                    <field tag="40D" field-name="Standard Wording Requested Language" format="2!a" status="O"/>
+                    <field tag="44H" field-name="Governing Law and/or Place of Jurisdiction" format="2!a[/65x]"
+                           status="O">
                         <components>
                             <component index="1" label="Country Code" format="2!a" status="M"/>
                             <component index="2" label="Narrative" format="65x" status="O"/>
@@ -246,16 +260,19 @@
                             <component index="2" format="35x" status="O"/>
                         </components>
                     </field>
-                    <field tag="78" field-name="Automatic Extension Non-Extension Notification" format="12*65x" status="O" />
-                    <field tag="26E" field-name="Automatic Extension Notification Period" format="3n" status="O" />
-                    <field tag="31S" field-name="Automatic Extension Final Expiry Date" format="6!n" pattern="YYMMDD" status="O" />
-                    <field tag="48B" field-name="Demand Indicator" format="4!c" status="O" options="NMLT|NMPT|NPRT" />
-                    <field tag="48D" field-name="Transfer Indicator" format="4!c" status="O" options="TRAN" />
-                    <field tag="39E" field-name="Transfer Conditions" format="12*65z" status="O" />
-                    <field tag="45L" field-name="Underlying Transaction Details" format="50*65z" status="M" />
+                    <field tag="78" field-name="Automatic Extension Non-Extension Notification" format="12*65x"
+                           status="O"/>
+                    <field tag="26E" field-name="Automatic Extension Notification Period" format="3n" status="O"/>
+                    <field tag="31S" field-name="Automatic Extension Final Expiry Date" format="6!n" pattern="YYMMDD"
+                           status="O"/>
+                    <field tag="48B" field-name="Demand Indicator" format="4!c" status="O" options="NMLT|NMPT|NPRT"/>
+                    <field tag="48D" field-name="Transfer Indicator" format="4!c" status="O" options="TRAN"/>
+                    <field tag="39E" field-name="Transfer Conditions" format="12*65z" status="O"/>
+                    <field tag="45L" field-name="Underlying Transaction Details" format="50*65z" status="M"/>
                     <field tag="24E" field-name="Delivery of Original Undertaking" format="4!c[/35x]" status="O">
                         <components>
-                            <component index="1" label="Code" format="4!c" status="M" options="COLL|COUR|MAIL|MESS|OTHR|REGM"/>
+                            <component index="1" label="Code" format="4!c" status="M"
+                                       options="COLL|COUR|MAIL|MESS|OTHR|REGM"/>
                             <component index="2" label="Additional Information" format="35x" status="O"/>
                         </components>
                     </field>

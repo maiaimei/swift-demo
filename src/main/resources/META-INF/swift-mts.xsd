@@ -132,9 +132,8 @@
     Field Status
 
     "M" indicates a field is mandatory;
-    "O" indicates a field is optional;
-    "E" indicates a field is Empty field.
-                ]]></xsd:documentation>
+    "O" indicates a field is optional.
+]]></xsd:documentation>
             </xsd:annotation>
             <xsd:simpleType>
                 <xsd:restriction base="xsd:string">

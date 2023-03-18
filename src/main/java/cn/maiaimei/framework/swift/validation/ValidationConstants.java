@@ -1,14 +1,11 @@
 package cn.maiaimei.framework.swift.validation;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public final class ValidationConstants {
 
     public static final String SLASH = "/";
     public static final String MANDATORY = "M";
-    public static final List<String> REQUIRED_FLAG = Arrays.asList("M", "E");
 
     /**
      * a, alphabetic, capital letters (A through Z), upper case only

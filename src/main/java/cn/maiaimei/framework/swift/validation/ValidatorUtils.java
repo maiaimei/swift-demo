@@ -115,11 +115,7 @@ public final class ValidatorUtils {
     public static boolean isMandatory(String status) {
         return ValidationConstants.MANDATORY.equals(status);
     }
-
-    public static boolean isRequired(String status) {
-        return ValidationConstants.REQUIRED_FLAG.contains(status);
-    }
-
+    
     public static List<Integer> getNumbers(String format) {
         List<Integer> numbers = new ArrayList<>();
         Matcher matcher = ValidationConstants.NUMBER_PATTERN.matcher(format);
