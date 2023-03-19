@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+
+    <mt798 id="mt777765Config" index-message-type="777" sub-message-type="765" bank-to-corporate="true"
+           corporate-to-bank="false">
+        <catalogue>Guarantee / Standby Letter of Credit</catalogue>
+        <transaction>Query to extend or pay Guarantee / Standby Letter of Credit – B2C</transaction>
+        <description>Query to extend or pay Guarantee / Standby Details</description>
+        <fields>
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>
+            <!-- TODO: mt777765Config -->
+        </fields>
+    </mt798>
+
+</mts>

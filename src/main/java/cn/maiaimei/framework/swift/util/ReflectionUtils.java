@@ -1,6 +1,7 @@
 package cn.maiaimei.framework.swift.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +27,16 @@ public class ReflectionUtils {
         for (Field declaredField : declaredFields) {
             if (fieldName.equals(declaredField.getName())) {
                 return declaredField;
+            }
+        }
+        return null;
+    }
+
+    public static Method findDeclaredMethod(Class<?> clazz, String methodName) {
+        final Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method declaredMethod : declaredMethods) {
+            if (methodName.equals(declaredMethod.getName())) {
+                return declaredMethod;
             }
         }
         return null;

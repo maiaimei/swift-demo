@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+
+    <mt798 id="mt739Config" index-message-type="739" sub-message-type="787" corporate-to-bank="false"
+           bank-to-corporate="true">
+        <catalogue>Guarantee / Standby Letter of Credit</catalogue>
+        <transaction>Advice of acceptance/refusal of Guarantee / Standby Letter of Credit Amendment – B2C</transaction>
+        <description>Guarantee / Standby Amendment Acceptance/Refusal Advice Details</description>
+        <fields>
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>
+            <field tag="20" field-name="Transaction Reference Number" format="16x" status="M"/>
+            <field tag="21" field-name="Related Reference Number" format="16x" status="M"/>
+            <!-- 52a start  -->
+            <field tag="52A" field-name="Issuer" format="[/1!a][/34x]4!a2!a2!c[3!c]" status="O">
+                <components>
+                    <component index="1" format="1!a" status="O"/>
+                    <component index="2" format="34x" status="O"/>
+                    <component index="3" format="4!a2!a2!c[3!c]" status="M"/>
+                </components>
+            </field>
+            <field tag="52D" field-name="Issuer" format="[/1!a][/34x]4*35x" status="O">
+                <components>
+                    <component index="1" format="1!a" status="O"/>
+                    <component index="2" format="34x" status="O"/>
+                    <component index="3" format="35x" status="M"/>
+                    <component start-index="4" end-index="6" format="35x" status="O"/>
+                </components>
+            </field>
+            <!-- 52a end  -->
+            <field tag="26E" field-name="Number of Amendment" format="3n" status="M"/>
+            <field tag="23R" field-name="Amendment Status" format="4!c6*35x" status="M">
+                <components>
+                    <component index="1" format="4!c" status="M" options="ACCP|REJT"/>
+                    <component start-index="2" end-index="7" format="35x" status="O"/>
+                </components>
+            </field>
+            <field tag="72Z" field-name="Sender to Receiver Information" format="6*35z" status="O"/>
+            <field tag="23X" field-name="File Identification" format="4!c/65x" status="O">
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M"
+                               options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
+                    <component index="2" label="File Name or Reference" format="65x" status="M"/>
+                </components>
+            </field>
+        </fields>
+    </mt798>
+
+</mts>

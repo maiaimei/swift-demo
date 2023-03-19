@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MT798BaseMessage extends BaseMessage {
     @Tag("20")
-    private String transactionReferenceNumber;
+    private String section1TransactionReferenceNumber;
 
     @Tag("12")
     private String subMessageType;

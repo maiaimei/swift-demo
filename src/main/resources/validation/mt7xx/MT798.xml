@@ -6,10 +6,10 @@
 
     <mt798 id="mt798Section1Config" index-message-type="798" sub-message-type="798">
         <fields>
-            <field tag="20" field-name="Transaction Reference Number" format="16x" status="M" />
-            <field tag="12" field-name="Sub-Message Type" format="3!n" status="M" />
-            <field tag="77E" field-name="Proprietary Message" format="*" status="E" />
+            <field tag="20" field-name="Transaction Reference Number" format="16x" status="M"/>
+            <field tag="12" field-name="Sub-Message Type" format="3!n" status="M"/>
+            <field tag="77E" field-name="Proprietary Message" format="*" status="M"/>
         </fields>
     </mt798>
-    
+
 </mts>

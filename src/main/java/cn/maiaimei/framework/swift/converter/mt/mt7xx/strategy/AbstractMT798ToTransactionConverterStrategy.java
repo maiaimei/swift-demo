@@ -22,21 +22,32 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Slf4j
-public abstract class AbstractMT798ToTransactionConverterStrategy implements MT798ToTransactionConverterStrategy {
+public abstract class AbstractMT798ToTransactionConverterStrategy
+        implements MT798ToTransactionConverterStrategy {
 
-    @Autowired
-    private MtToMsConverter mtToMsConverter;
+    @Autowired private MtToMsConverter mtToMsConverter;
 
     @SneakyThrows
     @Override
-    public <T extends MT798Transaction> T convert(MT798 indexMessage, List<MT798> detailMessages, List<MT798> extensionMessages, Class<T> transactionType) {
-        Method setIndexMessageMethod = findDeclaredMethod(transactionType, "setIndexMessage");
-        Method setDetailMessagesMethod = findDeclaredMethod(transactionType, "setDetailMessages");
-        Method setExtensionMessagesMethod = findDeclaredMethod(transactionType, "setExtensionMessages");
+    public <T extends MT798Transaction> T convert(
+            MT798 indexMessage,
+            List<MT798> detailMessages,
+            List<MT798> extensionMessages,
+            Class<T> transactionType) {
+        Method setIndexMessageMethod =
+                ReflectionUtils.findDeclaredMethod(transactionType, "setIndexMessage");
+        Method setDetailMessagesMethod =
+                ReflectionUtils.findDeclaredMethod(transactionType, "setDetailMessages");
+        Method setExtensionMessagesMethod =
+                ReflectionUtils.findDeclaredMethod(transactionType, "setExtensionMessages");
 
         Constructor<T> constructor = transactionType.getConstructor();
         T instance = constructor.newInstance();
-        invoke(instance, setIndexMessageMethod, Collections.singletonList(indexMessage), this::getIndexMessage);
+        invoke(
+                instance,
+                setIndexMessageMethod,
+                Collections.singletonList(indexMessage),
+                this::getIndexMessage);
         invoke(instance, setDetailMessagesMethod, detailMessages, this::getDetailMessage);
         invoke(instance, setExtensionMessagesMethod, extensionMessages, this::getExtensionMessage);
         return instance;
@@ -48,7 +59,8 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
 
     protected abstract MT798ExtensionMessage getExtensionMessage();
 
-    private <T extends MT798Transaction, M extends MT798BaseMessage> void invoke(T instance, Method method, List<MT798> mts, Supplier<M> spplier) {
+    private <T extends MT798Transaction, M extends MT798BaseMessage> void invoke(
+            T instance, Method method, List<MT798> mts, Supplier<M> spplier) {
         if (method == null) {
             return;
         }
@@ -67,7 +79,8 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         }
     }
 
-    private <T extends MT798BaseMessage> List<T> mt798ToMessage(List<MT798> mts, Supplier<T> spplier) {
+    private <T extends MT798BaseMessage> List<T> mt798ToMessage(
+            List<MT798> mts, Supplier<T> spplier) {
         List<T> msgs = null;
         if (!CollectionUtils.isEmpty(mts)) {
             msgs = new ArrayList<>();
@@ -79,7 +92,6 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         return msgs;
     }
 
-
     private <T extends MT798BaseMessage> T mt798ToMessage(MT798 mt, Supplier<T> spplier) {
         T message = spplier.get();
         if (message == null) {
@@ -89,7 +101,7 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
         SwiftTagListBlock block = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
         String transactionReferenceNumber = mt.getField20().getValue();
         String subMessageType = mt.getField12().getValue();
-        message.setTransactionReferenceNumber(transactionReferenceNumber);
+        message.setSection1TransactionReferenceNumber(transactionReferenceNumber);
         message.setSubMessageType(subMessageType);
         pupulateMessageIndexTotal(message, block);
         mtToMsConverter.convert(message, mt, block, subMessageType);
@@ -97,23 +109,14 @@ public abstract class AbstractMT798ToTransactionConverterStrategy implements MT7
     }
 
     @SneakyThrows
-    private <T extends MT798BaseMessage> void pupulateMessageIndexTotal(T message, SwiftTagListBlock block) {
-        final Field messageIndexTotalField = ReflectionUtils.getDeclaredField(MT798BaseMessage.class, "messageIndexTotal");
+    private <T extends MT798BaseMessage> void pupulateMessageIndexTotal(
+            T message, SwiftTagListBlock block) {
+        final Field messageIndexTotalField =
+                ReflectionUtils.getDeclaredField(MT798BaseMessage.class, "messageIndexTotal");
         if (messageIndexTotalField != null) {
             messageIndexTotalField.setAccessible(Boolean.TRUE);
             messageIndexTotalField.set(message, block.getTagValue(Field27A.NAME));
             messageIndexTotalField.setAccessible(Boolean.FALSE);
         }
     }
-
-    private Method findDeclaredMethod(Class<?> clazz, String methodName) {
-        final Method[] declaredMethods = clazz.getDeclaredMethods();
-        for (Method declaredMethod : declaredMethods) {
-            if (methodName.equals(declaredMethod.getName())) {
-                return declaredMethod;
-            }
-        }
-        return null;
-    }
-
 }

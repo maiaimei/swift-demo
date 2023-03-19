@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mts xmlns="https://maiamy.cn/schema/swift"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://maiamy.cn/schema/swift 
+                         https://maiamy.cn/schema/swift/swift-mts.xsd">
+
+    <mt798 id="mt777Config" index-message-type="777" sub-message-type="777" bank-to-corporate="true"
+           corporate-to-bank="false">
+        <catalogue>Guarantee / Standby Letter of Credit</catalogue>
+        <transaction>Query to extend or pay Guarantee / Standby Letter of Credit – B2C</transaction>
+        <description>Query to extend or pay Guarantee / Standby Index</description>
+        <fields>
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21T" field-name="Customer Business Reference" format="16x" status="M"/>
+            <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>
+            <field tag="21S" field-name="Bank Business Reference" format="16x" status="M"/>
+            <field tag="20" field-name="Undertaking Number" format="16x" status="M"/>
+            <field tag="13E" field-name="Message Creation Date Time" format="8!n4!n" pattern="YYYYMMDDHHMM" status="M"/>
+            <field tag="31C" field-name="Date of Extend or Pay Request" format="6!n" pattern="YYMMDD" status="M"/>
+            <field tag="34D" field-name="Amount Claimed" format="3!a15d" status="O"/>
+            <field tag="31L" field-name="New Validity Expiry Date" format="6!n" pattern="YYMMDD" status="O"/>
+            <field tag="49J" field-name="Text of Extend or Pay Request" format="50*65z" status="O"/>
+            <field tag="78B" field-name="Instructions from the Bank" format="50*65z" status="O"/>
+            <field tag="31T" field-name="Latest Date for Reply" format="6!n" pattern="YYMMDD" status="M"/>
+            <field tag="29B" field-name="Bank Contact" format="4*35x" status="O"/>
+            <field tag="72Z" field-name="Bank to Corporate Information" format="6*35z" status="O"/>
+            <field tag="23X" field-name="File Identification" format="4!c/65x" status="O">
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M"
+                               options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
+                    <component index="2" label="File Name or Reference" format="65x" status="M"/>
+                </components>
+            </field>
+            <field tag="29S" field-name="Customer Identifier" format="4!c/35x" status="O">
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M" options="BICC|OTHR"/>
+                    <component index="2" label="Party Identifier" format="35x" status="M"/>
+                </components>
+            </field>
+            <field tag="29P" field-name="Processing Bank Identifier" format="4!a2!a2!c[3!c]" status="O"/>
+            <field tag="29U" field-name="Lead Bank Identifier" format="4!a2!a2!c[3!c]" status="O"/>
+        </fields>
+    </mt798>
+
+</mts>

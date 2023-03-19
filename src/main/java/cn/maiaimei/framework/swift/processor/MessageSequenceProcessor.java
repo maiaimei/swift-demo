@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MessageSequenceProcessor {
-    boolean supportsMessageType(String subMessageType);
+    boolean supportsMessageType(String messageType);
 
     Map<String, List<SwiftTagListBlock>> getSequenceMap(AbstractMT mt);
 }

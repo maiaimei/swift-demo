@@ -4,10 +4,7 @@ import cn.maiaimei.framework.swift.model.mt.config.FieldComponentInfo;
 import cn.maiaimei.framework.swift.validation.ValidationError;
 import cn.maiaimei.framework.swift.validation.ValidationResult;
 import cn.maiaimei.framework.swift.validation.ValidatorUtils;
-import com.prowidesoftware.swift.model.field.Field;
-import com.prowidesoftware.swift.model.field.Field15A;
-import com.prowidesoftware.swift.model.field.Field15B;
-import com.prowidesoftware.swift.model.field.Field15C;
+import com.prowidesoftware.swift.model.field.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +16,7 @@ import java.util.List;
 public class MandatoryFieldValidator implements FieldValidator, FieldValidatorHandler {
 
     private static final List<String> IGNORE_FIELD =
-            Arrays.asList(Field15A.NAME, Field15B.NAME, Field15C.NAME);
+            Arrays.asList(Field77E.NAME, Field15A.NAME, Field15B.NAME, Field15C.NAME);
 
     @Autowired private FormatFieldValidatorComposite formatFieldValidatorComposite;
 
@@ -27,7 +24,7 @@ public class MandatoryFieldValidator implements FieldValidator, FieldValidatorHa
     public String validate(
             FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (StringUtils.isBlank(value)) {
-            if (IGNORE_FIELD.contains(field.getName())) {
+            if (field != null && IGNORE_FIELD.contains(field.getName())) {
                 return null;
             }
             if (ValidatorUtils.isMandatory(fieldComponentInfo.getStatus())) {

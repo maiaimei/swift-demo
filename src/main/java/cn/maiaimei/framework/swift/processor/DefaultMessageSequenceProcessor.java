@@ -11,7 +11,7 @@ import java.util.Map;
 @Component
 public class DefaultMessageSequenceProcessor implements MessageSequenceProcessor {
     @Override
-    public boolean supportsMessageType(String subMessageType) {
+    public boolean supportsMessageType(String messageType) {
         return false;
     }
 

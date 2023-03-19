@@ -139,7 +139,6 @@
                 <xsd:restriction base="xsd:string">
                     <xsd:enumeration value="M"/>
                     <xsd:enumeration value="O"/>
-                    <xsd:enumeration value="E"/>
                 </xsd:restriction>
             </xsd:simpleType>
         </xsd:attribute>
