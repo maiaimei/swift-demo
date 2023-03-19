@@ -9,17 +9,8 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unchecked")
 @Component
-public class MT784ToTransactionConverterStrategy extends AbstractMT798ToTransactionConverterStrategy {
-    @Override
-    public boolean supportsMessageType(String subMessageType) {
-        return "784".equals(subMessageType);
-    }
-
-    @Override
-    public <T extends MT798Transaction> Class<T> getTransactionType() {
-        return (Class<T>) MT784Transaction.class;
-    }
-
+public class MT784ToTransactionConverterStrategy
+        extends AbstractMT798ToTransactionConverterStrategy {
     @Override
     protected MT798IndexMessage getIndexMessage() {
         return new MT784Transaction.MT784IndexMessage();
@@ -33,5 +24,15 @@ public class MT784ToTransactionConverterStrategy extends AbstractMT798ToTransact
     @Override
     protected MT798ExtensionMessage getExtensionMessage() {
         return new MT784Transaction.MT784ExtensionMessage();
+    }
+
+    @Override
+    public boolean supportsMessageType(String subMessageType) {
+        return "784".equals(subMessageType);
+    }
+
+    @Override
+    public <T extends MT798Transaction> Class<T> getTransactionType() {
+        return (Class<T>) MT784Transaction.class;
     }
 }

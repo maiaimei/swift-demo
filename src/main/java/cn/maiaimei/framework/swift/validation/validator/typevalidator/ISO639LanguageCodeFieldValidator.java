@@ -6,9 +6,7 @@ import com.prowidesoftware.swift.model.field.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-/**
- * TODO:  2 alphabetic, ISO 639 Language Code, e.g., en = English, fr = French, de = German.
- */
+/** TODO: 2 alphabetic, ISO 639 Language Code, e.g., en = English, fr = French, de = German. */
 @Component
 public class ISO639LanguageCodeFieldValidator implements TypeFieldValidator {
     private static final String TYPE = "Language";
@@ -19,7 +17,8 @@ public class ISO639LanguageCodeFieldValidator implements TypeFieldValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         return null;
     }
 }

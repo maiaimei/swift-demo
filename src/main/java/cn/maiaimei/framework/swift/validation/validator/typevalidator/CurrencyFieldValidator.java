@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 public class CurrencyFieldValidator implements TypeFieldValidator {
     private static final String TYPE = "Currency";
 
-    @Autowired
-    private CurrencyList currencyList;
+    @Autowired private CurrencyList currencyList;
 
     @Override
     public boolean supportsType(Field field, String type) {
@@ -21,10 +20,12 @@ public class CurrencyFieldValidator implements TypeFieldValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
-//        if (currencies.getCurrencies().stream().noneMatch(t -> t.getCurrency().equals(value))) {
-//            return label.concat(" unknown currency, invalid value is ".concat(value));
-//        }
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+        //        if (currencies.getCurrencies().stream().noneMatch(t ->
+        // t.getCurrency().equals(value))) {
+        //            return label.concat(" unknown currency, invalid value is ".concat(value));
+        //        }
         return null;
     }
 }

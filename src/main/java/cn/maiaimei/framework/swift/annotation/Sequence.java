@@ -11,13 +11,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Sequence {
-    /**
-     * sequence name
-     */
+    /** sequence name */
     String value();
 
-    /**
-     * sequence index
-     */
+    /** sequence index */
     int index() default 0;
 }

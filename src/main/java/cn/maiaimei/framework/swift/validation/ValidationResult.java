@@ -22,5 +22,4 @@ public class ValidationResult {
         result.setErrorMessages(new ArrayList<>());
         return result;
     }
-
 }

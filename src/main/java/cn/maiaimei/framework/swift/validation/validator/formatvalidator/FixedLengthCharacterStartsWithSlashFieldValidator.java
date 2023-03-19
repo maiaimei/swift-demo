@@ -9,7 +9,8 @@ import com.prowidesoftware.swift.model.field.Field;
 import org.springframework.stereotype.Component;
 
 /**
- * Validate fixed length of alphabetic, alpha-numeric, numeric, SWIFT X set, SWIFT Z set or decimals, and starts with slash
+ * Validate fixed length of alphabetic, alpha-numeric, numeric, SWIFT X set, SWIFT Z set or
+ * decimals, and starts with slash
  */
 @Component
 public class FixedLengthCharacterStartsWithSlashFieldValidator implements FormatFieldValidator {
@@ -19,20 +20,24 @@ public class FixedLengthCharacterStartsWithSlashFieldValidator implements Format
     }
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         String format = fieldComponentInfo.getFormat();
         int length = ValidatorUtils.getNumber(format);
         String type = ValidatorUtils.getType(format);
         String valueToValidate = value;
         if (!ValidatorUtils.isStartsWithSlash(value)) {
             if (FieldInfo.class.isAssignableFrom(fieldComponentInfo.getClass())) {
-                return ValidationError.mustBeFixedLengthCharacterStartsWithSlash(label, length, type, value);
+                return ValidationError.mustBeFixedLengthCharacterStartsWithSlash(
+                        label, length, type, value);
             }
         } else {
             valueToValidate = ValidatorUtils.trimStartSlash(format, value);
         }
-        if (ValidatorUtils.ne(valueToValidate, length) || ValidatorUtils.containsOther(valueToValidate, type)) {
-            return ValidationError.mustBeFixedLengthCharacterStartsWithSlash(label, length, type, value);
+        if (ValidatorUtils.ne(valueToValidate, length)
+                || ValidatorUtils.containsOther(valueToValidate, type)) {
+            return ValidationError.mustBeFixedLengthCharacterStartsWithSlash(
+                    label, length, type, value);
         }
         return null;
     }

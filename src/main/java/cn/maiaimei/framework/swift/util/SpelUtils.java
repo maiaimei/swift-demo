@@ -9,23 +9,27 @@ import java.util.Map;
 public class SpelUtils {
     private static final SpelExpressionParser PARSER = new SpelExpressionParser();
 
-    public static StandardEvaluationContext newStandardEvaluationContext(String name, Object value) {
+    public static StandardEvaluationContext newStandardEvaluationContext(
+            String name, Object value) {
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setVariable(name, value);
         return context;
     }
 
-    public static StandardEvaluationContext newStandardEvaluationContext(Map<String, Object> variables) {
+    public static StandardEvaluationContext newStandardEvaluationContext(
+            Map<String, Object> variables) {
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setVariables(variables);
         return context;
     }
 
-    public static boolean parseExpressionAsBoolean(StandardEvaluationContext context, String expressionString) {
+    public static boolean parseExpressionAsBoolean(
+            StandardEvaluationContext context, String expressionString) {
         return parseExpression(context, expressionString, Boolean.class);
     }
 
-    public static <T> T parseExpression(StandardEvaluationContext context, String expressionString, Class<T> clazz) {
+    public static <T> T parseExpression(
+            StandardEvaluationContext context, String expressionString, Class<T> clazz) {
         Expression exp = PARSER.parseExpression(expressionString);
         return exp.getValue(context, clazz);
     }

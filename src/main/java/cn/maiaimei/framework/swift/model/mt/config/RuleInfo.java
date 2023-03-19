@@ -4,10 +4,9 @@ import lombok.Data;
 
 @Data
 public class RuleInfo {
-    /**
-     * Spel expressionString
-     */
+    /** Spel expressionString */
     private String expressionString;
+
     private String beanName;
     private String errorMessage;
 }

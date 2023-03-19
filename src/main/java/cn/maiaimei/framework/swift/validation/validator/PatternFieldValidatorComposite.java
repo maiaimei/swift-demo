@@ -11,17 +11,21 @@ import java.util.Set;
 
 @Component
 public class PatternFieldValidatorComposite implements FieldValidatorHandler {
-    @Autowired
-    private TypeFieldValidatorComposite typeFieldValidatorComposite;
+    @Autowired private TypeFieldValidatorComposite typeFieldValidatorComposite;
 
-    @Autowired
-    private Set<PatternFieldValidator> patternValidatorSet;
+    @Autowired private Set<PatternFieldValidator> patternValidatorSet;
 
     @Override
-    public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public void handleValidation(
+            ValidationResult result,
+            FieldComponentInfo fieldComponentInfo,
+            Field field,
+            String label,
+            String value) {
         for (PatternFieldValidator patternValidator : patternValidatorSet) {
             if (patternValidator.supportsPattern(field, fieldComponentInfo.getPattern())) {
-                String errorMessage = patternValidator.validate(fieldComponentInfo, field, label, value);
+                String errorMessage =
+                        patternValidator.validate(fieldComponentInfo, field, label, value);
                 if (StringUtils.isNotBlank(errorMessage)) {
                     result.addErrorMessage(errorMessage);
                     return;

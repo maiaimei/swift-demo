@@ -82,7 +82,9 @@ public final class ValidatorUtils {
     }
 
     public static boolean isFixedLengthCharacterStartsWithSlash(String format) {
-        return ValidationConstants.FIXED_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN.matcher(format).matches();
+        return ValidationConstants.FIXED_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN
+                .matcher(format)
+                .matches();
     }
 
     public static boolean isVariableLengthCharacter(String format) {
@@ -90,7 +92,9 @@ public final class ValidatorUtils {
     }
 
     public static boolean isVariableLengthCharacterStartsWithSlash(String format) {
-        return ValidationConstants.VARIABLE_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN.matcher(format).matches();
+        return ValidationConstants.VARIABLE_LENGTH_CHARACTER_STARTS_WITH_SLASH_PATTERN
+                .matcher(format)
+                .matches();
     }
 
     public static boolean isMultilineSwiftSet(String format) {
@@ -115,7 +119,7 @@ public final class ValidatorUtils {
     public static boolean isMandatory(String status) {
         return ValidationConstants.MANDATORY.equals(status);
     }
-    
+
     public static List<Integer> getNumbers(String format) {
         List<Integer> numbers = new ArrayList<>();
         Matcher matcher = ValidationConstants.NUMBER_PATTERN.matcher(format);

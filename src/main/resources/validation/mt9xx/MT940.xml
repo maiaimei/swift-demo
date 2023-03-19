@@ -3,14 +3,14 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="https://maiamy.cn/schema/swift 
                          https://maiamy.cn/schema/swift/swift-mts.xsd">
-    
+
     <mt id="mt940Config" message-type="940">
         <description>customer statement message</description>
         <fields>
-            <field tag="20" field-name="Transaction Reference Number" format="16x" status="M" />
-            <field tag="21" field-name="Related Reference" format="16x" status="O" />
-            <field tag="25" field-name="Account Identification" format="35x" status="M" />
-            <field tag="28C" field-name="Statement Number / Sequence Number" format="5n[/5n]" status="M" />
+            <field tag="20" field-name="Transaction Reference Number" format="16x" status="M"/>
+            <field tag="21" field-name="Related Reference" format="16x" status="O"/>
+            <field tag="25" field-name="Account Identification" format="35x" status="M"/>
+            <field tag="28C" field-name="Statement Number / Sequence Number" format="5n[/5n]" status="M"/>
             <field tag="60F" field-name="Opening Balance" format="1!a6!n3!a15d" status="O">
                 <components>
                     <component index="1" label="D/C Mark" format="1!a" status="M"/>
@@ -43,9 +43,9 @@
                     <component index="4" label="Amount" format="15d" status="M"/>
                 </components>
             </field>
-            <field tag="64" field-name="Closing Available Balance(Available Funds)" format="1!a6!n3!a15d" status="O" />
-            <field tag="65" field-name="Forward Available Balance" format="1!a6!n3!a15d" status="O" />
-            <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O" />
+            <field tag="64" field-name="Closing Available Balance(Available Funds)" format="1!a6!n3!a15d" status="O"/>
+            <field tag="65" field-name="Forward Available Balance" format="1!a6!n3!a15d" status="O"/>
+            <field tag="86" field-name="Information to Account Owner" format="6*65x" status="O"/>
         </fields>
         <!--<sequences>
             <sequence name="A" status="O">

@@ -14,9 +14,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Convert BaseMessage to AbstractMT
- */
+/** Convert BaseMessage to AbstractMT */
 @Component
 public class MsToMtConverter implements Converter<BaseMessage, AbstractMT> {
 
@@ -46,7 +44,8 @@ public class MsToMtConverter implements Converter<BaseMessage, AbstractMT> {
     }
 
     @SneakyThrows
-    private <T extends AbstractMT> void handleSequenceField(T mt, Field declaredField, Object value) {
+    private <T extends AbstractMT> void handleSequenceField(
+            T mt, Field declaredField, Object value) {
         Sequence sequenceAnnotation = declaredField.getAnnotation(Sequence.class);
         if (sequenceAnnotation == null || value == null) {
             return;
@@ -63,13 +62,16 @@ public class MsToMtConverter implements Converter<BaseMessage, AbstractMT> {
     private <T extends AbstractMT> void handleSimpleField(T mt, Field declaredField, Object value) {
         Tag tagAnnotation = declaredField.getAnnotation(Tag.class);
         if (tagAnnotation != null && value != null) {
-            mt.append(new com.prowidesoftware.swift.model.Tag(tagAnnotation.value(), value.toString()));
+            mt.append(
+                    new com.prowidesoftware.swift.model.Tag(
+                            tagAnnotation.value(), value.toString()));
         }
     }
 
     private List<Field> getAllDeclaredFields(BaseMessage ms) {
         List<Field> selfFields = ReflectionUtils.getSelfDeclaredFields(ms.getClass());
-        List<Field> superclassDeclaredFields = ReflectionUtils.getSelfDeclaredFields(MT798BaseMessage.class);
+        List<Field> superclassDeclaredFields =
+                ReflectionUtils.getSelfDeclaredFields(MT798BaseMessage.class);
         List<Field> allFields = new ArrayList<>();
         allFields.addAll(superclassDeclaredFields);
         allFields.addAll(selfFields);

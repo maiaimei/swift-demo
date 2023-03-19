@@ -21,7 +21,8 @@ public class BICFieldValidator implements FormatFieldValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (!PATTERN.matcher(value).matches()) {
             return ValidationError.mustMatchFormat(label, FORMAT, value);
         }

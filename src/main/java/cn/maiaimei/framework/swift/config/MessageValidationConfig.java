@@ -7,5 +7,4 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @ConditionalOnProperty(name = "swift.mt.validation.enabled", havingValue = "true")
 @ImportResource("classpath*:validation/**/*.xml")
-public class MessageValidationConfig {
-}
+public class MessageValidationConfig {}

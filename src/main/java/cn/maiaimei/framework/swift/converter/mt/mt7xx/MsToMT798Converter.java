@@ -6,9 +6,7 @@ import com.prowidesoftware.swift.model.mt.mt7xx.MT798;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-/**
- * Convert BaseMessage to MT798
- */
+/** Convert BaseMessage to MT798 */
 @Component
 public class MsToMT798Converter implements Converter<BaseMessage, MT798> {
 

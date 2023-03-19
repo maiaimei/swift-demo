@@ -27,30 +27,31 @@ import java.util.stream.Collectors;
 @Component
 public class MT798ValidationEngine {
 
-    @Autowired
-    private GenericMTValidationEngine genericMTValidationEngine;
+    @Autowired private GenericMTValidationEngine genericMTValidationEngine;
 
-    @Autowired
-    private MT798Config mt798Section1Config;
+    @Autowired private MT798Config mt798Section1Config;
 
-    @Autowired
-    private Set<MT798Config> mt798ConfigSet;
+    @Autowired private Set<MT798Config> mt798ConfigSet;
 
-    /**
-     * validate message for the corporate-to-bank flows
-     */
+    /** validate message for the corporate-to-bank flows */
     public ValidationResult validate(MT798 mt798) {
-        String subMessageType = Optional.ofNullable(mt798.getField12()).orElseGet(Field12::new).getValue();
+        String subMessageType =
+                Optional.ofNullable(mt798.getField12()).orElseGet(Field12::new).getValue();
         if (StringUtils.isBlank(subMessageType)) {
             ValidationResult result = ValidationResult.newInstance();
             result.addErrorMessage(ValidationError.mustNotBlank(Field12.NAME));
             return result;
         }
-        Supplier<MT798Config> mt798ConfigSupplier = () -> getMT798Config(
-                w -> w.getSubMessageType().equals(subMessageType) && Boolean.TRUE.equals(w.getCorporateToBank()),
-                "Can't found validation config for MT 798<" + subMessageType + ">",
-                "Can't determine which validation config to use for MT 798<" + subMessageType + ">"
-        );
+        Supplier<MT798Config> mt798ConfigSupplier =
+                () ->
+                        getMT798Config(
+                                w ->
+                                        w.getSubMessageType().equals(subMessageType)
+                                                && Boolean.TRUE.equals(w.getCorporateToBank()),
+                                "Can't found validation config for MT 798<" + subMessageType + ">",
+                                "Can't determine which validation config to use for MT 798<"
+                                        + subMessageType
+                                        + ">");
         return doValidate(mt798, mt798ConfigSupplier);
     }
 
@@ -59,15 +60,26 @@ public class MT798ValidationEngine {
      *
      * @param mt798
      * @param indexMessageType Sub-Message Type for Index Message
-     * @param subMessageType   Sub-Message Type
+     * @param subMessageType Sub-Message Type
      * @return
      */
     public ValidationResult validate(MT798 mt798, String indexMessageType, String subMessageType) {
-        Supplier<MT798Config> mt798ConfigSupplier = () -> getMT798Config(
-                w -> w.getIndexMessageType().equals(indexMessageType) && w.getSubMessageType().equals(subMessageType),
-                "Can't found validation config for MT 798<" + indexMessageType + "> + MT 798<" + subMessageType + ">",
-                "Can't determine which validation config to use for MT 798<" + indexMessageType + "> + MT 798<" + subMessageType + ">"
-        );
+        Supplier<MT798Config> mt798ConfigSupplier =
+                () ->
+                        getMT798Config(
+                                w ->
+                                        w.getIndexMessageType().equals(indexMessageType)
+                                                && w.getSubMessageType().equals(subMessageType),
+                                "Can't found validation config for MT 798<"
+                                        + indexMessageType
+                                        + "> + MT 798<"
+                                        + subMessageType
+                                        + ">",
+                                "Can't determine which validation config to use for MT 798<"
+                                        + indexMessageType
+                                        + "> + MT 798<"
+                                        + subMessageType
+                                        + ">");
         return doValidate(mt798, mt798ConfigSupplier);
     }
 
@@ -75,7 +87,8 @@ public class MT798ValidationEngine {
         ValidationResult result = ValidationResult.newInstance();
         SwiftBlock4 block4 = mt798.getSwiftMessage().getBlock4();
         // Validate Section 1
-        SwiftTagListBlock blockBeforeFirst77E = block4.getSubBlockBeforeFirst(Field77E.NAME, Boolean.TRUE);
+        SwiftTagListBlock blockBeforeFirst77E =
+                block4.getSubBlockBeforeFirst(Field77E.NAME, Boolean.TRUE);
         int errorMessageCount = result.getErrorMessages().size();
         genericMTValidationEngine.validate(result, mt798, blockBeforeFirst77E, mt798Section1Config);
         if (errorMessageCount != result.getErrorMessages().size()) {
@@ -83,18 +96,20 @@ public class MT798ValidationEngine {
         }
         // Validate Section 2
         String subMessageType = mt798.getField12().getValue();
-        SwiftTagListBlock blockAfterFirst77E = block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
+        SwiftTagListBlock blockAfterFirst77E =
+                block4.getSubBlockAfterFirst(Field77E.NAME, Boolean.FALSE);
         MT798Config config = mt798ConfigSupplier.get();
-        genericMTValidationEngine.validate(result, mt798, blockAfterFirst77E, config, subMessageType);
+        genericMTValidationEngine.validate(
+                result, mt798, blockAfterFirst77E, config, subMessageType);
         return result;
     }
 
-    private MT798Config getMT798Config(Predicate<MT798Config> predicate,
-                                       String validationConfigNotFoundError,
-                                       String multipleValidationConfigError) {
-        List<MT798Config> mt798Configs = mt798ConfigSet.stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
+    private MT798Config getMT798Config(
+            Predicate<MT798Config> predicate,
+            String validationConfigNotFoundError,
+            String multipleValidationConfigError) {
+        List<MT798Config> mt798Configs =
+                mt798ConfigSet.stream().filter(predicate).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(mt798Configs)) {
             throw new ValidationException(validationConfigNotFoundError);
         }
@@ -103,5 +118,4 @@ public class MT798ValidationEngine {
         }
         return mt798Configs.get(0);
     }
-
 }

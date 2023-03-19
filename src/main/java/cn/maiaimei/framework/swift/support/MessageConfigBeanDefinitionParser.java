@@ -65,7 +65,10 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
         List<Element> childElements = DomUtils.getChildElements(element);
         if (!CollectionUtils.isEmpty(childElements)) {
             for (Element childElement : childElements) {
-                Class<?> beanClass = "mt".equals(childElement.getNodeName()) ? GenericMTConfig.class : MT798Config.class;
+                Class<?> beanClass =
+                        "mt".equals(childElement.getNodeName())
+                                ? GenericMTConfig.class
+                                : MT798Config.class;
                 doParse(childElement, parserContext, beanClass);
             }
         }
@@ -75,8 +78,10 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
 
     private void doParse(Element element, ParserContext parserContext, Class<?> beanClass) {
         String id = element.getAttribute(ID_ATTRIBUTE);
-        Boolean bankToCorporate = Boolean.parseBoolean(element.getAttribute(BANK_TO_CORPORATE_ATTRIBUTE));
-        Boolean corporateToBank = Boolean.parseBoolean(element.getAttribute(CORPORATE_TO_BANK_ATTRIBUTE));
+        Boolean bankToCorporate =
+                Boolean.parseBoolean(element.getAttribute(BANK_TO_CORPORATE_ATTRIBUTE));
+        Boolean corporateToBank =
+                Boolean.parseBoolean(element.getAttribute(CORPORATE_TO_BANK_ATTRIBUTE));
         String messageType = element.getAttribute(MESSAGE_TYPE_ATTRIBUTE);
         String indexMessageType = element.getAttribute(INDEX_MESSAGE_TYPE_ATTRIBUTE);
         String subMessageType = element.getAttribute(SUB_MESSAGE_TYPE_ATTRIBUTE);
@@ -87,10 +92,13 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
         } else {
             builder.addPropertyValue(INDEX_MESSAGE_TYPE_PROPERTY, indexMessageType);
             builder.addPropertyValue(SUB_MESSAGE_TYPE_PROPERTY, subMessageType);
-            builder.addPropertyValue(CATALOGUE, DomUtils.getChildElementValueByTagName(element, CATALOGUE));
-            builder.addPropertyValue(TRANSACTION, DomUtils.getChildElementValueByTagName(element, TRANSACTION));
+            builder.addPropertyValue(
+                    CATALOGUE, DomUtils.getChildElementValueByTagName(element, CATALOGUE));
+            builder.addPropertyValue(
+                    TRANSACTION, DomUtils.getChildElementValueByTagName(element, TRANSACTION));
         }
-        builder.addPropertyValue(DESCRIPTION, DomUtils.getChildElementValueByTagName(element, DESCRIPTION));
+        builder.addPropertyValue(
+                DESCRIPTION, DomUtils.getChildElementValueByTagName(element, DESCRIPTION));
         builder.addPropertyValue(BANK_TO_CORPORATE_PROPERTY, bankToCorporate);
         builder.addPropertyValue(CORPORATE_TO_BANK_PROPERTY, corporateToBank);
         parseFields(element, builder);
@@ -108,23 +116,28 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
     }
 
     private void parseComponents(Element element, BeanDefinitionBuilder builder) {
-        parseElements(element, COMPONENTS, COMPONENT, COMPONENTS, builder, this::parseComponentInfo);
+        parseElements(
+                element, COMPONENTS, COMPONENT, COMPONENTS, builder, this::parseComponentInfo);
     }
 
     private void parseRules(Element element, BeanDefinitionBuilder builder) {
         parseElements(element, RULES, RULE, RULES, builder, this::parseRuleInfo);
     }
 
-    private void parseElements(Element element, String childEleName, String grandsonEleName,
-                               String propertyName,
-                               BeanDefinitionBuilder builder,
-                               Function<Element, BeanDefinition> function) {
+    private void parseElements(
+            Element element,
+            String childEleName,
+            String grandsonEleName,
+            String propertyName,
+            BeanDefinitionBuilder builder,
+            Function<Element, BeanDefinition> function) {
         List<Element> childElements = DomUtils.getChildElementsByTagName(element, childEleName);
         if (CollectionUtils.isEmpty(childElements)) {
             return;
         }
         for (Element childElement : childElements) {
-            List<Element> elements = DomUtils.getChildElementsByTagName(childElement, grandsonEleName);
+            List<Element> elements =
+                    DomUtils.getChildElementsByTagName(childElement, grandsonEleName);
             ManagedList<BeanDefinition> beanDefinitions = new ManagedList<>(elements.size());
             for (Element ele : elements) {
                 BeanDefinition beanDefinition = function.apply(ele);
@@ -135,7 +148,8 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
     }
 
     private BeanDefinition parseSequenceInfo(Element element) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(SequenceInfo.class);
+        BeanDefinitionBuilder builder =
+                BeanDefinitionBuilder.genericBeanDefinition(SequenceInfo.class);
         builder.addPropertyValue(NAME_ATTRIBUTE, element.getAttribute(NAME_ATTRIBUTE));
         builder.addPropertyValue(STATUS_ATTRIBUTE, element.getAttribute(STATUS_ATTRIBUTE));
         parseFields(element, builder);
@@ -144,7 +158,8 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
     }
 
     private BeanDefinition parseFieldInfo(Element element) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(FieldInfo.class);
+        BeanDefinitionBuilder builder =
+                BeanDefinitionBuilder.genericBeanDefinition(FieldInfo.class);
         builder.addPropertyValue(TAG_ATTRIBUTE, element.getAttribute(TAG_ATTRIBUTE));
         builder.addPropertyValue(FIELD_NAME_PROPERTY, element.getAttribute(FIELD_NAME_ATTRIBUTE));
         parseFieldComponentInfo(element, builder);
@@ -154,7 +169,8 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
     }
 
     private BeanDefinition parseComponentInfo(Element element) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(ComponentInfo.class);
+        BeanDefinitionBuilder builder =
+                BeanDefinitionBuilder.genericBeanDefinition(ComponentInfo.class);
         addPropertyValue(element, builder, INDEX_ATTRIBUTE, INDEX_ATTRIBUTE);
         addPropertyValue(element, builder, START_INDEX_PROPERTY, START_INDEX_ATTRIBUTE);
         addPropertyValue(element, builder, END_INDEX_PROPERTY, END_INDEX_ATTRIBUTE);
@@ -176,16 +192,21 @@ public class MessageConfigBeanDefinitionParser implements BeanDefinitionParser {
 
     private BeanDefinition parseRuleInfo(Element element) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(RuleInfo.class);
-        builder.addPropertyValue(EXPRESSION_STRING_PROPERTY, element.getAttribute(EXPRESSION_STRING_ATTRIBUTE));
+        builder.addPropertyValue(
+                EXPRESSION_STRING_PROPERTY, element.getAttribute(EXPRESSION_STRING_ATTRIBUTE));
         builder.addPropertyValue(BEAN_NAME_PROPERTY, element.getAttribute(BEAN_NAME_ATTRIBUTE));
-        builder.addPropertyValue(ERROR_MESSAGE_PROPERTY, element.getAttribute(ERROR_MESSAGE_ATTRIBUTE));
+        builder.addPropertyValue(
+                ERROR_MESSAGE_PROPERTY, element.getAttribute(ERROR_MESSAGE_ATTRIBUTE));
         return builder.getBeanDefinition();
     }
 
-    private void addPropertyValue(Element element, BeanDefinitionBuilder builder, String propertyName, String attributeName) {
+    private void addPropertyValue(
+            Element element,
+            BeanDefinitionBuilder builder,
+            String propertyName,
+            String attributeName) {
         if (element.hasAttribute(attributeName)) {
             builder.addPropertyValue(propertyName, element.getAttribute(attributeName));
         }
     }
-
 }

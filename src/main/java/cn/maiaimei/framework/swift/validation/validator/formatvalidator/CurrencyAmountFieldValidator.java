@@ -18,8 +18,7 @@ public class CurrencyAmountFieldValidator implements FormatFieldValidator {
     private static final String REGEX = "^[A-Z]{3}[0-9]+,([0-9]+)?$";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
-    @Autowired
-    private CurrencyList currencyList;
+    @Autowired private CurrencyList currencyList;
 
     @Override
     public boolean supportsFormat(Field field, String format) {
@@ -27,15 +26,17 @@ public class CurrencyAmountFieldValidator implements FormatFieldValidator {
     }
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         if (!PATTERN.matcher(value).matches()) {
             return ValidationError.mustMatchFormat(label, FORMAT, value);
         }
         String currency = field.getComponent(1);
         String amount = field.getComponent(2);
-//        if (currencies.getCurrencies().stream().noneMatch(t -> t.getCurrency().equals(currency))) {
-//            return label.concat(" unknown currency, invalid value is ".concat(value));
-//        }
+        //        if (currencies.getCurrencies().stream().noneMatch(t ->
+        // t.getCurrency().equals(currency))) {
+        //            return label.concat(" unknown currency, invalid value is ".concat(value));
+        //        }
         if (ValidatorUtils.gt(amount, 15) && ValidatorUtils.containsOther(amount, "d")) {
             return ValidationError.mustBeVariableLengthCharacter(label, 15, "d", value);
         }

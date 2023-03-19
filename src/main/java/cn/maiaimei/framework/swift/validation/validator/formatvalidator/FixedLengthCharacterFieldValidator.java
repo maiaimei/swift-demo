@@ -18,7 +18,8 @@ public class FixedLengthCharacterFieldValidator implements FormatFieldValidator 
     }
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         String format = fieldComponentInfo.getFormat();
         int length = ValidatorUtils.getNumber(format);
         String type = ValidatorUtils.getType(format);

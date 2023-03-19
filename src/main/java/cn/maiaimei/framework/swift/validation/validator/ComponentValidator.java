@@ -15,11 +15,15 @@ import java.util.List;
 @Component
 public class ComponentValidator implements FieldValidatorHandler {
 
-    @Autowired
-    private FieldValidatorChain fieldValidatorChain;
+    @Autowired private FieldValidatorChain fieldValidatorChain;
 
     @Override
-    public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public void handleValidation(
+            ValidationResult result,
+            FieldComponentInfo fieldComponentInfo,
+            Field field,
+            String label,
+            String value) {
         if (!FieldInfo.class.isAssignableFrom(fieldComponentInfo.getClass())) {
             return;
         }
@@ -37,23 +41,32 @@ public class ComponentValidator implements FieldValidatorHandler {
             }
             if (componentInfo.getIndex() != null) {
                 int index = componentInfo.getIndex() - 1;
-                String componentLabel = StringUtils.isNotBlank(componentInfo.getLabel()) ? componentInfo.getLabel() : componentLabels.get(index);
+                String componentLabel =
+                        StringUtils.isNotBlank(componentInfo.getLabel())
+                                ? componentInfo.getLabel()
+                                : componentLabels.get(index);
                 String componentValue = components.get(index);
-                fieldValidatorChain.handleValidation(res, componentInfo, field, componentLabel, componentValue);
-            } else if (componentInfo.getStartIndex() != null && componentInfo.getEndIndex() != null) {
+                fieldValidatorChain.handleValidation(
+                        res, componentInfo, field, componentLabel, componentValue);
+            } else if (componentInfo.getStartIndex() != null
+                    && componentInfo.getEndIndex() != null) {
                 for (int i = componentInfo.getStartIndex(); i <= componentInfo.getEndIndex(); i++) {
                     int index = i - 1;
                     String componentLabel = componentLabels.get(index);
                     String componentValue = components.get(index);
-                    fieldValidatorChain.handleValidation(res, componentInfo, field, componentLabel, componentValue);
+                    fieldValidatorChain.handleValidation(
+                            res, componentInfo, field, componentLabel, componentValue);
                 }
             } else {
-                result.addErrorMessage(label + " component config error, either index or start-index and end-index must be present");
+                result.addErrorMessage(
+                        label
+                                + " component config error, either index or start-index and end-index must be present");
             }
         }
         if (!CollectionUtils.isEmpty(res.getErrorMessages())) {
             String errorMessage = String.join(", ", res.getErrorMessages());
-            result.addErrorMessage(label + StringUtils.SPACE + errorMessage + ", field value is " + value);
+            result.addErrorMessage(
+                    label + StringUtils.SPACE + errorMessage + ", field value is " + value);
         }
     }
 

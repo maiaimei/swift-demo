@@ -11,17 +11,21 @@ import java.util.Set;
 
 @Component
 public class TypeFieldValidatorComposite implements FieldValidatorHandler {
-    @Autowired
-    private EnumFieldValidator enumFieldValidator;
+    @Autowired private EnumFieldValidator enumFieldValidator;
 
-    @Autowired
-    private Set<TypeFieldValidator> typeValidatorSet;
+    @Autowired private Set<TypeFieldValidator> typeValidatorSet;
 
     @Override
-    public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public void handleValidation(
+            ValidationResult result,
+            FieldComponentInfo fieldComponentInfo,
+            Field field,
+            String label,
+            String value) {
         for (TypeFieldValidator typeValidator : typeValidatorSet) {
             if (typeValidator.supportsType(field, fieldComponentInfo.getType())) {
-                String errorMessage = typeValidator.validate(fieldComponentInfo, field, label, value);
+                String errorMessage =
+                        typeValidator.validate(fieldComponentInfo, field, label, value);
                 if (StringUtils.isNotBlank(errorMessage)) {
                     result.addErrorMessage(errorMessage);
                     return;

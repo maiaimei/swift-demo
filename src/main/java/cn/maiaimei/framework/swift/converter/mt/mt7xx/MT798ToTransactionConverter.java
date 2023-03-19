@@ -17,8 +17,7 @@ import java.util.Set;
 @Component
 public class MT798ToTransactionConverter implements Converter<MT798Packets, MT798Transaction> {
 
-    @Autowired
-    private Set<MT798ToTransactionConverterStrategy> converterStrategySet;
+    @Autowired private Set<MT798ToTransactionConverterStrategy> converterStrategySet;
 
     @Override
     public MT798Transaction convert(MT798Packets mt798Packets) {
@@ -26,8 +25,10 @@ public class MT798ToTransactionConverter implements Converter<MT798Packets, MT79
         List<MT798> detailMessages = mt798Packets.getDetailMessages();
         List<MT798> extensionMessages = mt798Packets.getExtensionMessages();
         String subMessageType = getSubMessageType(indexMessage);
-        MT798ToTransactionConverterStrategy strategy = getMT798ToTransactionConverterStrategy(subMessageType);
-        return strategy.convert(indexMessage, detailMessages, extensionMessages, strategy.getTransactionType());
+        MT798ToTransactionConverterStrategy strategy =
+                getMT798ToTransactionConverterStrategy(subMessageType);
+        return strategy.convert(
+                indexMessage, detailMessages, extensionMessages, strategy.getTransactionType());
     }
 
     private String getSubMessageType(MT798 indexMessage) {
@@ -42,7 +43,8 @@ public class MT798ToTransactionConverter implements Converter<MT798Packets, MT79
         return subMessageType;
     }
 
-    private MT798ToTransactionConverterStrategy getMT798ToTransactionConverterStrategy(String subMessageType) {
+    private MT798ToTransactionConverterStrategy getMT798ToTransactionConverterStrategy(
+            String subMessageType) {
         if (StringUtils.isNotBlank(subMessageType)) {
             for (MT798ToTransactionConverterStrategy strategy : converterStrategySet) {
                 if (strategy.supportsMessageType(subMessageType)) {
@@ -50,7 +52,7 @@ public class MT798ToTransactionConverter implements Converter<MT798Packets, MT79
                 }
             }
         }
-        throw new ConverterNotFoundException("Can't found MT798ToTransactionConverterStrategy for MT" + subMessageType);
+        throw new ConverterNotFoundException(
+                "Can't found MT798ToTransactionConverterStrategy for MT" + subMessageType);
     }
-
 }

@@ -16,20 +16,24 @@ public class VariableLengthCharacterStartsWithSlashFieldValidator implements For
     }
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         String format = fieldComponentInfo.getFormat();
         int maxlength = ValidatorUtils.getNumber(format);
         String type = ValidatorUtils.getType(format);
         String valueToValidate = value;
         if (!ValidatorUtils.isStartsWithSlash(value)) {
             if (FieldInfo.class.isAssignableFrom(fieldComponentInfo.getClass())) {
-                return ValidationError.mustBeVariableLengthCharacterStartsWithSlash(label, maxlength, type, value);
+                return ValidationError.mustBeVariableLengthCharacterStartsWithSlash(
+                        label, maxlength, type, value);
             }
         } else {
             valueToValidate = ValidatorUtils.trimStartSlash(format, value);
         }
-        if (ValidatorUtils.gt(valueToValidate, maxlength) || ValidatorUtils.containsOther(valueToValidate, type)) {
-            return ValidationError.mustBeVariableLengthCharacterStartsWithSlash(label, maxlength, type, value);
+        if (ValidatorUtils.gt(valueToValidate, maxlength)
+                || ValidatorUtils.containsOther(valueToValidate, type)) {
+            return ValidationError.mustBeVariableLengthCharacterStartsWithSlash(
+                    label, maxlength, type, value);
         }
         return null;
     }

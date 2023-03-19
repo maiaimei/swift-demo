@@ -11,17 +11,15 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-/**
- * Validate field by enum
- */
+/** Validate field by enum */
 @Component
 public class EnumFieldValidator implements FieldValidator, FieldValidatorHandler {
 
-    @Autowired
-    private ComponentValidator componentValidator;
+    @Autowired private ComponentValidator componentValidator;
 
     @Override
-    public String validate(FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public String validate(
+            FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
         List<String> options = fieldComponentInfo.getOptions();
         if (!CollectionUtils.isEmpty(options) && !options.contains(value)) {
             return ValidationError.mustInOptions(label, value, options);
@@ -30,7 +28,12 @@ public class EnumFieldValidator implements FieldValidator, FieldValidatorHandler
     }
 
     @Override
-    public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public void handleValidation(
+            ValidationResult result,
+            FieldComponentInfo fieldComponentInfo,
+            Field field,
+            String label,
+            String value) {
         String errorMessage = validate(fieldComponentInfo, field, label, value);
         if (StringUtils.isNotBlank(errorMessage)) {
             result.addErrorMessage(errorMessage);

@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class FieldValidatorChain {
 
-    /**
-     * add @Lazy annotation to solve circular references
-     */
-    @Lazy
-    @Autowired
-    private MandatoryFieldValidator mandatoryFieldValidator;
+    /** add @Lazy annotation to solve circular references */
+    @Lazy @Autowired private MandatoryFieldValidator mandatoryFieldValidator;
 
-    public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public void handleValidation(
+            ValidationResult result,
+            FieldComponentInfo fieldComponentInfo,
+            Field field,
+            String label,
+            String value) {
         mandatoryFieldValidator.handleValidation(result, fieldComponentInfo, field, label, value);
     }
-
 }

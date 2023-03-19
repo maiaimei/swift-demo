@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unchecked")
 @Component
-public class MT762ToTransactionConverterStrategy extends AbstractMT798ToTransactionConverterStrategy {
+public class MT762ToTransactionConverterStrategy
+        extends AbstractMT798ToTransactionConverterStrategy {
     @Override
     protected MT798IndexMessage getIndexMessage() {
         return new MT762Transaction.MT762IndexMessage();
@@ -27,7 +28,7 @@ public class MT762ToTransactionConverterStrategy extends AbstractMT798ToTransact
 
     @Override
     public boolean supportsMessageType(String subMessageType) {
-        return subMessageType.equals("762");
+        return "762".equals(subMessageType);
     }
 
     @Override

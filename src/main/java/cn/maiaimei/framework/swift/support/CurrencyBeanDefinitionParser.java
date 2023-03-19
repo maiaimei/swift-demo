@@ -27,7 +27,8 @@ public class CurrencyBeanDefinitionParser implements BeanDefinitionParser {
     public BeanDefinition parse(Element element, ParserContext parserContext) {
         List<Element> childElements = DomUtils.getChildElements(element);
         if (!CollectionUtils.isEmpty(childElements)) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(CurrencyList.class);
+            BeanDefinitionBuilder builder =
+                    BeanDefinitionBuilder.genericBeanDefinition(CurrencyList.class);
             ManagedList<BeanDefinition> beanDefinitions = new ManagedList<>(childElements.size());
             for (Element childElement : childElements) {
                 String country = childElement.getAttribute(COUNTRY_ATTRIBUTE);
@@ -35,7 +36,9 @@ public class CurrencyBeanDefinitionParser implements BeanDefinitionParser {
                 String currency = childElement.getAttribute(CURRENCY_ATTRIBUTE);
                 String fractionDigits = childElement.getAttribute(FRACTION_DIGITS_ATTRIBUTE);
 
-                BeanDefinitionBuilder b = BeanDefinitionBuilder.genericBeanDefinition(CurrencyList.CurrencyInfo.class);
+                BeanDefinitionBuilder b =
+                        BeanDefinitionBuilder.genericBeanDefinition(
+                                CurrencyList.CurrencyInfo.class);
                 b.addPropertyValue(COUNTRY_PROPERTY, country);
                 b.addPropertyValue(COUNTRY_SHORT_NAME_PROPERTY, countryShortName);
                 b.addPropertyValue(CURRENCY_PROPERTY, currency);
@@ -43,7 +46,9 @@ public class CurrencyBeanDefinitionParser implements BeanDefinitionParser {
                 beanDefinitions.add(b.getBeanDefinition());
             }
             builder.addPropertyValue("items", beanDefinitions);
-            parserContext.getRegistry().registerBeanDefinition("currencyList", builder.getBeanDefinition());
+            parserContext
+                    .getRegistry()
+                    .registerBeanDefinition("currencyList", builder.getBeanDefinition());
         }
 
         return null;

@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unchecked")
 @Component
-public class MT719ToTransactionConverterStrategy extends AbstractMT798ToTransactionConverterStrategy {
+public class MT719ToTransactionConverterStrategy
+        extends AbstractMT798ToTransactionConverterStrategy {
     @Override
     protected MT798IndexMessage getIndexMessage() {
         return new MT719Transaction.MT719IndexMessage();

@@ -11,17 +11,21 @@ import java.util.Set;
 
 @Component
 public class FormatFieldValidatorComposite implements FieldValidatorHandler {
-    @Autowired
-    private PatternFieldValidatorComposite patternFieldValidatorComposite;
+    @Autowired private PatternFieldValidatorComposite patternFieldValidatorComposite;
 
-    @Autowired
-    private Set<FormatFieldValidator> formatValidatorSet;
+    @Autowired private Set<FormatFieldValidator> formatValidatorSet;
 
     @Override
-    public void handleValidation(ValidationResult result, FieldComponentInfo fieldComponentInfo, Field field, String label, String value) {
+    public void handleValidation(
+            ValidationResult result,
+            FieldComponentInfo fieldComponentInfo,
+            Field field,
+            String label,
+            String value) {
         for (FormatFieldValidator formatValidator : formatValidatorSet) {
             if (formatValidator.supportsFormat(field, fieldComponentInfo.getFormat())) {
-                String errorMessage = formatValidator.validate(fieldComponentInfo, field, label, value);
+                String errorMessage =
+                        formatValidator.validate(fieldComponentInfo, field, label, value);
                 if (StringUtils.isNotBlank(errorMessage)) {
                     result.addErrorMessage(errorMessage);
                     return;
