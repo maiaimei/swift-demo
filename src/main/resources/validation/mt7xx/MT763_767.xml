@@ -7,8 +7,8 @@
     <mt798 id="mt763767Config" index-message-type="763" sub-message-type="767" corporate-to-bank="true"
            bank-to-corporate="false">
         <catalogue>Guarantee / Standby Letter of Credit</catalogue>
-        <transaction>Request for Amendment of Guarantee /Standby Letter of Credit – Corporate-to-Bank</transaction>
-        <description>Request for Amendment of Guarantee /Standby Letter of Credit – Corporate-to-Bank Details
+        <transaction>Request for amendment of Guarantee / Standby Letter of Credit – C2B</transaction>
+        <description>Guarantee / Standby Amendment Request Details
         </description>
         <fields>
             <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>

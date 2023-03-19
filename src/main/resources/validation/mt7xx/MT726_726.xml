@@ -3,35 +3,37 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="https://maiamy.cn/schema/swift 
                          https://maiamy.cn/schema/swift/swift-mts.xsd">
-    
-	<mt798 id="mt726Config" index-message-type="726" sub-message-type="726">
+
+    <mt798 id="mt726Config" index-message-type="726" sub-message-type="726" corporate-to-bank="true"
+           bank-to-corporate="false">
         <catalogue>Common Group Messages</catalogue>
-        <transaction>Ancillary Message – Corporate-to-Bank</transaction>
-        <description>Ancillary Message – Corporate-to-bank Index</description>
+        <transaction>Ancillary Message – C2B</transaction>
+        <description>Ancillary Message Index</description>
         <fields>
-            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M" />
-            <field tag="21A" field-name="Customer Reference Number" format="16x" status="M" />
-            <field tag="21T" field-name="Customer Business Reference" format="16x" status="M" />
-            <field tag="21P" field-name="Bank Reference Number" format="16x" status="O" />
-            <field tag="21S" field-name="Bank Business Reference" format="16x" status="O" />
-            <field tag="13E" field-name="Message Creation Date Time" format="8!n4!n" pattern="YYYYMMDDHHMM" status="M" />
-            <field tag="29A" field-name="Customer Contact" format="4*35x" status="O" />
-            <field tag="72Z" field-name="Corporate to Bank Information" format="6*35z" status="O" />
+            <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
+            <field tag="21A" field-name="Customer Reference Number" format="16x" status="M"/>
+            <field tag="21T" field-name="Customer Business Reference" format="16x" status="M"/>
+            <field tag="21P" field-name="Bank Reference Number" format="16x" status="O"/>
+            <field tag="21S" field-name="Bank Business Reference" format="16x" status="O"/>
+            <field tag="13E" field-name="Message Creation Date Time" format="8!n4!n" pattern="YYYYMMDDHHMM" status="M"/>
+            <field tag="29A" field-name="Customer Contact" format="4*35x" status="O"/>
+            <field tag="72Z" field-name="Corporate to Bank Information" format="6*35z" status="O"/>
             <field tag="23X" field-name="File Identification" format="4!c/65x" status="O">
-            	<components>
-            		<component index="1" label="Code" format="4!c" status="M" options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
-            		<component index="2" label="File Name or Reference" format="65x" status="M"/>
-            	</components>
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M"
+                               options="FACT|FAXT|EMAL|MAIL|COUR|HOST|OTHR"/>
+                    <component index="2" label="File Name or Reference" format="65x" status="M"/>
+                </components>
             </field>
             <field tag="29S" field-name="Customer Identifier" format="4!c/35x" status="O">
-            	<components>
-            		<component index="1" label="Code" format="4!c" status="M" options="BICC|OTHR"/>
-            		<component index="2" label="Party Identifier" format="35x" status="M"/>
-            	</components>
+                <components>
+                    <component index="1" label="Code" format="4!c" status="M" options="BICC|OTHR"/>
+                    <component index="2" label="Party Identifier" format="35x" status="M"/>
+                </components>
             </field>
-            <field tag="29P" field-name="Processing Bank Identifier" format="4!a2!a2!c[3!c]" status="O" />
-            <field tag="29U" field-name="Lead Bank Identifier" format="4!a2!a2!c[3!c]" status="O" />
+            <field tag="29P" field-name="Processing Bank Identifier" format="4!a2!a2!c[3!c]" status="O"/>
+            <field tag="29U" field-name="Lead Bank Identifier" format="4!a2!a2!c[3!c]" status="O"/>
         </fields>
     </mt798>
-    
+
 </mts>

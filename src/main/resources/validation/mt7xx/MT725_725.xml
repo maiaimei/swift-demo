@@ -4,10 +4,11 @@
      xsi:schemaLocation="https://maiamy.cn/schema/swift 
          https://maiamy.cn/schema/swift/swift-mts.xsd">
 
-    <mt798 id="mt725Config" index-message-type="725" sub-message-type="725">
+    <mt798 id="mt725Config" index-message-type="725" sub-message-type="725" bank-to-corporate="true"
+           corporate-to-bank="false">
         <catalogue>Common Group Messages</catalogue>
-        <transaction>Ancillary Message Bank-to-Corporate</transaction>
-        <description>Ancillary Message Bank-to-Corporate Index</description>
+        <transaction>Ancillary Message – B2C</transaction>
+        <description>Ancillary Message Index</description>
         <fields>
             <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
             <field tag="21A" field-name="Customer Reference Number" format="16x" status="O"/>

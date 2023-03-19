@@ -4,10 +4,11 @@
      xsi:schemaLocation="https://maiamy.cn/schema/swift 
                          https://maiamy.cn/schema/swift/swift-mts.xsd">
 
-    <mt798 id="mt793790Config" index-message-type="793" sub-message-type="790">
+    <mt798 id="mt793790Config" index-message-type="793" sub-message-type="790" corporate-to-bank="false"
+           bank-to-corporate="true">
         <catalogue>Common Group Messages</catalogue>
-        <transaction>Notification of Settlement of Charges – Bank-to-Corporate</transaction>
-        <description>Notification of Settlement of Charges – Bank-to-Corporate Details</description>
+        <transaction>Notification of Settlement of Charges – B2C</transaction>
+        <description>Charges Settlement Notice Details</description>
         <fields>
             <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
             <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>

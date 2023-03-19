@@ -6,8 +6,8 @@
 
     <mt798 id="mt797Config" index-message-type="797" sub-message-type="797">
         <catalogue>Common Group Messages</catalogue>
-        <transaction>Request for Cancellation – Corporate-to-Bank</transaction>
-        <description>Request for Cancellation – Corporate-to-Bank Index</description>
+        <transaction>Request for Cancellation – C2B</transaction>
+        <description>Request for Cancellation Index</description>
         <fields>
             <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
             <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>

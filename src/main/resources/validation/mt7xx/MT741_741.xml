@@ -4,10 +4,11 @@
      xsi:schemaLocation="https://maiamy.cn/schema/swift 
                          https://maiamy.cn/schema/swift/swift-mts.xsd">
 
-    <mt798 id="mt741Config" index-message-type="741" sub-message-type="741">
+    <mt798 id="mt741Config" index-message-type="741" sub-message-type="741" bank-to-corporate="true"
+           corporate-to-bank="false">
         <catalogue>Common Group Messages</catalogue>
-        <transaction>Notification of Cancellation /Refusal – Bank-to-Corporate</transaction>
-        <description>Notification of Cancellation /Refusal – Bank-to-Corporate Index</description>
+        <transaction>Notification of Cancellation / Refusal– B2C</transaction>
+        <description>Notification of Cancellation / Refusal Index</description>
         <fields>
             <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
             <field tag="21P" field-name="Bank Reference Number" format="16x" status="M"/>

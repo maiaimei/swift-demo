@@ -4,10 +4,11 @@
      xsi:schemaLocation="https://maiamy.cn/schema/swift 
                          https://maiamy.cn/schema/swift/swift-mts.xsd">
 
-    <mt798 id="mt784760Config" index-message-type="784" sub-message-type="760" corporate-to-bank="true">
+    <mt798 id="mt784760Config" index-message-type="784" sub-message-type="760" corporate-to-bank="true"
+           bank-to-corporate="false">
         <catalogue>Guarantee / Standby Letter of Credit</catalogue>
-        <transaction>Application for issuance of Guarantee /Standby Letter of Credit – Corporate-to-Bank</transaction>
-        <description>Application for issuance of Guarantee / Standby LC / Undertaking Details</description>
+        <transaction>Application for Guarantee / Standby Letter of Credit – C2B</transaction>
+        <description>Guarantee / Standby / Undertaking Application Details</description>
         <fields>
             <field tag="27A" field-name="Message Index/Total" format="1!n/1!n" status="M"/>
             <field tag="21A" field-name="Customer Reference Number" format="16x" status="M"/>
